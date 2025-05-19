@@ -55,7 +55,7 @@ body {
     }
     &.info-principal {
         background-color: $color-bg-principal!important;
-        color: var(--color-primary)!important;
+        color: var(--color-principal)!important;
     }
     &.info-secondary {
         background-color: $color-bg-secondary!important;
@@ -82,10 +82,11 @@ body {
         }
     }
     &.secondary {
-        background-color: var(--color-secondary);
-        color: #ffffff!important;
+        background-color: var(--color-text-secondary);
+        color: var(--color-principal)!important;
         &:hover {
-            background-color: $color-hover-secondary;
+            background-color: var(--color-principal)!important;
+            color: #FFFBFC !important;
         }
     }
 }
