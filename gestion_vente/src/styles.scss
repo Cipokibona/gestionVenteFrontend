@@ -1,1 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+    --color-principal: #4F3824;
+    --color-secondary: #D1603D;
+    --color-background: #FFFBFC;
+    --color-text: #221D23;
+    --color-text-secondary: #DDB967;
+}
+
+$color-text: var(--color-text);
+$color-text-secondary: var(--color-text-secondary);
+$color-principal:var(--color-principal);
+$color-secondary:var(--color-secondary);
+$color-background:var(--color-background);
+$color-bg-principal:rgba($color-principal, 15%);
+$color-bg-secondary:rgba($color-secondary, 15%);
+$color-hover-principal:darken(#4F3824, 10%);
+$color-hover-secondary:darken(#D1603D, 10%);
+$color-disabled-principal:#4F3824;
+$color-disabled-secondary:#D1603D;
+body {
+    background-color: var(--color-background)!important;
+    color: var(--color-text)!important;
+}
+
+.principal {
+    color: var(--color-principal)!important;
+}
+
+.secondary {
+    color: var(--color-secondary)!important;
+}
+
+.text-principal {
+    color: $color-text!important;
+}
+
+.text-secondary {
+    color: $color-text-secondary!important;
+}
+
+.background {
+    &.principal {
+        background-color: var(--color-principal)!important;
+        color: white!important;
+    }
+    &.secondary {
+        background-color: var(--color-secondary)!important;
+        color: black!important;
+    }
+    &.normal {
+        background-color: $color-background!important;
+        color: var(--color-text)!important;
+    }
+    &.info-principal {
+        background-color: $color-bg-principal!important;
+        color: var(--color-primary)!important;
+    }
+    &.info-secondary {
+        background-color: $color-bg-secondary!important;
+        color: var(--color-secondary)!important;
+    }
+}
+
+.button {
+    display: inline-block;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    &.principal {
+        background-color: var(--color-principal);
+        color: white!important;
+        &:hover {
+            background-color: $color-hover-principal;
+        }
+        &.disabled {
+            background-color: $color-disabled-principal;
+        }
+    }
+    &.secondary {
+        background-color: var(--color-secondary);
+        color: #010400!important;
+        &:hover {
+            background-color: $color-hover-secondary;
+        }
+    }
+}
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
