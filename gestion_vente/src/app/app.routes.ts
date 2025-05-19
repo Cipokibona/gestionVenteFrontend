@@ -15,7 +15,7 @@ export const routes: Routes = [
     },
     {
         path:'home',
-        title: 'Login Page',
+        title: 'Home Page',
         component: HomeComponent,
     },
 ];
