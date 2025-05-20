@@ -20,12 +20,13 @@
         <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               1. Client
+              <span class="text-danger ms-2">(Endete par Jean)</span>
             </button>
         </h2>
         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
                 <div class="row">
-                    <div class="col-6 text-secondary">
+                    <div class="col-6 text-secondary text-end">
                         Adresse:
                     </div>
                     <div class="col-6">
@@ -33,7 +34,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6 text-secondary">
+                    <div class="col-6 text-secondary text-end">
                         Tel:
                     </div>
                     <div class="col-6">
@@ -41,14 +42,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6 text-secondary">
+                    <div class="col-6 text-secondary text-start text-end">
                         Dettes:
                     </div>
                     <div class="col-6">
-                        <a href="" class="text-danger">
+                        <a class="text-danger" data-bs-toggle="modal" data-bs-target="#recouvrement">
                             2,000,000 Bif
                         </a>
                     </div>
+                </div>
+
+                <div class="row text-center">
+                    <a href="">Edit Client</a>
                 </div>
             </div>
         </div>
@@ -128,6 +133,47 @@
                     <div class="ms-auto me-auto mb-2 mt-3">
                         <button type="submit" class="button principal p-1 m-1">
                             <span class="ms-5 me-5">Create</span>
+                        </button>
+                        <a class="button secondary p-1 m-1">
+                            <span class="ms-5 me-5">Back</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de recouvrement -->
+<div class="modal fade" id="recouvrement" tabindex="-1" aria-labelledby="recouvrement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Recouvrement de dette</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="nameClient" class="visually-hidden">Full name</label>
+                        <input type="text" class="form-control" name="nameClient" id="nameClient" value="Jean" disabled>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="montant" class="visually-hidden">Montant</label>
+                        <input type="number" class="form-control" name="montant" id="montant" placeholder="montant" required>
+                        <p class="text-secondary">
+                            Total de la dette:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span> <br> Reste:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span> <br> Date prevu de payement:
+                            <input type="date" name="datePrevu" id="datePrevu" class="form-control-sm"><br>
+                        </p>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3">
+                        <button type="submit" class="button principal p-1 m-1">
+                            <span class="ms-5 me-5">Ok</span>
                         </button>
                         <a class="button secondary p-1 m-1">
                             <span class="ms-5 me-5">Back</span>

@@ -5,6 +5,8 @@ import { ListComponent } from './components/client/list/list.component';
 import { SellComponent } from './components/product/sell/sell.component';
 import { ListUserComponent } from './components/user/list-user/list-user.component';
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
+import { TransactionComponent } from './components/wallet/transaction/transaction.component';
+import { EditClientComponent } from './components/client/edit-client/edit-client.component';
 
 export const routes: Routes = [
     { 
@@ -28,6 +30,11 @@ export const routes: Routes = [
         component: ListComponent,
     },
     {
+        path: 'client/:id',
+        title: 'edit client',
+        component: EditClientComponent,
+    },
+    {
         path: 'vente',
         title: 'vente page',
         component: SellComponent,
@@ -41,5 +48,10 @@ export const routes: Routes = [
         path:'user/:id',
         title: 'user edit',
         component: EditUserComponent,
+    },
+    {
+        path:'transactionForm',
+        title: 'transaction form',
+        component: TransactionComponent,
     },
 ];
