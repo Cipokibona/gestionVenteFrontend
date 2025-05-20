@@ -3,6 +3,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { ListComponent } from './components/client/list/list.component';
 import { SellComponent } from './components/product/sell/sell.component';
+import { ListUserComponent } from './components/user/list-user/list-user.component';
 
 export const routes: Routes = [
     { 
@@ -29,5 +30,10 @@ export const routes: Routes = [
         path: 'vente',
         title: 'vente page',
         component: SellComponent,
+    },
+    {
+        path: 'userList',
+        title: 'list user',
+        component: ListUserComponent,
     }
 ];
