@@ -157,11 +157,39 @@
                         <label for="nameClient" class="visually-hidden">Full name</label>
                         <input type="text" class="form-control" name="nameClient" id="nameClient" value="Jean" disabled>
                     </div>
+                    <div class="row border p-3 m-2">
+                        <h6>Mode de recuperation</h6>
+                        <div class="col-auto mb-2">
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Cash</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <label for="numero" class="visually-hidden">Bordereau</label>
+                            <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
+                        </div>
+                        <div class="col-auto mb-2">
+                            <label for="montantCash" class="visually-hidden">montantCash</label>
+                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montantCash" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+                                + Add
+                            </button>
+                        <button type="button" class="btn btn-danger rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+                                Delete
+                            </button>
+                    </div>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="montant" class="visually-hidden">Montant</label>
-                        <input type="number" class="form-control" name="montant" id="montant" placeholder="montant" required>
                         <p class="text-secondary">
                             Total de la dette:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span> <br> Total paye:
                             <span class="text-danger">
                                 30000 Bif
                             </span> <br> Reste:

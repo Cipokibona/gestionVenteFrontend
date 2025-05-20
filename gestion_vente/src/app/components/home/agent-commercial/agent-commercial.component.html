@@ -19,7 +19,11 @@
                         1,000,000 Bif
                     </div>
                 </div>
-
+                <div class="col-auto mt-2">
+                    <button class="button secondary rounded-pill p-1" data-bs-toggle="modal" data-bs-target="#depotBanque">
+                        Faire un depot dans une banque
+                    </button>
+                </div>
                 <h5 class="card-title m-3">
                     Total:
                     <span class="text-danger">
@@ -107,5 +111,52 @@
                 </a>
             </div>
         </div> -->
+    </div>
+</div>
+<!-- Modal de depot banque -->
+<div class="modal fade" id="depotBanque" tabindex="-1" aria-labelledby="recouvrement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Recouvrement de dette</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="nameClient" class="visually-hidden">Full name</label>
+                        <input type="text" class="form-control" name="nameClient" id="nameClient" value="Jean" disabled>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="montantCashDepot" class="visually">Montant Cash</label>
+                        <input type="number" class="form-control" name="montantCashDepot" id="montantCashDepot" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <select class="form-select" aria-label="Default select example">
+                                <option selected>Banque</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <p class="text-secondary">
+                            Reste en cash:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span> <br> Total sur ton wallet:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span>
+                        </p>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3">
+                        <button type="submit" class="button principal p-1 m-1">
+                            <span class="ms-5 me-5">Effectuer</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
