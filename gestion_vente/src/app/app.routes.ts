@@ -4,6 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ListComponent } from './components/client/list/list.component';
 import { SellComponent } from './components/product/sell/sell.component';
 import { ListUserComponent } from './components/user/list-user/list-user.component';
+import { EditUserComponent } from './components/user/edit-user/edit-user.component';
 
 export const routes: Routes = [
     { 
@@ -35,5 +36,10 @@ export const routes: Routes = [
         path: 'userList',
         title: 'list user',
         component: ListUserComponent,
-    }
+    },
+    {
+        path:'user/:id',
+        title: 'user edit',
+        component: EditUserComponent,
+    },
 ];
