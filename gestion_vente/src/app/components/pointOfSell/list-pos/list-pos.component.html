@@ -7,20 +7,20 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Par dettes
             </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createPOS">
                 New
             </button>
         </div>
     </div>
 </div>
 <h4 class="text-center ">
-    Liste des clients</h4>
+    Liste des points of sell</h4>
 <div class="accordion" id="accordionExample">
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              1. Client
-              <span class="text-danger ms-2">(Endete par Jean)</span>
+              1. Point of sell
+              <span class="text-danger ms-2">(non paye)</span>
             </button>
         </h2>
         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -40,20 +40,38 @@
                     <div class="col-6">
                         76225896
                     </div>
+                    <div class="col-6 text-secondary text-end">
+                        Responsable:
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            user 1
+                            <a href="" class="text-danger">
+                                (2000000 Bif)
+                            </a> <br> user 2
+                            <a href="" class="text-danger">
+                                (5000000 Bif)
+                            </a><br>
+                        </p>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6 text-secondary text-start text-end">
-                        Dettes:
+                        Total Caisse:
                     </div>
                     <div class="col-6">
-                        <a class="text-danger" data-bs-toggle="modal" data-bs-target="#recouvrement">
+                        <span class="text-danger">
                             2,000,000 Bif
-                        </a>
+                        </span>
                     </div>
                 </div>
-
-                <div class="row text-center">
-                    <a href="">Edit Client</a>
+                <div class="row justify-content-center">
+                    <button type="button" class="col-auto button secondary rounded-pill m-1 p-1">
+                        Edit point of sell
+                    </button>
+                    <button type="button" class="col-auto button secondary rounded-pill m-1 p-1">
+                        Approvisioinner
+                    </button>
                 </div>
             </div>
         </div>
@@ -96,25 +114,25 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Par dettes
             </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createPOS">
                 New
             </button>
         </div>
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="createClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createPOS" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create client</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create point of sell</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form class="needs-validation" novalidate>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="nameClient" class="visually-hidden">Full name</label>
-                        <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="Full name" required>
+                        <label for="namePOS" class="visually-hidden">Full name</label>
+                        <input type="text" class="form-control" name="namePOS" id="namePOS" placeholder="Full name" required>
                     </div>
                     <div class="ms-auto me-auto mb-2">
                         <label for="adress" class="visually-hidden">Adress</label>
@@ -134,9 +152,6 @@
                         <button type="submit" class="button principal p-1 m-1">
                             <span class="ms-5 me-5">Create</span>
                         </button>
-                        <a class="button secondary p-1 m-1">
-                            <span class="ms-5 me-5">Back</span>
-                        </a>
                     </div>
                 </form>
             </div>

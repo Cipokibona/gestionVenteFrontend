@@ -11,6 +11,7 @@ import { ListProductComponent } from './components/product/list-product/list-pro
 import { BuyComponent } from './components/product/buy/buy.component';
 import { ToAgentComponent } from './components/product/to-agent/to-agent.component';
 import { ToPointOfSellComponent } from './components/product/to-point-of-sell/to-point-of-sell.component';
+import { ListPOSComponent } from './components/pointOfSell/list-pos/list-pos.component';
 
 export const routes: Routes = [
     { 
@@ -77,5 +78,10 @@ export const routes: Routes = [
         path:'listProduct',
         title: 'list products page',
         component: ListProductComponent,
+    },
+    {
+        path:'listPOS',
+        title: 'list POS page',
+        component: ListPOSComponent,
     },
 ];
