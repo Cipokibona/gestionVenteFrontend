@@ -8,6 +8,7 @@ import { EditUserComponent } from './components/user/edit-user/edit-user.compone
 import { TransactionComponent } from './components/wallet/transaction/transaction.component';
 import { EditClientComponent } from './components/client/edit-client/edit-client.component';
 import { ListProductComponent } from './components/product/list-product/list-product.component';
+import { BuyComponent } from './components/product/buy/buy.component';
 
 export const routes: Routes = [
     { 
@@ -39,6 +40,11 @@ export const routes: Routes = [
         path: 'vente',
         title: 'vente page',
         component: SellComponent,
+    },
+    {
+        path: 'achat',
+        title: 'achat page',
+        component: BuyComponent,
     },
     {
         path: 'userList',
