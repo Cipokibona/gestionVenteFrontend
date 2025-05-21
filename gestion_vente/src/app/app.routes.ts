@@ -7,6 +7,7 @@ import { ListUserComponent } from './components/user/list-user/list-user.compone
 import { EditUserComponent } from './components/user/edit-user/edit-user.component';
 import { TransactionComponent } from './components/wallet/transaction/transaction.component';
 import { EditClientComponent } from './components/client/edit-client/edit-client.component';
+import { ListProductComponent } from './components/product/list-product/list-product.component';
 
 export const routes: Routes = [
     { 
@@ -53,5 +54,10 @@ export const routes: Routes = [
         path:'transactionForm',
         title: 'transaction form',
         component: TransactionComponent,
+    },
+    {
+        path:'listProduct',
+        title: 'list products page',
+        component: ListProductComponent,
     },
 ];
