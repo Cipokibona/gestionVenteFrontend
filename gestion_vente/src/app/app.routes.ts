@@ -9,6 +9,7 @@ import { TransactionComponent } from './components/wallet/transaction/transactio
 import { EditClientComponent } from './components/client/edit-client/edit-client.component';
 import { ListProductComponent } from './components/product/list-product/list-product.component';
 import { BuyComponent } from './components/product/buy/buy.component';
+import { ToAgentComponent } from './components/product/to-agent/to-agent.component';
 
 export const routes: Routes = [
     { 
@@ -45,6 +46,11 @@ export const routes: Routes = [
         path: 'achat',
         title: 'achat page',
         component: BuyComponent,
+    },
+    {
+        path:'approvisionnementAgent',
+        title: 'approvisionnement Agent page',
+        component: ToAgentComponent,
     },
     {
         path: 'userList',
