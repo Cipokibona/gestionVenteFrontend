@@ -10,6 +10,7 @@ import { EditClientComponent } from './components/client/edit-client/edit-client
 import { ListProductComponent } from './components/product/list-product/list-product.component';
 import { BuyComponent } from './components/product/buy/buy.component';
 import { ToAgentComponent } from './components/product/to-agent/to-agent.component';
+import { ToPointOfSellComponent } from './components/product/to-point-of-sell/to-point-of-sell.component';
 
 export const routes: Routes = [
     { 
@@ -51,6 +52,11 @@ export const routes: Routes = [
         path:'approvisionnementAgent',
         title: 'approvisionnement Agent page',
         component: ToAgentComponent,
+    },
+    {
+        path:'approvisionnementPOS',
+        title: 'approvisionnement POS page',
+        component: ToPointOfSellComponent,
     },
     {
         path: 'userList',

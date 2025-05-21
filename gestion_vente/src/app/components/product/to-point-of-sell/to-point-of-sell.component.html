@@ -1,0 +1,106 @@
+<div class="container justify-content-center">
+    <h5 class="text-center">Distribution de produits a point de vente</h5>
+    <div class="row">
+        <form class="needs-validation">
+            <div class="ms-auto me-auto mb-2">
+                <label for="namePOS" class="visually-hidden">Full name</label>
+                <input type="text" class="form-control" name="namePOS" id="namePOS" placeholder="POS Rohero" disabled>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+                         + Add
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <!-- card de product -->
+                <div class="card border p-2 rounded shadow m-2" style="width: 18rem;">
+                    <h6>Product 1</h6>
+                    <select class="form-select mb-2" aria-label="Default select example">
+                        <option selected>Selon le prix d'achat</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <div class="row">
+                        <div class="col-auto mb-2">
+                            <label for="quantity" class="visually">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
+                        </div>
+                        <p class="text-secondary">
+                            Prix total officiel:
+                            <span class="text-danger">
+                                30000 Bif
+                            </span> <br> Prix total pour le client:
+                            <span class="text-danger">
+                            20000 Bif
+                        </span>
+                        </p>
+                    </div>
+                    <div class="row text-end">
+                        <div class="col">
+                            <button type="button" class="btn btn-danger rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+                            Delete
+                        </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card product -->
+            </div>
+            <h6 class="m-2">Mode de payement du client</h6>
+            <div class="row border p-1">
+                <div class="col-auto mb-2">
+                    <select class="form-select" aria-label="Default select example">
+                                <option selected>Cash</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                </div>
+                <div class="col-auto mb-2">
+                    <label for="numero" class="visually-hidden">Bordereau</label>
+                    <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
+                </div>
+                <div class="col-auto mb-2">
+                    <label for="montantCash" class="visually-hidden">montantCash</label>
+                    <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montantCash" required>
+                </div>
+                <div class="col text-end">
+                    <button type=" button " class="btn btn-danger rounded-pill m-1 p-1">
+                        Delete
+                    </button>
+                </div>
+            </div>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                + Add
+            </button>
+            <div class="ms-auto me-auto mb-2 mt-3 ">
+                <p class="text-secondary">
+                    Nombre d'article:
+                    <span class="text-dark">
+                        14
+                    </span> <br> Nombre total de produit:
+                    <span class="text-dark">
+                        150
+                    </span> <br> Equivalent de:
+                    <span class="text-danger ">
+                        30000 Bif
+                    </span><br> Total paye:
+                    <span class="text-danger ">
+                        3000000 Bif
+                    </span><br> Reste:
+                    <span class="text-danger ">
+                        0 Bif
+                    </span>
+                </p>
+                <button type="submit" class="button principal p-1 m-1 ">
+                    <span class="ms-5 me-5 ">Distribuer</span>
+               </button>
+                <!-- <a class="button secondary p-1 m-1 ">
+                    <span class="ms-5 me-5 ">Back</span>
+                </a> -->
+            </div>
+        </form>
+    </div>
+</div>
