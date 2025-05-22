@@ -41,6 +41,7 @@ export class LoginComponent {
         const dataToken = jwtDecode<any>(data.access);
         this.apiService.saveToken(data);
         this.getUser(dataToken.user_id,data);
+        this.apiService.updateAuth(true);
         this.router.navigate(['/home']);
         // console.log('data dans login', this.apiService.currentUser);
       },

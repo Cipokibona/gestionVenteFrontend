@@ -10,10 +10,19 @@ import { ApiServiceService } from '../../services/api-service.service';
 })
 export class HeaderComponent {
   logo: string = 'assets/icons/favicon.ico';
+  isAuthenticate!: any;
 
-  constructor(private apiService: ApiServiceService){}
+  constructor(private apiService: ApiServiceService){
+    this.apiService.currentIsAuthenticate.subscribe({
+      next: (data) => {
+        this.isAuthenticate = data;
+        console.log('etat de isauth', this.isAuthenticate);
+      }
+    });
+  }
 
   logout(){
     this.apiService.logout();
+    this.apiService.updateAuth(false);
   }
 }

@@ -11,8 +11,10 @@ export class ApiServiceService {
 
   // private storedUser = localStorage.getItem('user');
   private user$ = new BehaviorSubject<string | null>(null);
+  private isAuthenticate$ = new BehaviorSubject<string | null>(null);
   
   currentUser = this.user$.asObservable();
+  currentIsAuthenticate = this.isAuthenticate$.asObservable();
 
 
   private http = inject(HttpClient);
@@ -41,6 +43,10 @@ export class ApiServiceService {
     this.router.navigate(['/login']).then(() => {
         location.reload();
     });
+  }
+
+  updateAuth(data: any){
+    this.isAuthenticate$.next(data);
   }
 
    getUser(userId: number, token: any): Observable<Object> {

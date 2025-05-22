@@ -2,9 +2,10 @@
     <div class="container-fluid">
         <img class="me-3" [ngSrc]="logo" alt="logo" width="40" height="40">
         <h4>Application</h4>
+        @if (isAuthenticate) {
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
+          </button>}
         <div class="offcanvas offcanvas-end text-bg-dark background principal" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
