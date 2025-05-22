@@ -1,2 +1,3 @@
-@if (userData && userData.is_agent_commercial) {
-<app-agent-commercial /> }@else { page vide {{userData?.is_agent_commercial}}}
+@if (userData && userData.is_admin) {
+<p>page pour admin</p> }@else if(userData && userData.is_respo_pos){ pour respo POS }@else {
+<app-agent-commercial /> }
