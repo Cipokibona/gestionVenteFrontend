@@ -38,7 +38,9 @@ export class ApiServiceService {
     this.token = null;
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+        location.reload();
+    });
   }
 
    getUser(userId: number, token: any): Observable<Object> {
