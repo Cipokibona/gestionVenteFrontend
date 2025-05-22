@@ -40,8 +40,9 @@ export class LoginComponent {
         this.loading = false;
         const dataToken = jwtDecode<any>(data.access);
         this.apiService.saveToken(data);
-        this.apiService.getUser(dataToken.user_id,data);
+        this.getUser(dataToken.user_id,data);
         this.router.navigate(['/home']);
+        // console.log('data dans login', this.apiService.currentUser);
       },
       error: err => {
         this.loading = false;
@@ -49,5 +50,17 @@ export class LoginComponent {
         console.error('Erreur de connexion', err);
       }
     })
+  }
+
+  getUser(userId: number, token: any){
+    return this.apiService.getUser(userId, token).subscribe({
+      next: (data) => {
+        this.apiService.updateUser(data);
+        console.log('data dans getUser login', data);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de data:', err);
+      }
+    });
   }
 }

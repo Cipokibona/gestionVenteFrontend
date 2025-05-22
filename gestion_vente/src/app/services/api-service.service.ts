@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -8,10 +9,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class ApiServiceService {
 
-  private storedUser = localStorage.getItem('user');
-  public user$ = new BehaviorSubject<string | null>(this.storedUser ? JSON.parse(this.storedUser) : null);
+  // private storedUser = localStorage.getItem('user');
+  private user$ = new BehaviorSubject<string | null>(null);
   
-  currentUser = this.user$.value;
+  currentUser = this.user$.asObservable();
+
 
   private http = inject(HttpClient);
 
@@ -23,7 +25,7 @@ export class ApiServiceService {
   private tokenUrl = `${this.url}token/`;
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {  }
 
   login(credentials: { username: string; password: string }): Observable<any> {
     if(this.token){
@@ -87,6 +89,20 @@ export class ApiServiceService {
     if(tokenLocal){
       tokenLocal.access = data;
       this.saveToken(tokenLocal);
+    }
+  }
+
+  updateUserLocal(){
+    const tokenLocal = this.getTokenLocal();
+    if (tokenLocal){
+      const decodeToken = jwtDecode<any>(tokenLocal.access);
+      this.getUser(decodeToken.user_id, tokenLocal).subscribe({
+        next: (data) => {
+          this.updateUser(data);
+        }
+      })
+    }else{
+      this.logout();
     }
   }
 }
