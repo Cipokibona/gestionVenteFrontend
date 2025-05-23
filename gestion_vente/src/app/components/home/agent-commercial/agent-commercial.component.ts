@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agent-commercial',
@@ -12,7 +13,7 @@ export class AgentCommercialComponent {
   userData!: any;
   walletSumTotal: number = 0;
   
-  constructor(private apiService: ApiServiceService){
+  constructor(private apiService: ApiServiceService, private router: Router){
     this.apiService.currentUser.subscribe({
       next: (data) => {
         this.userData = data;
@@ -20,6 +21,9 @@ export class AgentCommercialComponent {
           this.walletSumTotal = this.walletSumTotal + wallet.montant;
         }
         console.log('les data dans agent-commercial component:', this.userData);
+      },error: () => {
+        this.apiService.logout();
+        // this.router.navigate(['/login']);
       }
     });
   }

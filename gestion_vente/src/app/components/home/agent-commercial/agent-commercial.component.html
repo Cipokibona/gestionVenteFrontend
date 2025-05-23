@@ -10,17 +10,17 @@
                         Mes produits:
                     </div>
                     <div class="col-6 text-danger text-start">
-                        <button class="button secondary rounded-pill p-1" data-bs-toggle="modal" data-bs-target="#depotBanque">
+                        <button class="button secondary rounded-pill p-1 mb-2" data-bs-toggle="modal" data-bs-target="#depotBanque">
                             Voir
                         </button>
                     </div>
                 </div>
                 <div class="row">
                     @for (wallet of userData?.wallet_user; track wallet.id) {
-                    <div class="col-6 text-end">
-                        {{wallet.wallet_name}}:
+                    <div class="col-6 text-end border-top">
+                        {{wallet.wallet_name}} (Bordereau : {{wallet.bordereau}}):
                     </div>
-                    <div class="col-6 text-danger text-start">
+                    <div class="col-6 text-danger text-start border-top">
                         {{wallet.montant}} BIF
                     </div>
                     }
