@@ -107,6 +107,7 @@ export class ApiServiceService {
       this.getUser(decodeToken.user_id, tokenLocal).subscribe({
         next: (data) => {
           this.updateUser(data);
+          this.updateAuth(true);
         }
       })
     }else{
