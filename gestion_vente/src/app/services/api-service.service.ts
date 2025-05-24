@@ -25,6 +25,7 @@ export class ApiServiceService {
 
   private usersUrl = `${this.url}users/`;
   private tokenUrl = `${this.url}token/`;
+  private transaction = `${this.url}transactions/`
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -113,5 +114,15 @@ export class ApiServiceService {
     }else{
       this.logout();
     }
+  }
+
+  getTransaction(){
+    return this.http.get(`${this.transaction}`);
+  }
+
+  createTransaction(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.transaction}`, data, {headers});
   }
 }

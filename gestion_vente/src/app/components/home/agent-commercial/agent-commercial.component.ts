@@ -11,12 +11,13 @@ import { Router } from '@angular/router';
 export class AgentCommercialComponent {
 
   userData!: any;
-  walletSumTotal: number = 0;
+  walletSumTotal!: number;
   
   constructor(private apiService: ApiServiceService, private router: Router){
     this.apiService.currentUser.subscribe({
       next: (data) => {
         this.userData = data;
+        this.walletSumTotal = 0;
         for(let wallet of this.userData.wallet_user){
           this.walletSumTotal = this.walletSumTotal + wallet.montant;
         }

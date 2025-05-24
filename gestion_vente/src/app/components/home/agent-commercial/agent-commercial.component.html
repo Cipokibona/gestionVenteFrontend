@@ -10,7 +10,7 @@
                         Mes produits:
                     </div>
                     <div class="col-6 text-danger text-start">
-                        <button class="button secondary rounded-pill p-1 mb-2" data-bs-toggle="modal" data-bs-target="#depotBanque">
+                        <button class="button secondary rounded-pill p-1 mb-2" data-bs-toggle="modal" data-bs-target="#depotWallet">
                             Voir
                         </button>
                     </div>
@@ -32,8 +32,8 @@
                     </div> -->
                 </div>
                 <div class="col-auto mt-4">
-                    <button class="button secondary rounded-pill p-1" data-bs-toggle="modal" data-bs-target="#depotBanque">
-                        Faire un depot dans une banque
+                    <button class="button secondary rounded-pill p-1" data-bs-toggle="modal" data-bs-target="#transactionOnMyWallet">
+                        Faire une transaction sur un autre wallet
                     </button>
                 </div>
                 <div class="alert alert-warning mt-3" role="alert">
@@ -125,31 +125,39 @@
         </div> -->
     </div>
 </div>
-<!-- Modal de depot banque -->
-<div class="modal fade" id="depotBanque" tabindex="-1" aria-labelledby="recouvrement" aria-hidden="true">
+<!-- Modal de transaction sur my wallet -->
+<div class="modal fade" id="transactionOnMyWallet" tabindex="-1" aria-labelledby="transactionOnMyWallet" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Recouvrement de dette</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Transfert sur mon wallet</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form class="needs-validation" novalidate>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="nameClient" class="visually-hidden">Full name</label>
-                        <input type="text" class="form-control" name="nameClient" id="nameClient" value="Jean" disabled>
-                    </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="montantCashDepot" class="visually">Montant Cash</label>
-                        <input type="number" class="form-control" name="montantCashDepot" id="montantCashDepot" required>
+                        <label for="nameAuthor" class="visually-hidden">Full name</label>
+                        <input type="text" class="form-control" name="nameAuthor" id="nameAuthor" value="{{userData?.username}}" disabled>
                     </div>
                     <div class="col-auto mb-2">
                         <select class="form-select" aria-label="Default select example">
-                                <option selected>Banque</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                                <option selected>Wallet source</option>
+                            @for (wallet of userData?.wallet_user; track wallet.id) {
+                                <option value="{{wallet.id}}">{{wallet.wallet_name}} ({{wallet.montant}} BIF)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <select class="form-select" aria-label="Default select example">
+                                <option selected>Wallet cible</option>
+                            @for (wallet of userData?.wallet_user; track wallet.id) {
+                                <option value="{{wallet.id}}">{{wallet.wallet_name}} ({{wallet.montant}} BIF)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="montantTransaction" class="visually">Montant Cash</label>
+                        <input type="number" class="form-control" name="montantTransaction" id="montantTransaction" required>
                     </div>
                     <div class="ms-auto me-auto mb-2">
                         <p class="text-secondary">
