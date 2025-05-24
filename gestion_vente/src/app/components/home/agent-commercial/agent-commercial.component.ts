@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router } from '@angular/router';
 
@@ -12,6 +12,8 @@ export class AgentCommercialComponent {
 
   userData!: any;
   walletSumTotal!: number;
+  data!: any;
+  typeEchange: any;
   
   constructor(private apiService: ApiServiceService, private router: Router){
     this.apiService.currentUser.subscribe({
@@ -27,5 +29,11 @@ export class AgentCommercialComponent {
         // this.router.navigate(['/login']);
       }
     });
+    this.apiService.getTypeEchange().subscribe({
+      next: (data: any) => {
+        this.typeEchange = data.results;
+      }
+    })
   }
 }
+

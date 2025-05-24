@@ -150,8 +150,8 @@
                     <div class="col-auto mb-2">
                         <select class="form-select" aria-label="Default select example">
                                 <option selected>Wallet cible</option>
-                            @for (wallet of userData?.wallet_user; track wallet.id) {
-                                <option value="{{wallet.id}}">{{wallet.wallet_name}} ({{wallet.montant}} BIF)</option>
+                            @for (wallet of typeEchange; track wallet.id) {
+                                <option value="{{wallet.id}}">{{wallet.nom}}</option>
                             }
                         </select>
                     </div>

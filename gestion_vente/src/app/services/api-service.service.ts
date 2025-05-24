@@ -12,9 +12,11 @@ export class ApiServiceService {
   // private storedUser = localStorage.getItem('user');
   private user$ = new BehaviorSubject<string | null>(null);
   private isAuthenticate$ = new BehaviorSubject<string | null>(null);
+  private typeEchange$ = new BehaviorSubject<string | null>(null);
   
   currentUser = this.user$.asObservable();
   currentIsAuthenticate = this.isAuthenticate$.asObservable();
+  currentTypeEchange = this.typeEchange$.asObservable()
 
 
   private http = inject(HttpClient);
@@ -25,7 +27,9 @@ export class ApiServiceService {
 
   private usersUrl = `${this.url}users/`;
   private tokenUrl = `${this.url}token/`;
-  private transaction = `${this.url}transactions/`
+  private transactionUrl = `${this.url}transactions/`
+  private walletUrl = `${this.url}wallet/`
+  private typeEchangeUrl = `${this.url}typeEchange/`
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -59,6 +63,10 @@ export class ApiServiceService {
   updateUser(data: any){
     this.user$.next(data);
     localStorage.setItem('user', JSON.stringify(data));
+  }
+
+  updateTypeEchange(data: any){
+    this.typeEchange$.next(data);
   }
 
   saveToken(token: any){
@@ -116,13 +124,21 @@ export class ApiServiceService {
     }
   }
 
+  getWallet(){
+    return this.http.get(`${this.walletUrl}`)
+  }
+
+  getTypeEchange(){
+    return this.http.get(`${this.typeEchangeUrl}`)
+  }
+
   getTransaction(){
-    return this.http.get(`${this.transaction}`);
+    return this.http.get(`${this.transactionUrl}`);
   }
 
   createTransaction(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.transaction}`, data, {headers});
+    return this.http.post<any>(`${this.transactionUrl}`, data, {headers});
   }
 }

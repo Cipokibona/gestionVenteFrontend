@@ -10,6 +10,8 @@ import { ApiServiceService } from '../../services/api-service.service';
 })
 export class HomeComponent implements OnInit{
   userData!: any| null;
+  allWallet!: any| null;
+  typeEchange!: any| null;
 
   constructor(private apiService: ApiServiceService){}
 
@@ -17,6 +19,8 @@ export class HomeComponent implements OnInit{
     this.apiService.refreshTokenLocal();
     this.apiService.updateUserLocal();
     this.getUser();
+    this.getAllWallet();
+    this.getTypeEchange();
   }
 
   getUser(){
@@ -26,5 +30,22 @@ export class HomeComponent implements OnInit{
         console.log('userData dans home page:', this.userData);
       }
     });
+  }
+
+  getAllWallet(){
+    this.apiService.getWallet().subscribe({
+      next: (data: any) => {
+        this.allWallet = data.results;
+      }
+    })
+  }
+
+  getTypeEchange(){
+    this.apiService.getTypeEchange().subscribe({
+      next: (data: any) => {
+        this.typeEchange = data.results;
+        console.log('type Echange', this.typeEchange);
+      }
+    })
   }
 }
