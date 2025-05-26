@@ -92,6 +92,9 @@ export class AgentCommercialComponent implements OnInit{
         }
       }
     };
+    this.router.navigate(['/home']).then(() => {
+        location.reload();
+    });
     // if(walletSource == this.transactionForm.value.typeEchangeCible){
     //   console.log('la source et la cible est la meme');
     // }
