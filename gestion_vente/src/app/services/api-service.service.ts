@@ -128,6 +128,18 @@ export class ApiServiceService {
     return this.http.get(`${this.walletUrl}`)
   }
 
+  createWallet(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.walletUrl}`, data, {headers});
+  }
+
+  updateWallet(id: any, data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.walletUrl}${id}/`, data, {headers});
+  }
+
   getTypeEchange(){
     return this.http.get(`${this.typeEchangeUrl}`)
   }

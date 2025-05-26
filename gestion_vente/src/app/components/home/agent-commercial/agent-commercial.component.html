@@ -134,22 +134,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate>
+                <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction()">
                     <div class="ms-auto me-auto mb-2">
                         <label for="nameAuthor" class="visually-hidden">Full name</label>
                         <input type="text" class="form-control" name="nameAuthor" id="nameAuthor" value="{{userData?.username}}" disabled>
                     </div>
                     <div class="col-auto mb-2">
-                        <select class="form-select" aria-label="Default select example">
-                                <option selected>Wallet source</option>
+                        <label for="walletSource">Wallet Source</label>
+                        <select class="form-select" name="walletSource" formControlName="typeEchangeSource" aria-label="Default select example">
                             @for (wallet of userData?.wallet_user; track wallet.id) {
                                 <option value="{{wallet.id}}">{{wallet.wallet_name}} ({{wallet.montant}} BIF)</option>
                             }
                         </select>
                     </div>
                     <div class="col-auto mb-2">
-                        <select class="form-select" aria-label="Default select example">
-                                <option selected>Wallet cible</option>
+                        <label for="walletCible">Wallet Cible</label>
+                        <select class="form-select" name="walletCible" formControlName="typeEchangeCible" aria-label="Default select example">
                             @for (wallet of typeEchange; track wallet.id) {
                                 <option value="{{wallet.id}}">{{wallet.nom}}</option>
                             }
@@ -157,9 +157,13 @@
                     </div>
                     <div class="ms-auto me-auto mb-2">
                         <label for="montantTransaction" class="visually">Montant Cash</label>
-                        <input type="number" class="form-control" name="montantTransaction" id="montantTransaction" required>
+                        <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
                     </div>
                     <div class="ms-auto me-auto mb-2">
+                        <label for="numBordereau" class="visually">Num bordereau</label>
+                        <input type="text" class="form-control" formControlName="bordereauTransaction" name="numBordereau" id="numBordereau" required>
+                    </div>
+                    <!-- <div class="ms-auto me-auto mb-2">
                         <p class="text-secondary">
                             Reste en cash:
                             <span class="text-danger">
@@ -169,7 +173,7 @@
                                 30000 Bif
                             </span>
                         </p>
-                    </div>
+                    </div> -->
                     <div class="ms-auto me-auto mb-2 mt-3">
                         <button type="submit" class="button principal p-1 m-1">
                             <span class="ms-5 me-5">Effectuer</span>
