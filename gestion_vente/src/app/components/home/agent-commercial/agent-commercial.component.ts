@@ -74,11 +74,28 @@ export class AgentCommercialComponent implements OnInit{
       if(wallet.id == walletSource){
         if(montant && wallet.montant > montant){
           this.apiService.createWallet(walletCibleData).subscribe({
-            next: (data) => {
-              console.log('resultat de create wallet', data);
+            next: (dataCreate) => {
+              console.log('resultat de create wallet', dataCreate);
               this.apiService.updateWallet(walletSource, walletSourceData).subscribe({
-                next: (data) => {
-                  console.log('update de wallet source avec susses', data);
+                next: (dataUpdate) => {
+                  console.log('update de wallet source avec susses', dataUpdate);
+                  const newTransaction = {
+                    author: this.userData.id,
+                    walletSource: walletSource,
+                    walletCible: dataUpdate.id,
+                    montant: montant,
+                    bordereau: dataCreate.bordereau,
+                    is_delivered: true,
+
+                  };
+                  this.apiService.createTransaction(newTransaction).subscribe({
+                    next: (dataTransaction) => {
+                      console.log('data Transaction', dataTransaction);
+                    },
+                    error: (err) => {
+                      console.error('errer de transaction', err);
+                    }
+                  })
                 },
                 error: (err) => {
                   console.error('erreur de update', err);
@@ -92,12 +109,9 @@ export class AgentCommercialComponent implements OnInit{
         }
       }
     };
-    this.router.navigate(['/home']).then(() => {
-        location.reload();
-    });
-    // if(walletSource == this.transactionForm.value.typeEchangeCible){
-    //   console.log('la source et la cible est la meme');
-    // }
+    // this.router.navigate(['/home']).then(() => {
+    //     location.reload();
+    // });
     console.log('transactionData sur submit', walletCibleData);
     
   }
