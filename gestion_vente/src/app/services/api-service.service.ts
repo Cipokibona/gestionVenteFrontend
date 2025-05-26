@@ -30,6 +30,7 @@ export class ApiServiceService {
   private transactionUrl = `${this.url}transactions/`
   private walletUrl = `${this.url}wallet/`
   private typeEchangeUrl = `${this.url}typeEchange/`
+  private productsBasketUrl = `${this.url}basketAgent/`;
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -152,5 +153,9 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.transactionUrl}`, data, {headers});
+  }
+
+  getProductBasket(){
+    return this.http.get(`${this.productsBasketUrl}`);
   }
 }

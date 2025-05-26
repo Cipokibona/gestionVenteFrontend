@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-agent-commercial',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './agent-commercial.component.html',
   styleUrl: './agent-commercial.component.scss'
 })
@@ -109,9 +109,9 @@ export class AgentCommercialComponent implements OnInit{
         }
       }
     };
-    // this.router.navigate(['/home']).then(() => {
-    //     location.reload();
-    // });
+    this.router.navigate(['/home']).then(() => {
+        location.reload();
+    });
     console.log('transactionData sur submit', walletCibleData);
     
   }

@@ -14,10 +14,12 @@
     </div>
     <div class="row">
         <h5 class="text-center m-3">Liste des produits</h5>
-        <div class="card shadow" style="width: 18rem;">
+        <!-- start card -->
+        @for (product of basketUser; track product.id) {
+        <div class="card shadow m-2" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">Nom du produit</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Nom depot ou agent commercial</h6>
+                <h5 class="card-title">{{product.depot_name}}</h5>
+                <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Nom depot ou agent commercial</h6> -->
                 <!-- <p class="card-text">
                     <span class="text-end">Prix officiel:</span>
                 </p> -->
@@ -25,61 +27,42 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Type d'achat
+                                List Product
                             </button>
                         </h2>
+                        @for (article of product.list_product; track $index) {
                         <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <h6 class="card-subtitle mb-2 text-body-secondary border-top mt-3">Achat 1</h6>
+                                <h6 class="card-subtitle mb-2 text-body-secondary border-top mt-3">{{article.product_name}}</h6>
                                 <div class="row">
                                     <div class="col-6 text-secondary text-end">
                                         prix officiel:
                                     </div>
                                     <div class="col-6 text-danger text-start">
-                                        50,000 Bif
+                                        {{article.pricePerUnitOfficiel}} Bif
                                     </div>
                                     <div class="col-6 text-secondary text-end">
                                         Quantity:
                                     </div>
                                     <div class="col-6 text-start">
-                                        52
+                                        {{article.quantity}}
                                     </div>
                                     <div class="col-6 text-secondary text-end">
                                         date d'expiration:
                                     </div>
                                     <div class="col-6 text-start">
-                                        12/02/2029
+                                        {{article.date_expiration | date: 'fullDate'}}
                                     </div>
                                     <div class="col-6 text-secondary text-end">
                                         prix total:
                                     </div>
                                     <div class="col-6 text-danger text-start">
-                                        1,000,000 Bif
-                                    </div>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-body-secondary border-top  mt-3">Achat 2</h6>
-                                <div class="row">
-                                    <div class="col-6 text-secondary text-end">
-                                        prix officiel:
-                                    </div>
-                                    <div class="col-6 text-danger text-start">
-                                        50,000 Bif
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        Quantity:
-                                    </div>
-                                    <div class="col-6 text-start">
-                                        52
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        date d'expiration:
-                                    </div>
-                                    <div class="col-6 text-start">
-                                        12/02/2029
+                                        {{article.pricePerUnitOfficiel * article.quantity}} Bif
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        }
                     </div>
                 </div>
                 <h6 class="card-subtitle mb-2 border-top  mt-3">Quantity totale: 120</h6>
@@ -87,9 +70,8 @@
                     Prix total:
                     <span class="text-danger">10,000,000 Bif</span>
                 </h6>
-                <!-- <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a> -->
             </div>
-        </div>
+        </div>}
+        <!-- end card -->
     </div>
 </div>
