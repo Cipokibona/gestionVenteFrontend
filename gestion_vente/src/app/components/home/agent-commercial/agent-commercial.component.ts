@@ -25,12 +25,14 @@ export class AgentCommercialComponent implements OnInit{
     bordereauTransaction: new FormControl('', Validators.required),
   });
   
-  constructor(private apiService: ApiServiceService, private router: Router){  }
-
-  ngOnInit(): void {
+  constructor(private apiService: ApiServiceService, private router: Router){ 
+    
     this.getUserData();
     this.getTypeEchange();
     this.getProductAgent();
+   }
+
+  ngOnInit(): void {
   }
 
   getUserData(){

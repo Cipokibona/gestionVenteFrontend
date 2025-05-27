@@ -40,7 +40,7 @@ export const routes: Routes = [
         component: EditClientComponent,
     },
     {
-        path: 'vente',
+        path: 'client/vente/:id',
         title: 'vente page',
         component: SellComponent,
     },

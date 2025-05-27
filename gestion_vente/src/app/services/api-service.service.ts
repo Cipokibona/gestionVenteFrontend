@@ -31,6 +31,7 @@ export class ApiServiceService {
   private walletUrl = `${this.url}wallet/`
   private typeEchangeUrl = `${this.url}typeEchange/`
   private productsBasketUrl = `${this.url}basketAgent/`;
+  private customerUrl = `${this.url}customers/`;
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -157,5 +158,13 @@ export class ApiServiceService {
 
   getProductBasket(){
     return this.http.get(`${this.productsBasketUrl}`);
+  }
+
+  getAllCustomers(){
+    return this.http.get(`${this.customerUrl}`);
+  }
+
+  getCustomer(id: any){
+    return this.http.get(`${this.customerUrl}${id}/`);
   }
 }

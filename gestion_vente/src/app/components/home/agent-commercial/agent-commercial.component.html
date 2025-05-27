@@ -55,7 +55,7 @@
             <h5 class="card-header">{{depot.depot_name}}</h5>
             <div class="card-body">
                 @for (wallet of depot.wallet_basket; track wallet.id) {
-                <div class="row">
+                <div class="row border-bottom">
                     <div class="col-6 text-end text-secondary">
                         {{wallet.type_echange_name}}:
                     </div>
