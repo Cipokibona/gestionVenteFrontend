@@ -50,66 +50,24 @@
     </div>
     <div class="row gap-2">
         <h5 class="mt-4">Attente sur les depos</h5>
+        @for (depot of basketUser; track depot.id) {
         <div class="card m-2 shadow-lg" style="width: 18rem;">
-            <h5 class="card-header">Point de vente Ngagara</h5>
+            <h5 class="card-header">{{depot.depot_name}}</h5>
             <div class="card-body">
+                @for (wallet of depot.wallet_basket; track wallet.id) {
                 <div class="row">
                     <div class="col-6 text-end text-secondary">
-                        Vente:
+                        {{wallet.type_echange_name}}:
                     </div>
-                    <div class="col-6 text-start">
-                        <a href="" class="text-danger">1,200,000 bif</a>
+                    <div class="col-6 text-start text-danger">
+                        {{wallet.montant}} BIF
                     </div>
-                </div>
-                <div class="row mt-5 mb-3 border-top">
-                    <div class="col-6 text-end text-secondary">
-                        Total:
-                    </div>
-                    <div class="col-6 text-danger text-start">
-                        <strong>
-                            1,200,000 bif
-                        </strong>
-                    </div>
-                </div>
+                </div>}
                 <a href="#" class="button principal p-1">
                     <span class="ms-5 me-5">Depot</span>
                 </a>
             </div>
-        </div>
-        <div class="card m-2 shadow-lg" style="width: 18rem;">
-            <h5 class="card-header">Point de vente Rohero</h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Vente:
-                    </div>
-                    <div class="col-6 text-start">
-                        <a href="" class="text-danger">200,000 bif</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Remboursement:
-                    </div>
-                    <div class="col-6 text-danger text-start">
-                        <a href="" class="text-danger">700,000 bif</a>
-                    </div>
-                </div>
-                <div class="row mt-5 mb-3 border-top">
-                    <div class="col-6 text-secondary text-end">
-                        Total:
-                    </div>
-                    <div class="col-6 text-danger text-start">
-                        <strong>
-                            900,000 bif
-                        </strong>
-                    </div>
-                </div>
-                <a href="#" class="button principal p-1">
-                    <span class="ms-5 me-5">Depot</span>
-                </a>
-            </div>
-        </div>
+        </div>}
         <!-- <div class="card m-2 shadow" style="width: 18rem;">
             <h5 class="card-header">Point de vente Rohero</h5>
             <div class="card-body">

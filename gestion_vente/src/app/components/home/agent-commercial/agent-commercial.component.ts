@@ -15,6 +15,7 @@ export class AgentCommercialComponent implements OnInit{
   walletSumTotal!: number;
   data!: any;
   typeEchange: any;
+  basketUser!: any;
 
   // form
   transactionForm = new FormGroup({
@@ -29,6 +30,7 @@ export class AgentCommercialComponent implements OnInit{
   ngOnInit(): void {
     this.getUserData();
     this.getTypeEchange();
+    this.getProductAgent();
   }
 
   getUserData(){
@@ -114,6 +116,19 @@ export class AgentCommercialComponent implements OnInit{
     });
     console.log('transactionData sur submit', walletCibleData);
     
+  }
+
+  getProductAgent(){
+    this.apiService.getProductBasket().subscribe({
+      next: (dataBasketAgent: any) => {
+        const data = dataBasketAgent.results;
+        this.basketUser = data.filter((item:any) => item.agent === this.userData.id);
+        console.log('panier pour les users dans home page', this.basketUser);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de panier dans home page', err);
+      }
+    })
   }
 }
 
