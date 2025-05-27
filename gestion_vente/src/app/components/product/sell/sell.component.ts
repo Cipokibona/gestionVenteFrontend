@@ -14,7 +14,9 @@ export class SellComponent implements OnInit{
   dataClient!: any;
   agentBasket!: any;
   nbreProducts: number = 1;
-  tabProducts: any[] = []; 
+  tabProducts: any[] = [];
+  selectedBasketId!: number;
+  selectedBasketData!: any;
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute){
     
@@ -82,6 +84,12 @@ export class SellComponent implements OnInit{
       this.nbreProducts--;
       this.updateTabProduct();
     }
+  }
+
+  selectBasket(event: Event){
+    this.selectedBasketId = Number((event.target as HTMLSelectElement).value);
+    this.selectedBasketData = this.agentBasket.find((item:any) => item.id === this.selectedBasketId);
+    console.log('selected Basket', this.selectedBasketData);
   }
   
 }

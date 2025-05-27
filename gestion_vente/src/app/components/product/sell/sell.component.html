@@ -9,18 +9,20 @@
             @for (item of tabProducts; track $index) {
             <div class="container border p-2 rounded">
                 <h6>Product {{$index + 1}}</h6>
+                @if (agentBasket) {
+                <label for="panier">Panier</label>
+                <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectBasket($event)">
+                    <option selected>Selectionner le panier</option>
+                    @for (basket of agentBasket; track basket.id) {
+                    <option value={{basket.id}}>Pris dans {{basket.depot_name}}</option>
+                }
+                </select>}@if(selectedBasketData){
+                <label for="product">Product</label>
                 <select class="form-select mb-2" aria-label="Default select example">
-                    <option selected>Selon le prix d'achat</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-                <select class="form-select mb-2" aria-label="Default select example">
-                    <option selected>Selon le prix d'achat</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedBasketData.list_product; track product.id) {
+                    <option value={{product.id}}>{{product.product_name}}</option>}
+                </select>}
                 <div class="row">
                     <div class="col-auto mb-2">
                         <label for="quantity" class="visually">Quantity</label>

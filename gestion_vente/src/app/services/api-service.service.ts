@@ -167,4 +167,8 @@ export class ApiServiceService {
   getCustomer(id: any){
     return this.http.get(`${this.customerUrl}${id}/`);
   }
+
+  getAgentBasketId(id: any){
+    return this.http.get(`${this.productsBasketUrl}${id}/`);
+  }
 }
