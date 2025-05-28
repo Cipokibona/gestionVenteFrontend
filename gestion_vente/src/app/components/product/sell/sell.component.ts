@@ -28,7 +28,7 @@ export class SellComponent implements OnInit{
   selectedBasketData!: any;
   
   selectedProductId!: number;
-  selectedProductData!: any;
+  selectedProductData: any[] = [];
   
   selectedTypeId!: number;
   selectedTypeData!: any;
@@ -112,12 +112,11 @@ export class SellComponent implements OnInit{
     console.log('ajout de data', this.tabProducts);
   }
 
-  removeProduct(index:number){
-    const id = Number(index);
+  removeProduct(data:any){
     if(this.tabProducts.length > 1){
-      this.tabProducts.splice(id,1);
+      this.tabProducts.splice(data, 1);
     }
-    console.log('resultat aprs suppression de product dans vente', this.tabProducts, id);
+    console.log('resultat aprs suppression de product dans vente', this.tabProducts);
   }
 
   updateTabModePay(){
@@ -143,7 +142,14 @@ export class SellComponent implements OnInit{
 
   selectProduct(event: Event, index:number){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
-    this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+    const dataSelectedProduct = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+    const dataPutIndex = {
+      ...dataSelectedProduct,
+      id: Number(index) // Définir un nouvel ID
+    };
+    this.selectedProductData.push(dataPutIndex);
+    console.log('selected product data', this.selectedProductData);
+    
 
     // Vérification de l'index existant
     // const existingIndex = this.tabProducts.find(item => item.id === Number(index));

@@ -8,38 +8,38 @@
             </div>
             @if (agentBasket) {
             <div class="container border p-2 rounded">
-                <h6>Panier</h6>
+                <h5>Panier</h5>
                 <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectBasket($event)">
                     <option selected>Selectionner le panier</option>
                     @for (basket of agentBasket; track basket.id) {
                     <option value={{basket.id}}>Pris dans {{basket.depot_name}}</option>
                 }
                 </select> @if(selectedBasketData){ @for (item of tabProducts; track $index) {
-                <label for="product">Product {{$index + 1}}</label>
-                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event, $index)">
+                <h4 for="product">Product {{$index + 1}}</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event, $index)" [disabled]="tabProducts[$index + 1]">
                     <option selected>Choisit un produit</option>
                     @for (product of selectedBasketData.list_product; track product.id) {
                     <option value={{product.id}}>{{product.product_name}}</option>}
-                </select> @if (selectedProductData) {
+                </select> @if (selectedProductData[$index]) {
                 <div class="col-auto mb-2">
-                    <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
-                    <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
+                    <label for="quantity" class="visually">Quantity (max:{{selectedProductData[$index].quantity}})</label>
+                    <input type="number" class="form-control" max="{{selectedProductData[$index].quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 [disabled]="tabProducts[$index + 1]" required>
                 </div>
                 <div class="col-auto mb-2">
                     <label for="pureel" class="visually">PU reel en Bif</label>
-                    <input type="number" class="form-control" name="pureel" id="pureel" required>
+                    <input type="number" class="form-control" name="pureel" id="pureel" [disabled]="tabProducts[$index + 1]" required>
                     <p class="text-secondary">
                         Prix unitaire officiel:
                         <span class="text-danger">
-                            {{selectedProductData.pricePerUnitOfficiel}} Bif
+                            {{selectedProductData[$index].pricePerUnitOfficiel}} Bif
                         </span>
                     </p>
                 </div>
                 <div class="col">
-                    <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProduct(selectedProductData,$index)">
+                    <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProduct(selectedProductData[$index],$index)" [disabled]="tabProducts[$index + 1]">
                          + Save
                     </button>
-                    <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct($index)">
+                    <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData[$index])">
                         Delete
                     </button>
                 </div>
