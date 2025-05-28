@@ -22,7 +22,7 @@ export class SellComponent implements OnInit{
   tabProducts: any[] = [{ id: null, product_name: '' }];
 
   nbreModePay: number = 1;
-  tabModePay!: any[];
+  tabModePay: any[] = [{ id: null, modePayName: '' }];
   
   selectedBasketId!: number;
   selectedBasketData!: any;
@@ -31,7 +31,7 @@ export class SellComponent implements OnInit{
   selectedProductData: any[] = [];
   
   selectedTypeId!: number;
-  selectedTypeData!: any;
+  selectedTypeData: any[] = [];
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute){
     
@@ -57,8 +57,6 @@ export class SellComponent implements OnInit{
     this.getUserData();
     this.getBasketAgent();
     this.getTypeEchange();
-    this.tabProducts;
-    this.updateTabModePay();
   }
 
   getBasketAgent(){
@@ -97,11 +95,11 @@ export class SellComponent implements OnInit{
     })
   }
 
-  updateTabProduct(){
-    this.tabProducts = Array.from({
-      length: this.nbreProducts
-    });
-  }
+  // updateTabProduct(){
+  //   this.tabProducts = Array.from({
+  //     length: this.nbreProducts
+  //   });
+  // }
 
   addProduct(data: any, index: number){
     const newProduct = {
@@ -119,19 +117,25 @@ export class SellComponent implements OnInit{
     console.log('resultat aprs suppression de product dans vente', this.tabProducts);
   }
 
-  updateTabModePay(){
-    this.tabModePay = Array.from({
-      length: this.nbreModePay
-    });
+  // updateTabModePay(){
+  //   this.tabModePay = Array.from({
+  //     length: this.nbreModePay
+  //   });
+  // }
+
+  addModePay(data: any, index: number){
+    const newModePay = {
+      ...data,
+      id: Number(index) 
+    };
+    this.tabModePay.push(newModePay);
+    console.log('ajout de data type', this.tabModePay);
   }
 
-  addModePay(){
-    this.nbreModePay++;
-    this.updateTabModePay();
-  }
-
-  removeModePay(){
-    
+  removeModePay(index:number){
+    if(this.tabModePay.length > 1){
+      this.tabModePay.splice(index,1);
+    }
   }
 
   selectBasket(event: Event){
@@ -177,9 +181,18 @@ export class SellComponent implements OnInit{
     
   }
 
-  selectedTypeEchange(event: Event){
+  selectedTypeEchange(event: Event, index: number){
     this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
-    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+    const dataPay = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+    // const existIndex = this.selectedTypeData.find((item:any) => item.id === index);
+    // if(existIndex){
+    //   this.selectedTypeData.slice(index,1);
+    // };
+    const datePayIndex = {
+      ...dataPay,
+      id: Number(index)
+    };
+    this.selectedTypeData.push(datePayIndex);
     // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
     console.log('selected type', this.selectedTypeData)
   }

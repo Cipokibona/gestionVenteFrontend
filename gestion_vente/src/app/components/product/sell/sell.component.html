@@ -110,33 +110,32 @@
                 </div> -->
                 <div class="container">
                     <h6>Mode de payement du client</h6>
+                    @for (item of tabModePay; track $index) {
                     <div class="row">
-                        @for (item of tabModePay; track $index) {
                         <div class="col-auto mb-2">
-                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)">
+                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event,$index)" [disabled]="tabModePay[$index + 1]">
                                 <option selected>Mode payement</option>
                                 @for (type of typeEchangeData; track type.id) {
                                 <option value={{type.id}}>{{type.nom}}</option>}
                             </select>
-                        </div>@if (selectedTypeData) {
-                        <div class="col-auto mb-2">
-                            <label for="numero" class="visually-hidden">Bordereau</label>
-                            <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
-                        </div>
+                        </div>@if (selectedTypeData[$index]) {
                         <div class="col-auto mb-2">
                             <label for="montantCash" class="visually-hidden">montant</label>
-                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" required>
+                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" [disabled]="tabModePay[$index + 1]" required>
+                        </div>@if (selectedTypeData[$index].is_bordereau) {
+                        <div class="col-auto mb-2">
+                            <label for="numero" class="visually-hidden">Bordereau</label>
+                            <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" [disabled]="tabModePay[$index + 1]" required>
                         </div>}}
-
                         <div class="col">
-                            <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addModePay()">
-                                + Add
+                            <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addModePay(selectedTypeData[$index],$index)" [disabled]="tabModePay[$index + 1]">
+                                + save
                             </button>
-                            <button type=" button " class="btn btn-danger rounded-pill m-1 p-1" (click)="removeModePay()">
+                            <button type=" button " class="btn btn-danger rounded-pill m-1 p-1" (click)="removeModePay($index)">
                                 Delete
                             </button>
                         </div>
-                    </div>
+                    </div>}
                 </div>
                 <p class="text-secondary ">
                     Totaux officiel:
