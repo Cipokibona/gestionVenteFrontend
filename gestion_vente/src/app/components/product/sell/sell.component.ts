@@ -17,6 +17,8 @@ export class SellComponent implements OnInit{
   tabProducts: any[] = [];
   selectedBasketId!: number;
   selectedBasketData!: any;
+  selectedProductId!: number;
+  selectedProductData!: any;
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute){
     
@@ -90,6 +92,13 @@ export class SellComponent implements OnInit{
     this.selectedBasketId = Number((event.target as HTMLSelectElement).value);
     this.selectedBasketData = this.agentBasket.find((item:any) => item.id === this.selectedBasketId);
     console.log('selected Basket', this.selectedBasketData);
+  }
+
+  selectProduct(event: Event){
+    this.selectedProductId = Number((event.target as HTMLSelectElement).value);
+    this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+    // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
+    console.log('selected product', this.selectedProductData)
   }
   
 }

@@ -6,7 +6,46 @@
                 <label for="nameClient" class="visually-hidden">Full name</label>
                 <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataClient.fullName}}" disabled>
             </div>
-            @for (item of tabProducts; track $index) {
+            @if (agentBasket) {
+            <div class="container border p-2 rounded">
+                <h6>Panier</h6>
+                <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectBasket($event)">
+                    <option selected>Selectionner le panier</option>
+                    @for (basket of agentBasket; track basket.id) {
+                    <option value={{basket.id}}>Pris dans {{basket.depot_name}}</option>
+                }
+                </select> @if(selectedBasketData){ @for (item of tabProducts; track $index) {
+                <label for="product">Product {{$index + 1}}</label>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedBasketData.list_product; track product.id) {
+                    <option value={{product.id}}>{{product.product_name}}</option>}
+                </select> @if (selectedProductData) {
+                <div class="col-auto mb-2">
+                    <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
+                    <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
+                </div>
+                <div class="col-auto mb-2">
+                    <label for="pureel" class="visually">PU reel en Bif</label>
+                    <input type="number" class="form-control" name="pureel" id="pureel" required>
+                    <p class="text-secondary">
+                        Prix unitaire officiel:
+                        <span class="text-danger">
+                            {{selectedProductData.pricePerUnitOfficiel}} Bif
+                        </span>
+                    </p>
+                </div>
+                }}}
+                <div class="col">
+                    <button type="button" class="button secondary rounded-pill m-1 p-1" (click)="addProduct()">
+                         + Add
+                    </button>
+                    <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct()">
+                        Delete
+                    </button>
+                </div>
+            </div>}
+            <!-- } @for (item of tabProducts; track $index) {
             <div class="container border p-2 rounded">
                 <h6>Product {{$index + 1}}</h6>
                 @if (agentBasket) {
@@ -52,23 +91,23 @@
                         </p>
                     </div>
                 </div>
-                <!-- <div class="row text-end">
+                <div class="row text-end">
                     <div class="col">
                         <button type="button" class="btn btn-danger rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
                             Delete
                         </button>
                     </div>
                 </div> -->
-            </div>}
+            <!-- </div>} -->
             <div class="row">
-                <div class="col">
+                <!-- <div class="col">
                     <button type="button" class="button secondary rounded-pill m-1 p-1" (click)="addProduct()">
                          + Add
                     </button>
                     <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct()">
                         Delete
                     </button>
-                </div>
+                </div> -->
                 <div class="container">
                     <h6>Mode de payement du client</h6>
                     <div class="row">
