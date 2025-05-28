@@ -16,14 +16,14 @@
                 }
                 </select> @if(selectedBasketData){ @for (item of tabProducts; track $index) {
                 <label for="product">Product {{$index + 1}}</label>
-                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)">
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event, $index)">
                     <option selected>Choisit un produit</option>
                     @for (product of selectedBasketData.list_product; track product.id) {
                     <option value={{product.id}}>{{product.product_name}}</option>}
                 </select> @if (selectedProductData) {
                 <div class="col-auto mb-2">
                     <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
-                    <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
+                    <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
                 </div>
                 <div class="col-auto mb-2">
                     <label for="pureel" class="visually">PU reel en Bif</label>
@@ -35,15 +35,15 @@
                         </span>
                     </p>
                 </div>
-                }}}
                 <div class="col">
-                    <button type="button" class="button secondary rounded-pill m-1 p-1" (click)="addProduct()">
-                         + Add
+                    <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProduct(selectedProductData,$index)">
+                         + Save
                     </button>
-                    <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct()">
+                    <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct($index)">
                         Delete
                     </button>
                 </div>
+                }}}
             </div>}
             <!-- } @for (item of tabProducts; track $index) {
             <div class="container border p-2 rounded">
@@ -111,27 +111,28 @@
                 <div class="container">
                     <h6>Mode de payement du client</h6>
                     <div class="row">
+                        @for (item of tabModePay; track $index) {
                         <div class="col-auto mb-2">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Cash</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)">
+                                <option selected>Mode payement</option>
+                                @for (type of typeEchangeData; track type.id) {
+                                <option value={{type.id}}>{{type.nom}}</option>}
                             </select>
-                        </div>
+                        </div>@if (selectedTypeData) {
                         <div class="col-auto mb-2">
                             <label for="numero" class="visually-hidden">Bordereau</label>
                             <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
                         </div>
                         <div class="col-auto mb-2">
-                            <label for="montantCash" class="visually-hidden">montantCash</label>
-                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montantCash" required>
-                        </div>
+                            <label for="montantCash" class="visually-hidden">montant</label>
+                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" required>
+                        </div>}}
+
                         <div class="col">
-                            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                            <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addModePay()">
                                 + Add
                             </button>
-                            <button type=" button " class="btn btn-danger rounded-pill m-1 p-1">
+                            <button type=" button " class="btn btn-danger rounded-pill m-1 p-1" (click)="removeModePay()">
                                 Delete
                             </button>
                         </div>

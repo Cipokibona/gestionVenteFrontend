@@ -10,15 +10,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SellComponent implements OnInit{
   userData!: any;
+  
   idClient!: any;
   dataClient!: any;
+  
+  typeEchangeData!: any;
+  
   agentBasket!: any;
+  
   nbreProducts: number = 1;
-  tabProducts: any[] = [];
+  tabProducts: any[] = [{ id: null, product_name: '' }];
+
+  nbreModePay: number = 1;
+  tabModePay!: any[];
+  
   selectedBasketId!: number;
   selectedBasketData!: any;
+  
   selectedProductId!: number;
   selectedProductData!: any;
+  
+  selectedTypeId!: number;
+  selectedTypeData!: any;
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute){
     
@@ -43,7 +56,9 @@ export class SellComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUserData();
     this.getBasketAgent();
-    this.updateTabProduct();
+    this.getTypeEchange();
+    this.tabProducts;
+    this.updateTabModePay();
   }
 
   getBasketAgent(){
@@ -70,22 +85,54 @@ export class SellComponent implements OnInit{
     })
   }
 
+  getTypeEchange(){
+    this.apiService.getTypeEchange().subscribe({
+      next: (dataEchange:any) => {
+        this.typeEchangeData = dataEchange.results;
+        console.log('type echange', this.typeEchangeData);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de type echange', err);
+      }
+    })
+  }
+
   updateTabProduct(){
     this.tabProducts = Array.from({
       length: this.nbreProducts
     });
   }
 
-  addProduct(){
-    this.nbreProducts++;
-    this.updateTabProduct();
+  addProduct(data: any, index: number){
+    const newProduct = {
+      ...data,
+      id: Number(index) 
+    };
+    this.tabProducts.push(newProduct);
+    console.log('ajout de data', this.tabProducts);
   }
 
-  removeProduct(){
-    if(this.nbreProducts > 1){
-      this.nbreProducts--;
-      this.updateTabProduct();
+  removeProduct(index:number){
+    const id = Number(index);
+    if(this.tabProducts.length > 1){
+      this.tabProducts.splice(id,1);
     }
+    console.log('resultat aprs suppression de product dans vente', this.tabProducts, id);
+  }
+
+  updateTabModePay(){
+    this.tabModePay = Array.from({
+      length: this.nbreModePay
+    });
+  }
+
+  addModePay(){
+    this.nbreModePay++;
+    this.updateTabModePay();
+  }
+
+  removeModePay(){
+    
   }
 
   selectBasket(event: Event){
@@ -94,11 +141,41 @@ export class SellComponent implements OnInit{
     console.log('selected Basket', this.selectedBasketData);
   }
 
-  selectProduct(event: Event){
+  selectProduct(event: Event, index:number){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
     this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+
+    // Vérification de l'index existant
+    // const existingIndex = this.tabProducts.find(item => item.id === Number(index));
+    // console.log('index existant', existingIndex);
+
+    // if (existingIndex) {
+    //   // Supprimer tous les éléments à partir de l'index existant
+    //   this.tabProducts.splice(index); 
+    // }
+
+    // Suppression des produits avec ID null
+    // const idNullIndex = this.tabProducts.find(product => product.id === null);
+    // if (idNullIndex) {
+    //   this.tabProducts.splice(idNullIndex); // Supprime l'élément avec ID null
+    // }
+
+    // Création du nouveau produit
+    // const newProduct = {
+    //   ...this.selectedProductData,
+    //   id: Number(index) // Définir un nouvel ID
+    // };
+    // this.tabProducts.push(newProduct);
     // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
     console.log('selected product', this.selectedProductData)
+    
+  }
+
+  selectedTypeEchange(event: Event){
+    this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
+    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+    // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
+    console.log('selected type', this.selectedTypeData)
   }
   
 }
