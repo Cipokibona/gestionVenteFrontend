@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sell',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './sell.component.html',
   styleUrl: './sell.component.scss'
 })
@@ -28,13 +29,32 @@ export class SellComponent implements OnInit{
   selectedBasketData!: any;
   
   selectedProductId!: number;
-  selectedProductData: any[] = [];
+  selectedProductData!: any;
   
   selectedTypeId!: number;
-  selectedTypeData: any[] = [];
+  selectedTypeData!: any;
 
-  constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute){
-    
+  venteForm: FormGroup;
+
+  constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
+    this.venteForm = this.fb.group({
+      panier: this.fb.control('', Validators.required),
+      list_product: this.fb.array([], Validators.required),
+      newProduct: this.fb.group({
+        id: new FormControl('', Validators.required),
+        product_name: new FormControl('', Validators.required),
+        quantity: new FormControl('', Validators.required),
+        prixOfficiel: new FormControl('', Validators.required),
+        prixClient: new FormControl('', Validators.required)
+      }),
+      typeEchange: this.fb.array([], Validators.required),
+      newTypeEchange: this.fb.group({
+        id: new FormControl('', Validators.required),
+        typeName: new FormControl('', Validators.required),
+        montant: new FormControl('', Validators.required),
+        bordereau: new FormControl('', Validators.required)
+      }),
+    });
   }
 
   ngOnInit(): void {
@@ -57,6 +77,7 @@ export class SellComponent implements OnInit{
     this.getUserData();
     this.getBasketAgent();
     this.getTypeEchange();
+    console.log('venteForm', this.venteForm.value);
   }
 
   getBasketAgent(){
@@ -95,41 +116,11 @@ export class SellComponent implements OnInit{
     })
   }
 
-  // updateTabProduct(){
-  //   this.tabProducts = Array.from({
-  //     length: this.nbreProducts
-  //   });
-  // }
-
-  addProduct(data: any, index: number){
-    const newProduct = {
-      ...data,
-      id: Number(index) 
-    };
-    this.tabProducts.push(newProduct);
-    console.log('ajout de data', this.tabProducts);
-  }
-
   removeProduct(data:any){
     if(this.tabProducts.length > 1){
       this.tabProducts.splice(data, 1);
     }
     console.log('resultat aprs suppression de product dans vente', this.tabProducts);
-  }
-
-  // updateTabModePay(){
-  //   this.tabModePay = Array.from({
-  //     length: this.nbreModePay
-  //   });
-  // }
-
-  addModePay(data: any, index: number){
-    const newModePay = {
-      ...data,
-      id: Number(index) 
-    };
-    this.tabModePay.push(newModePay);
-    console.log('ajout de data type', this.tabModePay);
   }
 
   removeModePay(index:number){
@@ -144,57 +135,70 @@ export class SellComponent implements OnInit{
     console.log('selected Basket', this.selectedBasketData);
   }
 
-  selectProduct(event: Event, index:number){
+  selectProduct(event: Event){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
-    const dataSelectedProduct = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
-    const dataPutIndex = {
-      ...dataSelectedProduct,
-      id: Number(index) // Définir un nouvel ID
-    };
-    this.selectedProductData.push(dataPutIndex);
+    this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+    
     console.log('selected product data', this.selectedProductData);
     
-
-    // Vérification de l'index existant
-    // const existingIndex = this.tabProducts.find(item => item.id === Number(index));
-    // console.log('index existant', existingIndex);
-
-    // if (existingIndex) {
-    //   // Supprimer tous les éléments à partir de l'index existant
-    //   this.tabProducts.splice(index); 
-    // }
-
-    // Suppression des produits avec ID null
-    // const idNullIndex = this.tabProducts.find(product => product.id === null);
-    // if (idNullIndex) {
-    //   this.tabProducts.splice(idNullIndex); // Supprime l'élément avec ID null
-    // }
-
-    // Création du nouveau produit
-    // const newProduct = {
-    //   ...this.selectedProductData,
-    //   id: Number(index) // Définir un nouvel ID
-    // };
-    // this.tabProducts.push(newProduct);
-    // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
-    console.log('selected product', this.selectedProductData)
-    
   }
 
-  selectedTypeEchange(event: Event, index: number){
+  selectedTypeEchange(event: Event){
     this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
-    const dataPay = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
-    // const existIndex = this.selectedTypeData.find((item:any) => item.id === index);
-    // if(existIndex){
-    //   this.selectedTypeData.slice(index,1);
-    // };
-    const datePayIndex = {
-      ...dataPay,
-      id: Number(index)
-    };
-    this.selectedTypeData.push(datePayIndex);
-    // this.selectedProductData = this.selectedBasketData.find((item:any) => item.id === this.selectedProductId);
+    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+    
     console.log('selected type', this.selectedTypeData)
   }
+
+  // recuperations des info dans le form
+  get listProduct(): FormArray {
+    return this.venteForm.get('list_product') as FormArray;
+  }
+
+  get listTypeEchange(): FormArray {
+    return this.venteForm.get('typeEchange') as FormArray;
+  }
+
+  get newProduct(): FormGroup {
+    return this.venteForm.get('newProduct') as FormGroup;
+  }
+
+  get newTypeEchange(): FormGroup {
+    return this.venteForm.get('newTypeEchange') as FormGroup;
+  }
+
+  get typeEchange(): FormArray {
+    return this.venteForm.get('typeEchange') as FormArray;
+  }
+
+  addProductByForm() {
+    this.listProduct.push(this.fb.group({
+      id: this.selectedProductId,
+      product_name: this.selectedProductData.product_name,
+      quantity: new FormControl(this.newProduct.value.quantity, Validators.required),
+      prixOfficiel: this.selectedProductData.pricePerUnitOfficiel,
+      prixClient: new FormControl(this.newProduct.value.prixClient, Validators.required)
+    }));
+
+    // Réinitialiser le FormGroup pour le nouveau produit
+    this.newProduct.reset();
+    console.log('list des products dans form', this.venteForm.value);
+  }
+
+  addTypeEchange() {
+    this.listTypeEchange.push(this.fb.group({
+      id: this.selectedTypeId,
+      typeName: this.selectedTypeData.nom,
+      montant: new FormControl(this.newTypeEchange.value.montant, Validators.required),
+      bordereau: new FormControl(this.newTypeEchange.value.bordereau, Validators.required)
+    }));
+
+    // Réinitialiser le FormGroup pour le nouveau produit
+    this.newTypeEchange.reset();
+    console.log('list des types dans form', this.venteForm.value);
+  }
+
+  createVente(){
+    console.log(this.venteForm.value);}
   
 }
