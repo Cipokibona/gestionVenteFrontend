@@ -255,10 +255,12 @@ export class SellComponent implements OnInit{
 
         forkJoin(requests).subscribe({
           next: (resp:any) => {
+            this.router.navigate(['/home']);
             console.log('creation reussi', resp);
           },
           error: (err) => {
-            console.error('erreur de creation', err);
+            this.apiService.deleteVente(data.id);
+            console.error('erreur de creation et suppression de vente', err);
           }
         });
       },
