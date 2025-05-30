@@ -1,0 +1,128 @@
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Toutes
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Depot 1
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Agent 1
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <h5 class="text-center m-3">Liste des ventes effectes</h5>
+        <!-- start card -->
+        @for (vente of allVente; track vente.id) {
+        <div class="card shadow m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Agent: {{vente.agent_name}}</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">{{vente.pos_name}}</h6>
+                <p class="card-text">
+                    <span class="text-secondary">Client: {{vente.client_name}}</span>
+                </p>
+                <div class="accordion" id="accordinationAchat">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + vente.id" aria-expanded="true" aria-controls="collapseOne">
+                                List Product
+                            </button>
+                        </h2>
+                        @for (article of vente.product_list; track article.id) {
+                        <div [attr.id]="'collapse' + vente.id" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <h6 class="card-subtitle mb-2 text-body-secondary border-top mt-3">{{article.product_name}}</h6>
+                                <div class="row">
+                                    <div class="col-6 text-secondary text-end">
+                                        prix officiel:
+                                    </div>
+                                    <div class="col-6 text-danger text-start">
+                                        {{article.pricePerUnitOfficiel}} Bif
+                                    </div>
+                                    <div class="col-6 text-secondary text-end">
+                                        prix vendu:
+                                    </div>
+                                    <div class="col-6 text-danger text-start">
+                                        {{article.pricePerUnitClient}} Bif
+                                    </div>
+                                    <div class="col-6 text-secondary text-end">
+                                        Quantity:
+                                    </div>
+                                    <div class="col-6 text-start">
+                                        {{article.quantity}}
+                                    </div>
+                                    <div class="col-6 text-secondary text-end">
+                                        prix total officiel:
+                                    </div>
+                                    <div class="col-6 text-danger text-start">
+                                        {{article.pricePerUnitOfficiel * article.quantity}} Bif
+                                    </div>
+                                    <div class="col-6 text-secondary text-end">
+                                        prix total client:
+                                    </div>
+                                    <div class="col-6 text-danger text-start">
+                                        {{article.pricePerUnitClient * article.quantity}} Bif
+                                    </div>
+                                    <!-- <div class="col-6 text-secondary text-end">
+                                        date d'expiration:
+                                    </div>
+                                    <div class="col-6 text-start">
+                                        {{article.date_expiration | date: 'fullDate'}}
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <!-- paymentmode -->
+                <div class="accordion mt-2" id="accordinationAchat">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseModePay' + vente.id" aria-expanded="true" aria-controls="collapseOne">
+                                Mode payement
+                            </button>
+                        </h2>
+                        @for (pay of vente.typeEchange_list; track pay.id) {
+                        <div [attr.id]="'collapseModePay' + vente.id" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-6 text-end">
+                                        {{pay.typeEchange_name}}:
+                                    </div>
+                                    <div class="col-6 text-danger text-start">
+                                        {{pay.montant}} Bif
+                                    </div>
+                                    <div class="col-12 text-start">
+                                        ({{pay.bordereau}})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <!-- <h6 class="card-subtitle mb-2 border-top  mt-3">Quantity totale: 120</h6> -->
+                <h6 class="card-subtitle mb-2 mt-2">
+                    Prix total vendu:
+                    <span class="text-danger">{{getTotalPrice(vente.product_list)}} BIF</span>
+                </h6>
+                <h6 class="card-subtitle mb-2 mt-2">
+                    Montant total paye:
+                    <span class="text-danger">{{getTotalPaye(vente.typeEchange_list)}} BIF</span>
+                </h6>
+                <h6 class="card-subtitle mb-2 mt-2">
+                    Reste:
+                    <span class="text-danger">{{vente.reste}} BIF</span>
+                </h6>
+                <button type="button" class="button secondary rounded-pill m-1 p-1">
+                    Rendre
+                </button>
+                <article class="text-secondary">{{vente.date | date: 'medium'}}</article>
+            </div>
+        </div>}
+        <!-- end card -->
+    </div>
+</div>

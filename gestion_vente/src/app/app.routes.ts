@@ -12,6 +12,7 @@ import { BuyComponent } from './components/product/buy/buy.component';
 import { ToAgentComponent } from './components/product/to-agent/to-agent.component';
 import { ToPointOfSellComponent } from './components/product/to-point-of-sell/to-point-of-sell.component';
 import { ListPOSComponent } from './components/pointOfSell/list-pos/list-pos.component';
+import { ListAllVenteComponent } from './components/vente/list-all-vente/list-all-vente.component';
 
 export const routes: Routes = [
     { 
@@ -41,8 +42,13 @@ export const routes: Routes = [
     },
     {
         path: 'client/vente/:id',
-        title: 'vente page',
+        title: 'vente client page',
         component: SellComponent,
+    },
+    {
+        path: 'vente',
+        title: 'vente page',
+        component: ListAllVenteComponent,
     },
     {
         path: 'achat',
