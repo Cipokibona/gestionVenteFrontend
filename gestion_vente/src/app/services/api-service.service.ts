@@ -32,6 +32,11 @@ export class ApiServiceService {
   private typeEchangeUrl = `${this.url}typeEchange/`
   private productsBasketUrl = `${this.url}basketAgent/`;
   private customerUrl = `${this.url}customers/`;
+  private ventesUrl = `${this.url}ventes/`;
+
+  private listProductVenteUrl = `${this.url}list_product_vente/`;
+  private listPayVenteUrl = `${this.url}list_pay_vente/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -170,5 +175,27 @@ export class ApiServiceService {
 
   getAgentBasketId(id: any){
     return this.http.get(`${this.productsBasketUrl}${id}/`);
+  }
+
+  getAllVente(){
+    return this.http.get(`${this.ventesUrl}`);
+  }
+
+  createVente(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.ventesUrl}`, data, {headers});
+  }
+
+  createListProductVente(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listProductVenteUrl}`, data, {headers});
+  }
+
+  createListPayVente(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listPayVenteUrl}`, data, {headers});
   }
 }

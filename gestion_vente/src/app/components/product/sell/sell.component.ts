@@ -36,6 +36,10 @@ export class SellComponent implements OnInit{
 
   venteForm: FormGroup;
 
+  totalReel: number = 0;
+  totalPaye: number = 0;
+  resteImpaye: number = 0;
+
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.venteForm = this.fb.group({
       panier: this.fb.control('', Validators.required),
@@ -54,6 +58,7 @@ export class SellComponent implements OnInit{
         montant: new FormControl('', Validators.required),
         bordereau: new FormControl('', Validators.required)
       }),
+      dateRecouvrement:new FormControl('', Validators.required),
     });
   }
 
@@ -176,13 +181,18 @@ export class SellComponent implements OnInit{
       id: this.selectedProductId,
       product_name: this.selectedProductData.product_name,
       quantity: new FormControl(this.newProduct.value.quantity, Validators.required),
-      prixOfficiel: this.selectedProductData.pricePerUnitOfficiel,
-      prixClient: new FormControl(this.newProduct.value.prixClient, Validators.required)
+      pricePerUnitOfficiel: this.selectedProductData.pricePerUnitOfficiel,
+      pricePerUnitClient: new FormControl(this.newProduct.value.prixClient, Validators.required)
     }));
+    let newTotal = 0;
+    for(let product of this.listProduct.value){
+      newTotal += (product.pricePerUnitOfficiel * product.quantity);
+    };
+    this.totalReel = newTotal;
 
     // Réinitialiser le FormGroup pour le nouveau produit
     this.newProduct.reset();
-    console.log('list des products dans form', this.venteForm.value);
+    console.log('list des products dans form', this.listProduct.value);
   }
 
   addTypeEchange() {
@@ -193,12 +203,37 @@ export class SellComponent implements OnInit{
       bordereau: new FormControl(this.newTypeEchange.value.bordereau, Validators.required)
     }));
 
+    let newPay = 0;
+    for(let type of this.listTypeEchange.value){
+      newPay += type.montant;
+    }
+    this.totalPaye = newPay;
+    this.resteImpaye = this.totalReel - this.totalPaye;
+
     // Réinitialiser le FormGroup pour le nouveau produit
     this.newTypeEchange.reset();
     console.log('list des types dans form', this.venteForm.value);
   }
 
   createVente(){
-    console.log(this.venteForm.value);}
+    console.log(this.venteForm.value);
+    const data = {
+      client: this.dataClient.id,
+      panier: this.venteForm.value.panier,
+      product_list: this.listProduct.value,
+      typeEchange_list: this.listTypeEchange.value,
+      reste: this.resteImpaye,
+      date_recouvrement: this.venteForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
+    }
+    this.apiService.createVente(data).subscribe({
+      next: (data:any) => {
+        console.log('vente enregistrer', data);
+      },
+      error: (err) => {
+        console.error('erreur de creation de vente', err);
+      }
+    });
+    console.log('data a envoyer', data);
+  }
   
 }

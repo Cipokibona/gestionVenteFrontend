@@ -78,40 +78,34 @@
                         </div>}
                     </div>
                 </div>
-                <p class="text-secondary">
-                    Totaux officiel:
-                    <span class="text-danger ">
-                        30000 Bif
-                    </span> <br> Totaux du client:
-                    <span class="text-danger ">
-                        30000 Bif
-                    </span> <br> Montant paye:
-                    <span class="text-danger ">
-                        30000 Bif
-                    </span> <br> Reste:
-                    <span class="text-danger ">
-                        30000 Bif
-                    </span> <br> Date prevu de payement:
-                    <input type="date" name="datePrevu" id="datePrevu" class="form-control w-25"><br>
-                </p>
                 <div class="col">
                     @if(venteForm.value.list_product && venteForm.value.list_product.length > 0){
                     <h5>Produit vendu</h5>
-                    @for (product of venteForm.value.list_product; track product.id) {
-                    <ul>
-                        <li>{{product.product_name}} {{product.quantity}}*{{product.prixClient}}: <br>
-                            <span class="text-danger">{{product.prixClient * product.quantity}} BIF</span>
+                    <ul> @for (product of venteForm.value.list_product; track product.id) {
+                        <li>{{product.product_name}} {{product.quantity}}*{{product.pricePerUnitOfficiel}}: <br>
+                            <span class="text-danger">{{product.pricePerUnitOfficiel * product.quantity}} BIF</span>
                         </li>
-                    </ul>
-                    }} @if (venteForm.value.typeEchange && venteForm.value.typeEchange.length > 0 ){
+                        }
+                        <li>Total pour client:<br>
+                            <span class="text-danger"> {{totalReel}}BIF</span>
+                        </li>
+                    </ul>} @if (venteForm.value.typeEchange && venteForm.value.typeEchange.length > 0 ){
                     <h5>Mode Payement</h5>
-                    @for (pay of venteForm.value.typeEchange; track pay.id) {
                     <ul>
+                        @for (pay of venteForm.value.typeEchange; track pay.id) {
                         <li>{{pay.typeName}}:
                             <span class="text-danger">{{pay.montant}} BIF</span>
                         </li>
-                    </ul>
-                    } }
+                        }
+                        <li>Total paye:<br>
+                            <span class="text-danger">{{totalPaye}} BIF</span>
+                        </li>
+                        <li>Reste a Paye: <br>
+                            <span class="text-danger">{{resteImpaye}} BIF</span>
+                        </li>
+                        <label for="dateDette">Payera le</label>
+                        <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
+                    </ul> }
                 </div>
             </div>
             <div class=" ms-auto me-auto mb-2 mt-3 ">
