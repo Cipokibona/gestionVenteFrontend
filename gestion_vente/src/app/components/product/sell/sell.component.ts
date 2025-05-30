@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-sell',
@@ -220,14 +221,46 @@ export class SellComponent implements OnInit{
     const data = {
       client: this.dataClient.id,
       panier: this.venteForm.value.panier,
-      product_list: this.listProduct.value,
-      typeEchange_list: this.listTypeEchange.value,
+      // product_list: this.listProduct.value,
+      // typeEchange_list: this.listTypeEchange.value,
       reste: this.resteImpaye,
       date_recouvrement: this.venteForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
     }
     this.apiService.createVente(data).subscribe({
       next: (data:any) => {
         console.log('vente enregistrer', data);
+        const requests = [];
+        for(let product of this.listProduct.value){
+          const dataProduct = {
+            vente: data.id,
+            product: product.id,
+            quantity: product.quantity,
+            pricePerUnitOfficiel: product.pricePerUnitOfficiel,
+            pricePerUnitClient: product.pricePerUnitClient
+          }
+          const request = this.apiService.createListProductVente(dataProduct);
+          requests.push(request);
+        };
+
+        for(let pay of this.listTypeEchange.value){
+          const dataPay = {
+            vente: data.id,
+            typeEchange: pay.id,
+            montant: pay.montant,
+            bordereau: pay.bordereau  || 'pas de bordereau',
+          }
+          const request = this.apiService.createListPayVente(dataPay);
+          requests.push(request);
+        };
+
+        forkJoin(requests).subscribe({
+          next: (resp:any) => {
+            console.log('creation reussi', resp);
+          },
+          error: (err) => {
+            console.error('erreur de creation', err);
+          }
+        });
       },
       error: (err) => {
         console.error('erreur de creation de vente', err);
