@@ -27,22 +27,23 @@ export class AgentCommercialComponent implements OnInit{
   
   constructor(private apiService: ApiServiceService, private router: Router){ 
     
-    this.getUserData();
-    this.getTypeEchange();
-    this.getProductAgent();
+    
    }
 
   ngOnInit(): void {
     this.apiService.refreshTokenLocal();
     this.apiService.updateUserLocal();
+    this.getUserData();
+    this.getTypeEchange();
+    this.getProductAgent();
   }
 
   getUserData(){
     this.apiService.currentUser.subscribe({
-      next: (data) => {
+      next: (data:any) => {
         this.userData = data;
         this.walletSumTotal = 0;
-        for(let wallet of this.userData.wallet_user){
+        for(let wallet of this.userData.wallet_user?){
           this.walletSumTotal = this.walletSumTotal + wallet.montant;
         }
         console.log('les data dans agent-commercial component:', this.userData);

@@ -97,9 +97,9 @@ export const routes: Routes = [
         title: 'list poste page',
         component: ListPosteComponent,
     },
-    {
-        path:'listTypeEchange',
-        title: 'type page',
-        component: ListWalletComponent,
-    },
+    // {
+    //     path:'listTypeEchange',
+    //     title: 'type page',
+    //     component: ListWalletComponent,
+    // },
 ];
