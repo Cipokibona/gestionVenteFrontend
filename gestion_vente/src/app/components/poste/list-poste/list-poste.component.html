@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createUser">
+            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationPoste">
                 + Add
             </button>
         </div>
@@ -24,7 +24,36 @@
                         Salaire:
                         <span class="text-danger">{{poste.salar}} BIF</span>/mois
                     </h6>
-                    <a href="#" class="card-link">Edit</a>
+                    <button class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                        Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- modal de edit poste -->
+        <div class="modal fade" [attr.id]="'collapse' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit poste</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="editPosteForm" (ngSubmit)="editPost(poste.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="nameOldPoste" class="visually-hidden">Salaire</label>
+                                <input type="text" class="form-control" formControlName="nameOldPoste" name="nameOldPoste" id="nameOldPoste" value="{{poste.name}}" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="salaireOldPoste" class="visually-hidden">Salaire</label>
+                                <input type="number" class="form-control" formControlName="salaireOldPoste" name="salaireOldPoste" id="salaireOldPoste" value="{{poste.salar}}" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn button secondary">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -32,4 +61,30 @@
     </div> }@else {
     <h4 class="text-center">{{error}}</h4>}}
     <!-- fin de condition de posteData -->
+</div>
+<div class="modal fade" id="creationPoste" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newPosteTitle">New poste</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="needs-validation" [formGroup]="newPosteForm" (ngSubmit)="createPoste()">
+                <div class="modal-body">
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="namePoste" class="visually-hidden">Poste</label>
+                        <input type="text" class="form-control" formControlName="namePoste" name="namePoste" id="namePoste" placeholder="Poste de ..." required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="salaire" class="visually-hidden">Salaire</label>
+                        <input type="number" class="form-control" formControlName="salaire" name="salaire" id="salaire" placeholder="Salaire par mois" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn button secondary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

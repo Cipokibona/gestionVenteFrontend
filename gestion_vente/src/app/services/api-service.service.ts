@@ -209,4 +209,16 @@ export class ApiServiceService {
   getAllPoste(){
     return this.http.get(`${this.posteUrl}`);
   }
+
+  createPoste(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.posteUrl}`, data, {headers});
+  }
+
+  editPost(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.posteUrl}${id}/`, data, {headers});
+  }
 }
