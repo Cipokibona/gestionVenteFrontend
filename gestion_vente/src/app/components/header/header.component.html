@@ -15,7 +15,7 @@
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     @if (userData && userData.is_admin) {
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">admin</a>
+                        <a routerLink="listTypeEchange" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">Type echange</a>
                     </li>
                     } @if (userData && userData.is_respo_pos) {
                     <li class="nav-item">
