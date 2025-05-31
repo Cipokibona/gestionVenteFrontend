@@ -97,6 +97,7 @@ export class ListPosteComponent implements OnInit{
         console.error('erreur de edit', err)
       }
     });
-    // location.reload();
+    location.reload();
   }
+
 }

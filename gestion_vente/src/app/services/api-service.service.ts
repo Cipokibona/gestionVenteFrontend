@@ -152,6 +152,18 @@ export class ApiServiceService {
     return this.http.get(`${this.typeEchangeUrl}`)
   }
 
+  createTypeEchange(data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.typeEchangeUrl}`, data, {headers});
+  }
+
+  editTypeEchange(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.typeEchangeUrl}${id}/`, data, {headers});
+  }
+
   getTransaction(){
     return this.http.get(`${this.transactionUrl}`);
   }
