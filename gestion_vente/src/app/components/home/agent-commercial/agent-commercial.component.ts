@@ -43,7 +43,7 @@ export class AgentCommercialComponent implements OnInit{
       next: (data:any) => {
         this.userData = data;
         this.walletSumTotal = 0;
-        for(let wallet of this.userData.wallet_user?){
+        for(let wallet of this.userData.wallet_user){
           this.walletSumTotal = this.walletSumTotal + wallet.montant;
         }
         console.log('les data dans agent-commercial component:', this.userData);

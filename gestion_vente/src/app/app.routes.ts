@@ -14,7 +14,7 @@ import { ToPointOfSellComponent } from './components/product/to-point-of-sell/to
 import { ListPOSComponent } from './components/pointOfSell/list-pos/list-pos.component';
 import { ListAllVenteComponent } from './components/vente/list-all-vente/list-all-vente.component';
 import { ListPosteComponent } from './components/poste/list-poste/list-poste.component';
-import { ListWalletComponent } from './components/wallet/list-wallet/list-wallet.component';
+import { ListTypeEchangeComponent } from './components/wallet/list-type-echange/list-type-echange.component';
 
 export const routes: Routes = [
     { 
@@ -97,9 +97,9 @@ export const routes: Routes = [
         title: 'list poste page',
         component: ListPosteComponent,
     },
-    // {
-    //     path:'listTypeEchange',
-    //     title: 'type page',
-    //     component: ListWalletComponent,
-    // },
+    {
+        path:'listTypeEchange',
+        title:'type echange page',
+        component:ListTypeEchangeComponent
+    }
 ];

@@ -34,6 +34,7 @@ export class ApiServiceService {
   private customerUrl = `${this.url}customers/`;
   private ventesUrl = `${this.url}ventes/`;
   private posteUrl = `${this.url}poste/`;
+  private tauxEchangeUrl = `${this.url}tauxEchange/`;
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -162,6 +163,17 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.patch<any>(`${this.typeEchangeUrl}${id}/`, data, {headers});
+  }
+  deleteTypeEchange(id:number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.typeEchangeUrl}${id}/`, {headers});
+  }
+
+  createTauxEchange(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.tauxEchangeUrl}`, data, {headers});
   }
 
   getTransaction(){
