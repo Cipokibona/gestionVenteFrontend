@@ -1,132 +1,43 @@
 <div class="container text-center mb-3">
     <div class="row">
         <div class="col">
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Toutes
             </button>
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
-            </button>
+            </button> -->
             <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createUser">
                 + Add
             </button>
         </div>
     </div>
-</div>
-<h4 class="text-center ">
-    Liste des users</h4>
-<div class="accordion" id="accordionExample">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              1. nom et prenom
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        poste:
-                    </div>
-                    <div class="col-6">
-                        Agent commercial
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
+    <h5>Liste des users</h5>
+    <div class="row text-start gap-1">
+        @if (loadingPage) {loading...}@else {@if (allUser) {@for (user of allUser; track $index) {
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title border-bottom">{{$index + 1}}. {{user.first_name}} {{user.last_name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{user.username}}</h6>
+                    <p class="card-text">
                         Tel:
-                    </div>
-                    <div class="col-6">
-                        76225896
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        email:
-                    </div>
-                    <div class="col-6">
-                        ajjlal
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Is active:
-                    </div>
-                    <div class="col-6">
-                        True
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Is admin:
-                    </div>
-                    <div class="col-6">
-                        False
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Outil de travail:
-                    </div>
-                    <div class="col-6">
-                        <a href="">
-                            voiture 2
-                        </a> <br>
-                        <a href="">
-                            voiture 2
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-secondary text-end">
-                        Wallet:
-                    </div>
-                    <div class="col-6">
-                        <span class="text-danger">
-                            <a href="" class="text-danger">
-                                2,000,000 Bif
-                            </a>
-                        </span>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-                    <button type="button" class="col-auto button secondary rounded-pill m-1 p-1">
-                        Edit user
-                    </button>
-                    <button type="button" class="col-auto button secondary rounded-pill m-1 p-1">
-                        Approvisioinner
-                    </button>
+                        <span class="text-secondary">{{user.tel}}</span>, email:
+                        <span class="text-secondary">{{user.email}}</span> <br> @if (user.is_admin) {
+                        <span class="text-danger">Admin</span> }
+                    </p>
+                    <p class="card-text border-top">
+                        @for (wallet of user.wallet_user; track $index) {
+                        <span>{{wallet.wallet_name}}: </span>
+                        <span class="text-danger">{{wallet.montant}} BIF</span> <br> }
+                    </p>
+                    <p>
+                        Total: <span class="text-danger">{{getTotalWallet(user.wallet_user)}} BIF</span>
+                    </p>
+                    <a href="#" class="card-link">Edit</a>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Accordion Item #2
-            </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the
-                showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition
-                does limit overflow.
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Accordion Item #3
-            </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing
-                and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does
-                limit overflow.
-            </div>
-        </div>
+        </div>} }}
     </div>
 </div>
 <!-- Modal -->

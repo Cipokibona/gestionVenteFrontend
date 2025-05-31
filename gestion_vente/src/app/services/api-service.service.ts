@@ -189,6 +189,12 @@ export class ApiServiceService {
   getProductBasket(){
     return this.http.get(`${this.productsBasketUrl}`);
   }
+  
+  getAllUser(){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.get<any>(`${this.usersUrl}`, {headers});
+  }
 
   getAllCustomers(){
     return this.http.get(`${this.customerUrl}`);
