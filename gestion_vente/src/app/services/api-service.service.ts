@@ -33,6 +33,7 @@ export class ApiServiceService {
   private productsBasketUrl = `${this.url}basketAgent/`;
   private customerUrl = `${this.url}customers/`;
   private ventesUrl = `${this.url}ventes/`;
+  private posteUrl = `${this.url}poste/`;
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -203,5 +204,9 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.listPayVenteUrl}`, data, {headers});
+  }
+
+  getAllPoste(){
+    return this.http.get(`${this.posteUrl}`);
   }
 }

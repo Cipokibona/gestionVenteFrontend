@@ -33,6 +33,8 @@ export class AgentCommercialComponent implements OnInit{
    }
 
   ngOnInit(): void {
+    this.apiService.refreshTokenLocal();
+    this.apiService.updateUserLocal();
   }
 
   getUserData(){

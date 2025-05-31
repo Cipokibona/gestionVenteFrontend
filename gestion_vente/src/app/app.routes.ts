@@ -13,6 +13,7 @@ import { ToAgentComponent } from './components/product/to-agent/to-agent.compone
 import { ToPointOfSellComponent } from './components/product/to-point-of-sell/to-point-of-sell.component';
 import { ListPOSComponent } from './components/pointOfSell/list-pos/list-pos.component';
 import { ListAllVenteComponent } from './components/vente/list-all-vente/list-all-vente.component';
+import { ListPosteComponent } from './components/poste/list-poste/list-poste.component';
 
 export const routes: Routes = [
     { 
@@ -89,5 +90,10 @@ export const routes: Routes = [
         path:'listPOS',
         title: 'list POS page',
         component: ListPOSComponent,
+    },
+    {
+        path:'listPoste',
+        title: 'list poste page',
+        component: ListPosteComponent,
     },
 ];
