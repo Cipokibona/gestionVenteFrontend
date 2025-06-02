@@ -38,6 +38,8 @@ export class ApiServiceService {
   private tauxEchangeUrl = `${this.url}tauxEchange/`;
   private distributeurUrl = `${this.url}distributeur/`;
   private productUrl = `${this.url}product/`;
+  private posUrl = `${this.url}pointVente/`;
+  private responsablePosUrl = `${this.url}respoPos/`;
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -274,4 +276,21 @@ export class ApiServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.productUrl}`, data, {headers});
   }
+
+  getAllPos(){
+    return this.http.get(`${this.posUrl}`);
+  }
+
+  createPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.posUrl}`, data, {headers});
+  }
+
+  createResponsablePos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.responsablePosUrl}`, data, {headers});
+  }
+  
 }
