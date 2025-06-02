@@ -14,30 +14,42 @@
     </div>
     <h5>Liste des users</h5>
     <div class="row text-start gap-1">
-        @if (loadingPage) {loading...}@else {@if (allUser) {@for (user of allUser; track $index) {
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title border-bottom">{{$index + 1}}. {{user.first_name}} {{user.last_name}}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">{{user.username}}</h6>
-                    <p class="card-text">
-                        Tel:
-                        <span class="text-secondary">{{user.tel}}</span>, email:
-                        <span class="text-secondary">{{user.email}}</span> <br> @if (user.is_admin) {
-                        <span class="text-danger">Admin</span> }
+        @if (loadingPage) {loading...}@else {@if (allUser) {
+        <div class="accordion" id="accordionUsers">
+            @for (user of allUser; track $index) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
+                        {{$index + 1}}. {{user.first_name}} {{user.last_name}}({{user.username}})
+                    </button>
+                </h2>
+                <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
+                    <p class="m-2">
+                        Contact:
+                        <span class="text-secondary">{{user.tel}}, {{user.email}}</span><br>
+                        <!-- Role du user -->
+                        <span>
+                            Role: @if (user.is_agent_commercial) {
+                                <span class="text-secondary">
+                                    Agent commercial
+                                </span> }@if (user.is_respo_pos) {
+                        <span class="text-secondary">
+                            Responsable d'un point de vente
+                        </span> }@if (user.is_admin) {
+                        <span class="text-secondary">Admin</span> }
+                        </span> <br>
+                        <!-- end role -->
+                        <span>
+                            Salaire :
+                            <span class="text-secondary">
+                                {{getSalarUser(user.id)}} BIF/mois ({{getPostUser(user.id)}})
+                            </span>
+                        </span>
                     </p>
-                    <p class="card-text border-top">
-                        @for (wallet of user.wallet_user; track $index) {
-                        <span>{{wallet.wallet_name}}: </span>
-                        <span class="text-danger">{{wallet.montant}} BIF</span> <br> }
-                    </p>
-                    <p>
-                        Total: <span class="text-danger">{{getTotalWallet(user.wallet_user)}} BIF</span>
-                    </p>
-                    <a href="#" class="card-link">Edit</a>
                 </div>
             </div>
-        </div>} }}
+            }
+        </div> }}
     </div>
 </div>
 <!-- Modal -->
@@ -54,44 +66,44 @@
                         <label for="nameUser" class="visually-hidden">Name</label>
                         <input type="text" class="form-control" name="nameClient" id="nameUser" placeholder="name" required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="firstUser" class="visually-hidden">Prenom</label>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="firstUser" class="visually-hidden ">Prenom</label>
                         <input type="text" class="form-control" name="firstUser" id="firstUser" placeholder="Prenom" required>
                     </div>
                     <select class="form-select mb-2" aria-label="Default select example">
                         <option selected>Choose poste</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="1 ">One</option>
+                        <option value="2 ">Two</option>
+                        <option value="3 ">Three</option>
                     </select>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="adress" class="visually-hidden">Adress</label>
-                        <input type="text" class="form-control" name="adress" id="adress" placeholder="Adress" required>
+                        <label for="adress " class="visually-hidden ">Adress</label>
+                        <input type="text " class="form-control " name="adress " id="adress " placeholder="Adress " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="tel" class="visually-hidden">Tel</label>
-                        <input type="number" class="form-control" name="tel" id="tel" placeholder="Tel" required>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="tel " class="visually-hidden ">Tel</label>
+                        <input type="number " class="form-control " name="tel " id="tel " placeholder="Tel " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="password" class="visually-hidden">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="password" required>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="password " class="visually-hidden ">Password</label>
+                        <input type="password " class="form-control " name="password " id="password " placeholder="password " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="confirmPassword" class="visually-hidden">confirm Password</label>
-                        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="confirm Password" required>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="confirmPassword " class="visually-hidden ">confirm Password</label>
+                        <input type="password " class="form-control " name="confirmPassword " id="confirmPassword " placeholder="confirm Password " required>
                     </div>
-                    <div class="form-check text-start">
-                        <input class="form-check-input" type="checkbox" value="" id="checkChecked">
-                        <label class="form-check-label" for="checkChecked">
+                    <div class="form-check text-start ">
+                        <input class="form-check-input " type="checkbox " value=" " id="checkChecked ">
+                        <label class="form-check-label " for="checkChecked ">
                             is admin
                         </label>
                     </div>
-                    <div class="ms-auto me-auto mb-2 mt-3">
-                        <button type="submit" class="button principal p-1 m-1">
-                            <span class="ms-5 me-5">Create</span>
+                    <div class="ms-auto me-auto mb-2 mt-3 ">
+                        <button type="submit " class="button principal p-1 m-1 ">
+                            <span class="ms-5 me-5 ">Create</span>
                         </button>
-                        <a class="button secondary p-1 m-1">
-                            <span class="ms-5 me-5">Back</span>
+                        <a class="button secondary p-1 m-1 ">
+                            <span class="ms-5 me-5 ">Back</span>
                         </a>
                     </div>
                 </form>

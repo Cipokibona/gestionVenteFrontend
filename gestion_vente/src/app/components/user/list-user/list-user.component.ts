@@ -10,6 +10,7 @@ import { ApiServiceService } from '../../../services/api-service.service';
 export class ListUserComponent implements OnInit{
   userData!: any;
   allUser!: any;
+  allSalaire!: any;
 
   loadingPage!: boolean;
   error!: string | null;
@@ -21,6 +22,7 @@ export class ListUserComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUser();
     this.getAllUser();
+    this.getAllSalarUser();
   }
 
   getUser(){
@@ -57,6 +59,33 @@ export class ListUserComponent implements OnInit{
 
   getTotalWallet(data:any): number {
     return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
+  }
+
+  getAllSalarUser(){
+    this.apiService.getAllSalar().subscribe({
+      next: (dataPoste: any) => {
+        this.allSalaire = dataPoste.results;
+        console.log('info salaire', this.allSalaire);
+      },
+      error: (err) => {
+        console.error('erreur de salaire', err);
+      }
+    });
+  }
+
+  getSalarUser(id:number){
+    const data = this.allSalaire.find((item:any) => item.user === Number(id));
+    if(data){
+      console.log('salaire du user',data.montant_poste);
+      return data.montant_poste;
+    }
+  }
+
+  getPostUser(id:number){
+    const data = this.allSalaire.find((item:any) => item.user === Number(id));
+    if(data){
+      return data.post_name;
+    }
   }
 
 }

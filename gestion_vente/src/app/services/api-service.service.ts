@@ -34,6 +34,7 @@ export class ApiServiceService {
   private customerUrl = `${this.url}customers/`;
   private ventesUrl = `${this.url}ventes/`;
   private posteUrl = `${this.url}poste/`;
+  private salarUrl = `${this.url}salaire/`;
   private tauxEchangeUrl = `${this.url}tauxEchange/`;
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
@@ -250,5 +251,9 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.patch<any>(`${this.posteUrl}${id}/`, data, {headers});
+  }
+
+  getAllSalar(){
+    return this.http.get(`${this.salarUrl}`);
   }
 }
