@@ -16,6 +16,7 @@ export class AgentCommercialComponent implements OnInit{
   data!: any;
   typeEchange: any;
   basketUser!: any;
+  venteUser!: any;
 
   // form
   transactionForm = new FormGroup({
@@ -35,7 +36,8 @@ export class AgentCommercialComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUserData();
     this.getTypeEchange();
-    this.getProductAgent();
+    this.getBasketAgent();
+    this.getVenteAgent();
   }
 
   getUserData(){
@@ -43,9 +45,9 @@ export class AgentCommercialComponent implements OnInit{
       next: (data:any) => {
         this.userData = data;
         this.walletSumTotal = 0;
-        for(let wallet of this.userData.wallet_user){
-          this.walletSumTotal = this.walletSumTotal + wallet.montant;
-        }
+        // for(let wallet of this.userData.wallet_user){
+        //   this.walletSumTotal = this.walletSumTotal + wallet.montant;
+        // }
         console.log('les data dans agent-commercial component:', this.userData);
       },error: () => {
         this.apiService.logout();
@@ -76,46 +78,46 @@ export class AgentCommercialComponent implements OnInit{
       montant : montant
     };
     // verification de montant cible
-    for(let wallet of this.userData.wallet_user){
-      console.log('wallet.id et walletSource', wallet.id,walletSource);
-      if(wallet.id == walletSource){
-        if(montant && wallet.montant > montant){
-          this.apiService.createWallet(walletCibleData).subscribe({
-            next: (dataCreate) => {
-              console.log('resultat de create wallet', dataCreate);
-              this.apiService.updateWallet(walletSource, walletSourceData).subscribe({
-                next: (dataUpdate) => {
-                  console.log('update de wallet source avec susses', dataUpdate);
-                  const newTransaction = {
-                    author: this.userData.id,
-                    walletSource: walletSource,
-                    walletCible: dataUpdate.id,
-                    montant: montant,
-                    bordereau: dataCreate.bordereau,
-                    is_delivered: true,
+    // for(let wallet of this.userData.wallet_user){
+    //   console.log('wallet.id et walletSource', wallet.id,walletSource);
+    //   if(wallet.id == walletSource){
+    //     if(montant && wallet.montant > montant){
+    //       this.apiService.createWallet(walletCibleData).subscribe({
+    //         next: (dataCreate) => {
+    //           console.log('resultat de create wallet', dataCreate);
+    //           this.apiService.updateWallet(walletSource, walletSourceData).subscribe({
+    //             next: (dataUpdate) => {
+    //               console.log('update de wallet source avec susses', dataUpdate);
+    //               const newTransaction = {
+    //                 author: this.userData.id,
+    //                 walletSource: walletSource,
+    //                 walletCible: dataUpdate.id,
+    //                 montant: montant,
+    //                 bordereau: dataCreate.bordereau,
+    //                 is_delivered: true,
 
-                  };
-                  this.apiService.createTransaction(newTransaction).subscribe({
-                    next: (dataTransaction) => {
-                      console.log('data Transaction', dataTransaction);
-                    },
-                    error: (err) => {
-                      console.error('errer de transaction', err);
-                    }
-                  })
-                },
-                error: (err) => {
-                  console.error('erreur de update', err);
-                }
-              })
-            },
-            error: (err) => {
-              console.error('erreur de create wallet',err);
-            }
-          });
-        }
-      }
-    };
+    //               };
+    //               this.apiService.createTransaction(newTransaction).subscribe({
+    //                 next: (dataTransaction) => {
+    //                   console.log('data Transaction', dataTransaction);
+    //                 },
+    //                 error: (err) => {
+    //                   console.error('errer de transaction', err);
+    //                 }
+    //               })
+    //             },
+    //             error: (err) => {
+    //               console.error('erreur de update', err);
+    //             }
+    //           })
+    //         },
+    //         error: (err) => {
+    //           console.error('erreur de create wallet',err);
+    //         }
+    //       });
+    //     }
+    //   }
+    // };
     this.router.navigate(['/home']).then(() => {
         location.reload();
     });
@@ -123,17 +125,34 @@ export class AgentCommercialComponent implements OnInit{
     
   }
 
-  getProductAgent(){
-    this.apiService.getProductBasket().subscribe({
+  getBasketAgent(){
+    this.apiService.getBasketAgent().subscribe({
       next: (dataBasketAgent: any) => {
         const data = dataBasketAgent.results;
         this.basketUser = data.filter((item:any) => item.agent === this.userData.id);
-        console.log('panier pour les users dans home page', this.basketUser);
+        console.log('panier pour le user dans home page', this.basketUser);
       },
       error: (err) => {
         console.error('erreur de recuperation de panier dans home page', err);
       }
     })
+  }
+
+  getVenteAgent(){
+    this.apiService.getAllVente().subscribe({
+      next: (dataVente: any) => {
+        const data = dataVente.results;
+        this.venteUser = data.filter((item:any) => item.agent_id === this.userData.id);
+        console.log('Vente du user', this.venteUser);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de vente', err);
+      }
+    })
+  }
+
+  getTotalTypeEchange(data:any): number {
+    return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
   }
 }
 

@@ -1,144 +1,25 @@
 <div class="container justify-content-center text-center">
-    <div class="row">
-        <div class="card m-2">
-            <h5 class="card-header">
-                Wallet de {{userData?.username}}
-            </h5>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6 text-end">
-                        Mes produits:
-                    </div>
-                    <div class="col-6 text-danger text-start">
-                        <a routerLink="/listProduct" class="button secondary rounded-pill p-1 mb-2" data-bs-toggle="modal" data-bs-target="#depotWallet">
-                            Voir
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    @for (wallet of userData?.wallet_user; track wallet.id) {
-                    <div class="col-6 text-end border-top">
-                        {{wallet.wallet_name}} (Bordereau : {{wallet.bordereau}}):
-                    </div>
-                    <div class="col-6 text-danger text-start border-top">
-                        {{wallet.montant}} BIF
-                    </div>
-                    }
-                    <!-- <div class="col-6 text-end">
-                        Cash:
-                    </div>
-                    <div class="col-6 text-danger text-start">
-                        2,000,000 Bif
-                    </div> -->
-                </div>
-                <div class="col-auto mt-4">
-                    <button class="button secondary rounded-pill p-1" data-bs-toggle="modal" data-bs-target="#transactionOnMyWallet">
-                        Faire une transaction sur un autre wallet
-                    </button>
-                </div>
-                <div class="alert alert-warning mt-3" role="alert">
-                    <h5 class="card-title m-3">
-                        Total:
-                        <span class="text-danger">
-                        {{walletSumTotal}} bif
-                    </span>
-                    </h5>
-                    Cette somme est sur votre responsabilite!!!
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row gap-2">
         <h5 class="mt-4">Attente sur les depos</h5>
-        @for (depot of basketUser; track depot.id) {
+        @for (depot of venteUser; track depot.id) {
         <div class="card m-2 shadow-lg" style="width: 18rem;">
-            <h5 class="card-header">{{depot.depot_name}}</h5>
+            <h5 class="card-header">{{depot.pos_name}}</h5>
             <div class="card-body">
-                @for (wallet of depot.wallet_basket; track wallet.id) {
+                @for (pay of depot.typeEchange_list; track pay.id) {
                 <div class="row border-bottom">
-                    <div class="col-6 text-end text-secondary">
-                        {{wallet.type_echange_name}}:
+                    <div class="col-6 text-end">
+                        {{pay.typeEchange_name}}:
                     </div>
                     <div class="col-6 text-start text-danger">
-                        {{wallet.montant}} BIF
+                        {{pay.montant}} BIF
                     </div>
                 </div>}
-                <a href="#" class="button principal p-1">
+                <strong>
+                    Total: 
+                    <span class="text-danger">{{getTotalTypeEchange(depot.typeEchange_list)}} BIF</span>
+                </strong>
+                <a href="#" class="button principal p-1 mt-2">
                     <span class="ms-5 me-5">Depot</span>
                 </a>
             </div>
         </div>}
-        <!-- <div class="card m-2 shadow" style="width: 18rem;">
-            <h5 class="card-header">Point de vente Rohero</h5>
-            <div class="card-body">
-                <h5 class="card-title text-danger">500,000 bif</h5>
-                <p class="card-text text-secondary">
-                    Remboursement des dettes du 2/05/2025
-                    <a href="">Voir</a>
-                </p>
-                <a href="#" class="button principal p-1">
-                    <span class="ms-5 me-5">Depot</span>
-                </a>
-            </div>
-        </div> -->
-    </div>
-</div>
-<!-- Modal de transaction sur my wallet -->
-<div class="modal fade" id="transactionOnMyWallet" tabindex="-1" aria-labelledby="transactionOnMyWallet" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Transfert sur mon wallet</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction()">
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="nameAuthor" class="visually-hidden">Full name</label>
-                        <input type="text" class="form-control" name="nameAuthor" id="nameAuthor" value="{{userData?.username}}" disabled>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <label for="walletSource">Wallet Source</label>
-                        <select class="form-select" name="walletSource" formControlName="typeEchangeSource" aria-label="Default select example">
-                            @for (wallet of userData?.wallet_user; track wallet.id) {
-                                <option value="{{wallet.id}}">{{wallet.wallet_name}} ({{wallet.montant}} BIF)</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <label for="walletCible">Wallet Cible</label>
-                        <select class="form-select" name="walletCible" formControlName="typeEchangeCible" aria-label="Default select example">
-                            @for (wallet of typeEchange; track wallet.id) {
-                                <option value="{{wallet.id}}">{{wallet.nom}}</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="montantTransaction" class="visually">Montant Cash</label>
-                        <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="numBordereau" class="visually">Num bordereau</label>
-                        <input type="text" class="form-control" formControlName="bordereauTransaction" name="numBordereau" id="numBordereau" required>
-                    </div>
-                    <!-- <div class="ms-auto me-auto mb-2">
-                        <p class="text-secondary">
-                            Reste en cash:
-                            <span class="text-danger">
-                                30000 Bif
-                            </span> <br> Total sur ton wallet:
-                            <span class="text-danger">
-                                30000 Bif
-                            </span>
-                        </p>
-                    </div> -->
-                    <div class="ms-auto me-auto mb-2 mt-3">
-                        <button type="submit" class="button principal p-1 m-1">
-                            <span class="ms-5 me-5">Effectuer</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>

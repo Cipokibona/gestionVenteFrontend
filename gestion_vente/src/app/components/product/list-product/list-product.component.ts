@@ -21,7 +21,7 @@ export class ListProductComponent {
   }
 
   getProductAgent(){
-    this.apiService.getProductBasket().subscribe({
+    this.apiService.getBasketAgent().subscribe({
       next: (dataBasketAgent: any) => {
         const data = dataBasketAgent.results;
         this.basketUser = data.filter((item:any) => item.agent === this.userData.id);

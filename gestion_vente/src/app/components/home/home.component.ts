@@ -19,7 +19,6 @@ export class HomeComponent implements OnInit{
     this.apiService.refreshTokenLocal();
     this.apiService.updateUserLocal();
     this.getUser();
-    this.getAllWallet();
     this.getTypeEchange();
   }
 
@@ -32,13 +31,13 @@ export class HomeComponent implements OnInit{
     });
   }
 
-  getAllWallet(){
-    this.apiService.getWallet().subscribe({
-      next: (data: any) => {
-        this.allWallet = data.results;
-      }
-    })
-  }
+  // getAllWallet(){
+  //   this.apiService.getWallet().subscribe({
+  //     next: (data: any) => {
+  //       this.allWallet = data.results;
+  //     }
+  //   })
+  // }
 
   getTypeEchange(){
     this.apiService.getTypeEchange().subscribe({

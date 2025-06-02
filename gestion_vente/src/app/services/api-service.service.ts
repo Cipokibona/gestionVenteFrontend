@@ -30,7 +30,7 @@ export class ApiServiceService {
   private transactionUrl = `${this.url}transactions/`
   private walletUrl = `${this.url}wallet/`
   private typeEchangeUrl = `${this.url}typeEchange/`
-  private productsBasketUrl = `${this.url}basketAgent/`;
+  private basketAgentUrl = `${this.url}basketAgent/`;
   private customerUrl = `${this.url}customers/`;
   private ventesUrl = `${this.url}ventes/`;
   private posteUrl = `${this.url}poste/`;
@@ -63,7 +63,7 @@ export class ApiServiceService {
     this.isAuthenticate$.next(data);
   }
 
-   getUser(userId: number, token: any): Observable<Object> {
+  getUser(userId: number, token: any): Observable<Object> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     
     return this.http.get(`${this.usersUrl}${userId}/`, {headers});
@@ -186,8 +186,8 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.transactionUrl}`, data, {headers});
   }
 
-  getProductBasket(){
-    return this.http.get(`${this.productsBasketUrl}`);
+  getBasketAgent(){
+    return this.http.get(`${this.basketAgentUrl}`);
   }
   
   getAllUser(){
@@ -205,7 +205,7 @@ export class ApiServiceService {
   }
 
   getAgentBasketId(id: any){
-    return this.http.get(`${this.productsBasketUrl}${id}/`);
+    return this.http.get(`${this.basketAgentUrl}${id}/`);
   }
 
   getAllVente(){

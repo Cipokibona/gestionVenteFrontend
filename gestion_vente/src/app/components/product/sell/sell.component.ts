@@ -87,7 +87,7 @@ export class SellComponent implements OnInit{
   }
 
   getBasketAgent(){
-    this.apiService.getProductBasket().subscribe({
+    this.apiService.getBasketAgent().subscribe({
       next: (dataBasketAgent: any) => {
         this.agentBasket = dataBasketAgent.results.filter((item:any) => item.agent === this.userData.id);
         console.log('basket agent', this.agentBasket);
