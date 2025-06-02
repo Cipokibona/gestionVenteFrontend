@@ -1,80 +1,118 @@
-<div class="container">
-    <div class="row text-center">
+<div class="container text-center mb-3">
+    <div class="row">
         <div class="col">
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Toutes
             </button>
             <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Depot 1
-            </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Agent 1
+                Poste 1
+            </button> -->
+            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createDistributeur">
+                + Add
             </button>
         </div>
     </div>
-    <div class="row">
-        <h5 class="text-center m-3">Liste des produits</h5>
-        <!-- start card -->
-        @for (product of basketUser; track product.id) {
-        <div class="card shadow m-2" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{product.depot_name}}</h5>
-                <!-- <h6 class="card-subtitle mb-2 text-body-secondary">Nom depot ou agent commercial</h6> -->
-                <!-- <p class="card-text">
-                    <span class="text-end">Prix officiel:</span>
-                </p> -->
-                <div class="accordion" id="accordinationAchat">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                List Product
-                            </button>
-                        </h2>
-                        @for (article of product.list_product; track $index) {
-                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <h6 class="card-subtitle mb-2 text-body-secondary border-top mt-3">{{article.product_name}}</h6>
-                                <div class="row">
-                                    <div class="col-6 text-secondary text-end">
-                                        prix officiel:
-                                    </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitOfficiel}} Bif
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        Quantity:
-                                    </div>
-                                    <div class="col-6 text-start">
-                                        {{article.quantity}}
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        prix total:
-                                    </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitOfficiel * article.quantity}} Bif
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        date d'expiration:
-                                    </div>
-                                    <div class="col-6 text-start">
-                                        {{article.date_expiration | date: 'fullDate'}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        }
+    <h5>Produits aux distributeurs</h5>
+    <div class="row text-start gap-1">
+        @if (loading) {loading...}@else {@if (distributeurs) {
+        <div class="accordion" id="accordionUsers">
+            @for (dist of distributeurs; track $index) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
+                        {{$index + 1}}. {{dist.name}}
+                    </button>
+                </h2>
+                <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
+                    <div class="m-2">
+                        Contact:
+                        <span class="text-secondary">{{dist.tel}}, {{dist.adress}}</span>
+                    </div>
+                    <div class="m-2">
+                        <h6>Product</h6>
+                        @for (product of dist.product_list; track $index) {
+                        <span>
+                            {{$index + 1}}. {{product.name}}
+                        </span>
+                        <br>}
+                        <button type="button" class="btn button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createProduct' + $index">
+                            + add
+                        </button>
                     </div>
                 </div>
-                <!-- <h6 class="card-subtitle mb-2 border-top  mt-3">Quantity totale: 120</h6>
-                <h6 class="card-subtitle mb-2 mt-2">
-                    Prix total:
-                    <span class="text-danger">10,000,000 Bif</span>
-                </h6> -->
-                <button type="button" class="button secondary rounded-pill m-1 p-1">
-                    Rendre
-                </button>
             </div>
-        </div>}
-        <!-- end card -->
+            <!-- Modal product-->
+            <div class="modal fade" [attr.id]="'createProduct' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Create Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" [formGroup]="productForm" (ngSubmit)="createProduct(dist.id)" novalidate>
+                                <div class="ms-auto me-auto mb-2">
+                                    <label for="nameDistributeur" class="visually">Produit {{dist.name}}</label>
+                                    <!-- <input type="number" class="form-control" name="nameDistributeur" value="{{dist.name}}" disabled> -->
+                                </div>
+                                <div class="ms-auto me-auto mb-2">
+                                    <label for="nameProduct" class="visually-hidden">Name</label>
+                                    <input type="text" class="form-control" formControlName="name" name="nameProduct" id="nameProduct" placeholder="name product" required>
+                                </div>
+                                <div class="ms-auto me-auto mb-2">
+                                    <label for="description" class="visually-hidden">Description</label>
+                                    <input type="text" class="form-control" formControlName="description" name="description" id="description" placeholder="Description" required>
+                                </div>
+                                <div class="ms-auto me-auto mb-2 mt-3">
+                                    <button type="submit" class="button principal p-1 m-1">
+                                        <span class="ms-5 me-5 ">Create</span>
+                                    </button>
+                                    <a class="button secondary p-1 m-1">
+                                        <span class="ms-5 me-5" data-bs-dismiss="modal">Back</span>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- fin modal -->
+            }
+        </div> }}
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createDistributeur" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create Distributeur</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" [formGroup]="distributeurForm" (ngSubmit)="createDistributeur()" novalidate>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="nameDistributeur" class="visually-hidden">Name</label>
+                        <input type="text" class="form-control" formControlName="name" name="nameDistributeur" id="nameDistributeur" placeholder="name distributeur" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="adress" class="visually-hidden">Adress</label>
+                        <input type="text" class="form-control" formControlName="adress" name="adress" id="adress" placeholder="Adress" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="tel" class="visually-hidden">Tel</label>
+                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3">
+                        <button type="submit" class="button principal p-1 m-1">
+                            <span class="ms-5 me-5 ">Create</span>
+                        </button>
+                        <a class="button secondary p-1 m-1">
+                            <span class="ms-5 me-5">Back</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>

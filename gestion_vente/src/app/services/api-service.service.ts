@@ -36,6 +36,8 @@ export class ApiServiceService {
   private posteUrl = `${this.url}poste/`;
   private salarUrl = `${this.url}salaire/`;
   private tauxEchangeUrl = `${this.url}tauxEchange/`;
+  private distributeurUrl = `${this.url}distributeur/`;
+  private productUrl = `${this.url}product/`;
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -255,5 +257,21 @@ export class ApiServiceService {
 
   getAllSalar(){
     return this.http.get(`${this.salarUrl}`);
+  }
+
+  getAllDistributeur(){
+    return this.http.get(`${this.distributeurUrl}`);
+  }
+
+  createDistributeur(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.distributeurUrl}`, data, {headers});
+  }
+
+  createProduct(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.productUrl}`, data, {headers});
   }
 }

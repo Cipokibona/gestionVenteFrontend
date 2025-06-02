@@ -75,12 +75,12 @@ export class ListPosteComponent implements OnInit{
     this.apiService.createPoste(data).subscribe({
       next: (data:any) => {
         console.log('creation reussi de poste', data);
-        location.reload();
       },
       error: (err) => {
         console.error('erreur de creation de poste',err)
       }
     });
+    location.reload();
   }
 
   editPost(id: number){
