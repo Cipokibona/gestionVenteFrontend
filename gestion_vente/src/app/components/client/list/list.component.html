@@ -1,97 +1,37 @@
 <div class="container text-center mb-3">
     <div class="row">
         <div class="col">
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Toutes
             </button>
             <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Par dettes
-            </button>
+                Poste 1
+            </button> -->
             <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                New
+                + Add
             </button>
         </div>
     </div>
-</div>
-<h4 class="text-center ">
-    Liste des clients</h4>
-@if (customers && customers.length > 0) {
-<div class="accordion" id="accordionExample">
-    @for (client of customers; track client.id) {
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              {{client.fullName}}
-              @for (dette of venteCreditClient; track dette.id) {
-              @if (client.id == dette.client) {
-              <span class="text-danger ms-2">*</span>}}
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                <div class="row">
-                    <div class="col-6 text-end">
-                        Adresse:
-                    </div>
-                    <div class="col-6 text-secondary">
-                        {{client.adress}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-end">
-                        Tel:
-                    </div>
-                    <div class="col-6 text-secondary">
-                        {{client.tel}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-end">
-                        Dettes:
-                    </div>
-                    <div class="col-6 text-secondary">
-                        @for (dette of venteCreditClient; track dette.id) { @if (client.id == dette.client) {
-                        <a routerLink="/vente">
-                            <span class="ms-2">
-                            <span class="text-danger">{{dette.reste}} BIF</span> va etre paye {{dette.date_recouvrement | date:'longDate'}}
-                            </span>
-                        </a> <br>}}
-                    </div>
-                </div>
-                <!-- <div class="row">
-                    <div class="col-6 text-secondary text-start text-end">
-                        Dettes:
-                    </div>
-                    <div class="col-6">
-                        <a class="text-danger" data-bs-toggle="modal" data-bs-target="#recouvrement">
-                            2,000,000 Bif
-                        </a>
-                    </div>
-                </div> -->
-
-                <div class="row text-center">
-                    <a routerLink="vente/{{client.id}}" type="button" class="button button secondary rounded-pill m-1 p-1">
-                        vendre
-                    </a>
-                    <a href="">Edit Client</a>
+    <h5>Liste des clients</h5>
+    <div class="row text-start gap-1">
+        @if (loadingPage) {loading...}@else {@if (customers) {
+        <div class="accordion" id="accordionUsers">
+            @for (client of customers; track $index) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
+                        {{$index + 1}}. {{client.fullName}}
+                    </button>
+                </h2>
+                <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
+                    <p class="m-2">
+                        Contact:
+                        <span class="text-secondary">{{client.tel}}, {{client.adress}}</span>
+                    </p>
                 </div>
             </div>
-        </div>
-    </div>}
-</div>}
-<div class="container text-center mb-3">
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn button secondary rounded-pill m-1 p-1">
-                Toutes
-            </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Par dettes
-            </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                New
-            </button>
-        </div>
+            }
+        </div> }}
     </div>
 </div>
 <!-- Modal -->
@@ -99,35 +39,63 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create client</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create user</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="needs-validation" novalidate>
+                <form class="needs-validation" [formGroup]="clientForm" (ngSubmit)="createClient()" novalidate>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="nameClient" class="visually-hidden">Full name</label>
-                        <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="Full name" required>
+                        <label for="firstUser" class="visually-hidden">Name</label>
+                        <input type="text" class="form-control" formControlName="first_name" name=" nameClient " id="nameUser " placeholder="name " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="adress" class="visually-hidden">Adress</label>
-                        <input type="text" class="form-control" name="adress" id="adress" placeholder="Adress" required>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="lastname" class="visually-hidden">Prenom</label>
+                        <input type="text" class="form-control" formControlName="last_name" name="lastname" id="lastname" placeholder="Prenom " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="tel" class="visually-hidden">Tel</label>
-                        <input type="number" class="form-control" name="tel" id="tel" placeholder="Tel" required>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="email" class="visually-hidden ">Email</label>
+                        <input type="email" class="form-control" formControlName="email" name="email" id="email" placeholder="email" required>
                     </div>
-                    <div class="form-check text-start">
-                        <input class="form-check-input" type="checkbox" value="" id="checkChecked" checked>
-                        <label class="form-check-label" for="checkChecked">
-                            is active
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="tel" class="visually-hidden ">Tel</label>
+                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="agent" value="agent" checked>
+                        <label class="form-check-label" for="agent">
+                            Agent commercial
                         </label>
                     </div>
-                    <div class="ms-auto me-auto mb-2 mt-3">
-                        <button type="submit" class="button principal p-1 m-1">
-                            <span class="ms-5 me-5">Create</span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="respo" value="respo">
+                        <label class="form-check-label" for="respo">
+                            Responsable d'un POV
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="admin" value="admin">
+                        <label class="form-check-label" for="admin">
+                            Admin
+                        </label>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="username" class="visually-hidden ">Username</label>
+                        <input type="text" class="form-control" formControlName="username" name="username" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="password" class="visually-hidden ">Password</label>
+                        <input type="password" class="form-control" formControlName="password" name="password" id="password" placeholder="password" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="confirmPassword" class="visually-hidden">confirm Password</label>
+                        <input type="password" class="form-control" formControlName="confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="confirm Password" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3 ">
+                        <button type="submit " class="button principal p-1 m-1 ">
+                            <span class="ms-5 me-5 ">Create</span>
                         </button>
-                        <a class="button secondary p-1 m-1">
-                            <span class="ms-5 me-5">Back</span>
+                        <a class="button secondary p-1 m-1 ">
+                            <span class="ms-5 me-5 ">Back</span>
                         </a>
                     </div>
                 </form>
@@ -135,72 +103,4 @@
         </div>
     </div>
 </div>
-<!-- Modal de recouvrement -->
-<div class="modal fade" id="recouvrement" tabindex="-1" aria-labelledby="recouvrement" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Recouvrement de dette</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="needs-validation" novalidate>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="nameClient" class="visually-hidden">Full name</label>
-                        <input type="text" class="form-control" name="nameClient" id="nameClient" value="Jean" disabled>
-                    </div>
-                    <div class="row border p-3 m-2">
-                        <h6>Mode de recuperation</h6>
-                        <div class="col-auto mb-2">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Cash</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="col-auto mb-2">
-                            <label for="numero" class="visually-hidden">Bordereau</label>
-                            <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
-                        </div>
-                        <div class="col-auto mb-2">
-                            <label for="montantCash" class="visually-hidden">montantCash</label>
-                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montantCash" required>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                                + Add
-                            </button>
-                        <button type="button" class="btn btn-danger rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                                Delete
-                            </button>
-                    </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <p class="text-secondary">
-                            Total de la dette:
-                            <span class="text-danger">
-                                30000 Bif
-                            </span> <br> Total paye:
-                            <span class="text-danger">
-                                30000 Bif
-                            </span> <br> Reste:
-                            <span class="text-danger">
-                                30000 Bif
-                            </span> <br> Date prevu de payement:
-                            <input type="date" name="datePrevu" id="datePrevu" class="form-control-sm"><br>
-                        </p>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 mt-3">
-                        <button type="submit" class="button principal p-1 m-1">
-                            <span class="ms-5 me-5">Ok</span>
-                        </button>
-                        <a class="button secondary p-1 m-1">
-                            <span class="ms-5 me-5">Back</span>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- old html -->
