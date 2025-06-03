@@ -120,15 +120,28 @@ export class ListUserComponent implements OnInit{
   }
 
   createUser(){
-    const newUser = {
+    let admin = false;
+    let respo = false;
+    let agent = false;
+    if(this.userForm.value.role == 'agent'){
+      agent = true
+    }
+    if(this.userForm.value.role == 'respo'){
+      respo = true
+    }
+    if(this.userForm.value.role == 'admin'){
+      admin = true
+    }
+    if(this.userForm.value.confirmPassword == this.userForm.value.password){
+      const newUser = {
       first_name: this.userForm.value.first_name,
       last_name: this.userForm.value.last_name,
       tel: this.userForm.value.tel,
       email: this.userForm.value.email,
       imgProfil: 'No image',
-      is_admin: false,
-      is_respo_pos: false,
-      is_agent_commercial: true,
+      is_admin: admin,
+      is_respo_pos: respo,
+      is_agent_commercial: agent,
       username: this.userForm.value.username,
       password: this.userForm.value.password,
     };
@@ -158,7 +171,8 @@ export class ListUserComponent implements OnInit{
         console.error('erreur de creation de user',err)
       }
     });
-    location.reload();
+    // location.reload();
+    }
   }
 
   getAllPoste(){
