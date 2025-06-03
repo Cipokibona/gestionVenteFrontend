@@ -76,44 +76,42 @@
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
                         <label for="tel" class="visually-hidden ">Tel</label>
-                        <input type="number" class="form-control" formControlName="email" name="tel" id="tel" placeholder="Tel " required>
+                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
                     </div>
-                    <label for="salaire ">Salaire mensuel</label>
-                    <select class="form-select mb-2 " formControlName="salaire" name="salaire" aria-label="Default">
-                        <option selected></option>
-                        <option value="1 ">One</option>
-                        <option value="2 ">Two</option>
-                        <option value="3 ">Three</option>
+                    <label for="salaire">Salaire mensuel</label>
+                    <select class="form-select mb-2" formControlName="poste" name="salaire" aria-label="Default">
+                        @for (poste of allPoste; track $index) {
+                        <option value={{poste.id}}>{{poste.salar}} BIF ({{poste.name}})</option>}
                     </select>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="agent" value="agent" checked>
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="agent" value="agent" checked>
                         <label class="form-check-label" for="agent">
-        Agent commercial
-    </label>
+                            Agent commercial
+                        </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="respo" value="respo">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="respo" value="respo">
                         <label class="form-check-label" for="respo">
                             Responsable d'un POV
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="role" id="admin" value="admin">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="admin" value="admin">
                         <label class="form-check-label" for="admin">
                             Admin
                         </label>
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
-                        <label for="username " class="visually-hidden ">Username</label>
-                        <input type="text " class="form-control " name="username " id="username " placeholder="Username " required>
+                        <label for="username" class="visually-hidden ">Username</label>
+                        <input type="text" class="form-control" formControlName="username" name="username" id="username" placeholder="Username" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
-                        <label for="password " class="visually-hidden ">Password</label>
-                        <input type="password " class="form-control " name="password " id="password " placeholder="password " required>
+                        <label for="password" class="visually-hidden ">Password</label>
+                        <input type="password" class="form-control" formControlName="password" name="password" id="password" placeholder="password" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
-                        <label for="confirmPassword " class="visually-hidden ">confirm Password</label>
-                        <input type="password " class="form-control " name="confirmPassword " id="confirmPassword " placeholder="confirm Password " required>
+                        <label for="confirmPassword" class="visually-hidden">confirm Password</label>
+                        <input type="password" class="form-control" formControlName="confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="confirm Password" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
                         <button type="submit " class="button principal p-1 m-1 ">

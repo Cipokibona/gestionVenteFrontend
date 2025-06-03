@@ -11,8 +11,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class ListUserComponent implements OnInit{
   userData!: any;
   allUser!: any;
+  
   allSalaire!: any;
   allVenteUser!: any;
+
+  allPoste!: any;
 
   loadingPage!: boolean;
   error!: string | null;
@@ -22,7 +25,11 @@ export class ListUserComponent implements OnInit{
     last_name: new FormControl('', Validators.required),
     tel: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
-    salaire: new FormControl('', Validators.required),
+    poste: new FormControl('', Validators.required),
+    role: new FormControl('agent', Validators.required),
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    confirmPassword: new FormControl('', Validators.required),
   });
 
   constructor(private apiService: ApiServiceService){}
@@ -34,6 +41,7 @@ export class ListUserComponent implements OnInit{
     this.getAllUser();
     this.getAllSalarUser();
     this.getVenteUser();
+    this.getAllPoste();
   }
 
   getUser(){
@@ -112,20 +120,57 @@ export class ListUserComponent implements OnInit{
   }
 
   createUser(){
-    const data = {
-      fullName: this.userForm.value.first_name,
-      adress: this.userForm.value.first_name,
-      tel: this.userForm.value.first_name
+    const newUser = {
+      first_name: this.userForm.value.first_name,
+      last_name: this.userForm.value.last_name,
+      tel: this.userForm.value.tel,
+      email: this.userForm.value.email,
+      imgProfil: 'No image',
+      is_admin: false,
+      is_respo_pos: false,
+      is_agent_commercial: true,
+      username: this.userForm.value.username,
+      password: this.userForm.value.password,
     };
-    this.apiService.createPos(data).subscribe({
-      next: (data:any) => {
-        console.log('creation reussi de pos', data);
+    console.log('data user envoyer',newUser);
+    this.apiService.createUser(newUser).subscribe({
+      next: (dataNewUser:any) => {
+        console.log('creation reussi de user', dataNewUser);
+        const dataSalar = {
+          user: dataNewUser.id,
+          poste: this.userForm.value.poste,
+        }
+        this.apiService.createSalar(dataSalar).subscribe({
+          next: (dataSalar:any) => {
+            console.log('creation salar', dataSalar)
+          },
+          error: (err) => {
+            this.apiService.deleteUser(dataNewUser.id).subscribe({
+              error: (err) => {
+                console.error('erreur de delete user', err)
+              }
+            });
+            console.error('erreur salar',err)
+          }
+        })
       },
       error: (err) => {
-        console.error('erreur de creation de pos',err)
+        console.error('erreur de creation de user',err)
       }
     });
     location.reload();
+  }
+
+  getAllPoste(){
+    this.apiService.getAllPoste().subscribe({
+      next: (dataPoste:any) => {
+        this.allPoste = dataPoste.results;
+        console.log('tout les postes', this.allPoste);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de postes',err)
+      }
+    });
   }
 
 }

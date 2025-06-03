@@ -201,6 +201,18 @@ export class ApiServiceService {
     return this.http.get<any>(`${this.usersUrl}`, {headers});
   }
 
+  createUser(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.usersUrl}`, data, {headers});
+  }
+
+  deleteUser(id: number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.usersUrl}${id}/`, {headers});
+  }
+
   getAllCustomers(){
     return this.http.get(`${this.customerUrl}`);
   }
@@ -259,6 +271,12 @@ export class ApiServiceService {
 
   getAllSalar(){
     return this.http.get(`${this.salarUrl}`);
+  }
+
+  createSalar(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.salarUrl}`, data, {headers});
   }
 
   getAllDistributeur(){
