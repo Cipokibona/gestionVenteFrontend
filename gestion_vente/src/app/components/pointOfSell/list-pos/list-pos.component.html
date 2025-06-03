@@ -20,7 +20,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
-                        {{$index + 1}}. {{pos.fullName}}
+                        {{$index + 1}}. {{pos.fullName}} 
                     </button>
                 </h2>
                 <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
@@ -38,6 +38,12 @@
                         <button type="button" class="btn button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createRespo' + $index">
                             + add
                         </button>
+                    </div>
+                    <div class="m-2">
+                        <h6>Stock</h6>
+                        <a routerLink="approvisionnementPOS/{{pos.id}}" class="btn button secondary rounded-pill m-1 p-1">
+                            + prod
+                        </a>
                     </div>
                 </div>
             </div>

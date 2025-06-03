@@ -1,107 +1,133 @@
 <div class="container justify-content-center">
-    <h5 class="text-center">Achat</h5>
+    <h5 class="text-center">Approvisionnement</h5>
     <div class="row">
-        <form class="needs-validation">
+        <form class="needs-validation" [formGroup]="aprovisionForm" (ngSubmit)="createAchat()">
             <div class="ms-auto me-auto mb-2">
-                <label for="nameDistributeur" class="visually-hidden">Full name</label>
-                <input type="text" class="form-control" name="nameDistributeur" id="nameDistributeur" placeholder="Distributeur" disabled>
+                <label for="nameClient" class="visually-hidden">Full name</label>
+                <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataPos.fullName}}" disabled>
             </div>
-            <div class="container border p-2 rounded">
-                <h6>Product 1</h6>
-                <select class="form-select mb-2" aria-label="Default select example">
-                    <option selected>Selon l'article</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-                <div class="row">
+            <h6>Source d'approvisionnement</h6>
+            <!-- button radio -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" id="distributeur" value=1 (change)="onSourceChange($event)">
+                <label class="form-check-label" for="distributeur">
+                    Distributeur
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" id="posPrincipal" value=2 (change)="onSourceChange($event)">
+                <label class="form-check-label" for="posPrincipal">
+                    Autre POS
+                </label>
+            </div>
+            @if (selectedSource && selectedSource== 2) {
+            <div class="container border p-2 rounded mt-2">
+                <h5>Point de vente</h5>
+                <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectPos($event)" formControlName="panier">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (pos of allPos; track pos.id) {
+                    <option value={{pos.id}}>{{pos.fullName}}</option>
+                }
+                </select> @if(selectedPosData){
+                <h4 for="product">New product</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedPosData.list_product; track product.id) {
+                    <option value={{product.id}}>{{product.product_name}}</option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
                     <div class="col-auto mb-2">
-                        <label for="quantity" class="visually">Quantity</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value=1 required>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <label for="pureel" class="visually">PU d'achat en Bif</label>
-                        <input type="number" class="form-control" name="pureel" id="pu d'achat du produit" required>
+                        <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
+                        <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 formControlName="quantity" required>
                         <p class="text-secondary">
-                            Prix total d'achat:
+                            Prix achat:
                             <span class="text-danger">
-                                30000 Bif
+                            {{selectedProductData.prixAchat}} Bif
+                        </span><br> Prix vente:
+                            <span class="text-danger">
+                                {{selectedProductData.prixVente}} BIF
+                            </span><br> Exp:
+                            <span>
+                                {{selectedProductData.date_expiration | date: 'longDate'}}
                             </span>
                         </p>
                     </div>
-                    <div class="col-auto mb-2">
-                        <label for="puVente" class="visually">PU pour vente en Bif</label>
-                        <input type="number" class="form-control" name="puVente" id="pu de vente du produit" required>
-                    </div>
-                    <div class="col-auto mb-2">
-                        <label for="expiration" class="visually">Date d'expiration du produit</label>
-                        <input type="date" class="form-control" name="expiration" id="date d'expiration du produit" required>
-                    </div>
-                </div>
-                <div class="row text-end">
                     <div class="col">
-                        <button type="button" class="btn btn-danger rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                            Delete
+                        <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + Save
                         </button>
+                        <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
+                            Delete
+                        </button> -->
                     </div>
                 </div>
-            </div>
+                }}
+            </div>}
             <div class="row">
-                <div class="col">
-                    <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
-                         + Add
-                    </button>
-                </div>
                 <div class="container">
-                    <h6>Votre mode de payement</h6>
+                    <h6>Mode de payement du client</h6>
                     <div class="row">
                         <div class="col-auto mb-2">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Cash</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)" formArrayName="typeEchange">
+                                <option selected>Mode payement</option>
+                                @for (type of typeEchangeData; track type.id) {
+                                <option value={{type.id}}>{{type.nom}}</option>}
                             </select>
-                        </div>
-                        <div class="col-auto mb-2">
-                            <label for="numero" class="visually-hidden">Bordereau</label>
-                            <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" required>
-                        </div>
-                        <div class="col-auto mb-2">
-                            <label for="montantCash" class="visually-hidden">montantCash</label>
-                            <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montantCash" required>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="button secondary rounded-pill m-1 p-1">
-                                + Add
-                            </button>
-                            <button type="button" class="btn btn-danger rounded-pill m-1 p-1">
-                                Delete
-                            </button>
-                        </div>
+                        </div>@if (selectedTypeData) {
+                        <div [formGroup]="newTypeEchange">
+                            <div class="col-auto mb-2">
+                                <label for="montantCash" class="visually-hidden">montant</label>
+                                <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" formControlName="montant" required>
+                            </div>@if (selectedTypeData.is_bordereau) {
+                            <div class="col-auto mb-2">
+                                <label for="numero" class="visually-hidden ">Bordereau</label>
+                                <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" formControlName="bordereau" required>
+                            </div>}
+                            <div class="col">
+                                <button type="button" class="btn button secondary rounded-pill m-1 p-1 " (click)="addTypeEchange()">
+                                    + save
+                                </button>
+                                <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1 " (click)="removeModePay(selectedTypeData)">
+                                    Delete
+                                </button> -->
+                            </div>
+                        </div>}
                     </div>
                 </div>
-                <p class="text-secondary">
-                    Totaux officiel:
-                    <span class="text-danger">
-                        30000 Bif
-                    </span> <br> Montant paye:
-                    <span class="text-danger">
-                        30000 Bif
-                    </span> <br> Reste:
-                    <span class="text-danger">
-                        30000 Bif
-                    </span> <br> Date prevu de payement:
-                    <input type="date" name="datePrevu " id="datePrevu " class="form-control w-25 "><br>
-                </p>
+                <div class="col">
+                    @if(aprovisionForm.value.list_product && aprovisionForm.value.list_product.length > 0){
+                    <h5>Produit recus</h5>
+                    <ul> @for (product of aprovisionForm.value.list_product; track product.id) {
+                        <li>{{product.product_name}} {{product.quantity}}*{{product.prixAchat}} BIF: <br>
+                            <span class="text-danger">{{product.prixAchat * product.quantity}} BIF</span>
+                        </li>
+                        }
+                        <li>Total a paye:<br>
+                            <span class="text-danger"> {{totalReel}}BIF</span>
+                        </li>
+                    </ul>} @if (aprovisionForm.value.typeEchange && aprovisionForm.value.typeEchange.length > 0 ){
+                    <h5>Mode Payement</h5>
+                    <ul>
+                        @for (pay of aprovisionForm.value.typeEchange; track pay.id) {
+                        <li>{{pay.typeName}}:
+                            <span class="text-danger">{{pay.montant}} BIF</span>
+                        </li>
+                        }
+                        <li>Total paye:<br>
+                            <span class="text-danger">{{totalPaye}} BIF</span>
+                        </li>
+                        <li>Reste a Paye: <br>
+                            <span class="text-danger">{{resteImpaye}} BIF</span>
+                        </li>
+                        <label for="dateDette">Payera le</label>
+                        <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
+                    </ul> }
+                </div>
             </div>
-            <div class="ms-auto me-auto mb-2 mt-3 ">
-                <button type=" " class="button principal p-1 m-1 ">
+            <div class=" ms-auto me-auto mb-2 mt-3 ">
+                <button type="submit " class="button principal p-1 m-1 ">
                     <span class="ms-5 me-5 ">Vente</span>
-               </button>
-                <!-- <a class="button secondary p-1 m-1 ">
-                    <span class="ms-5 me-5 ">Back</span>
-                </a> -->
+                </button>
             </div>
         </form>
     </div>

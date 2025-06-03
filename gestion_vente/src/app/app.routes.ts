@@ -53,7 +53,7 @@ export const routes: Routes = [
         component: ListAllVenteComponent,
     },
     {
-        path: 'achat',
+        path: 'listPOS/approvisionnementPOS/:id',
         title: 'achat page',
         component: BuyComponent,
     },
@@ -63,7 +63,7 @@ export const routes: Routes = [
         component: ToAgentComponent,
     },
     {
-        path:'approvisionnementPOS',
+        path:'apprivisionnement',
         title: 'approvisionnement POS page',
         component: ToPointOfSellComponent,
     },

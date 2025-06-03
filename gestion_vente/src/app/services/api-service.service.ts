@@ -40,6 +40,9 @@ export class ApiServiceService {
   private productUrl = `${this.url}product/`;
   private posUrl = `${this.url}pointVente/`;
   private responsablePosUrl = `${this.url}respoPos/`;
+  private provisionPosUrl = `${this.url}approvisionnementPos/`;
+
+  private listProductApprovisionnementPosUrl = `${this.url}list_approvisionnement_pos/`
 
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -247,6 +250,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listProductVenteUrl}`, data, {headers});
   }
 
+  createListProductProvisionPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listProductApprovisionnementPosUrl}`, data, {headers});
+  }
+
   createListPayVente(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -299,6 +308,10 @@ export class ApiServiceService {
     return this.http.get(`${this.posUrl}`);
   }
 
+  getPosById(id: number){
+    return this.http.get(`${this.posUrl}${id}/`);
+  }
+
   createPos(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -309,6 +322,18 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.responsablePosUrl}`, data, {headers});
+  }
+
+  createProvisionPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.provisionPosUrl}`, data, {headers});
+  }
+
+  deleteProvisionPos(id:number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.provisionPosUrl}${id}/`, {headers});
   }
   
 }

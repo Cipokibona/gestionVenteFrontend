@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../../../services/api-service.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-pos',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './list-pos.component.html',
   styleUrl: './list-pos.component.scss'
 })
