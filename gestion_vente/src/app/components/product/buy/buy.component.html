@@ -23,7 +23,7 @@
             @if (selectedSource && selectedSource== 2) {
             <div class="container border p-2 rounded mt-2">
                 <h5>Point de vente</h5>
-                <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectPos($event)" formControlName="panier">
+                <select class="form-select mb-2" aria-label="Default select example" name="pos" (change)="selectPos($event)" formControlName="pos">
                     <!-- <option selected>Selectionner le panier</option> -->
                     @for (pos of allPos; track pos.id) {
                     <option value={{pos.id}}>{{pos.fullName}}</option>
@@ -62,7 +62,60 @@
                     </div>
                 </div>
                 }}
-            </div>}
+            </div>
+            }
+            <!-- fin de condition de pos -->
+            <!-- consition de distributeur -->
+            @else if (selectedSource && selectedSource== 1) {
+            <div class="container border p-2 rounded mt-2">
+                <h5>Distributeur</h5>
+                <select class="form-select mb-2" aria-label="Default select example" name="distributeur" (change)="selectDistributeur($event)" formControlName="distr">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (distributeur of allDistributeur; track distributeur.id) {
+                    <option value={{distributeur.id}}>{{distributeur.name}}</option>
+                }
+                </select> @if(selectedDistrData){
+                <h4 for="product">New product</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedDistrData.product_list; track product.id) {
+                    <option value={{product.id}}>{{product.name}}</option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
+                    <p class="text-secondary">
+                        <span>
+                                {{selectedProductData.description}}
+                            </span>
+                    </p>
+                    <div class="col-auto mb-2">
+                        <label for="quantityDistributeur" class="visually-hidden">Quantity</label>
+                        <input type="number" class="form-control" name="quantityDistributeur" id="quantityDistributeur" placeholder="Quantity" formControlName="quantity" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <label for="prixAchatDistributeur" class="visually-hidden">Prix d'achat</label>
+                        <input type="number" class="form-control" name="prixAchatDistributeur" id="prixAchatDistributeur" placeholder="Prix d'achat" formControlName="prixAchatDistributeur" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <label for="prixVenteDistributeur" class="visually-hidden">Prix de vente</label>
+                        <input type="number" class="form-control" name="prixVenteDistributeur" id="prixVenteDistributeur" placeholder="Prix de vente" formControlName="prixVenteDistributeur" required>
+                    </div>
+                    <div clas="col-auto mb-2">
+                        <label for="dateExpiration">Exp:</label>
+                        <input type="date" class="form-control" name="dateExpiration" id="dateExpiration" formControlName="dateExpiration">
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + Save
+                        </button>
+                        <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
+                            Delete
+                        </button> -->
+                    </div>
+                </div>
+                }}
+            </div>
+            }
+            <!-- fin condition de distributeur -->
             <div class="row">
                 <div class="container">
                     <h6>Mode de payement du client</h6>

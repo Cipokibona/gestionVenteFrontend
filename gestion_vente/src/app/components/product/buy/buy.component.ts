@@ -22,6 +22,7 @@ export class BuyComponent implements OnInit{
   typeEchangeData!: any;
   
   allPos!: any;
+  allDistributeur!: any;
   
   nbreProducts: number = 1;
   tabProducts: any[] = [{ id: null, product_name: '' }];
@@ -31,6 +32,9 @@ export class BuyComponent implements OnInit{
   
   selectedPosId!: number;
   selectedPosData!: any;
+
+  selectedDistrId!: number;
+  selectedDistrData!: any;
   
   selectedProductId!: number;
   selectedProductData!: any;
@@ -46,14 +50,16 @@ export class BuyComponent implements OnInit{
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.aprovisionForm = this.fb.group({
-      panier: this.fb.control('', Validators.required),
+      pos: this.fb.control('', Validators.required),
+      distr: this.fb.control('',Validators.required),
       list_product: this.fb.array([], Validators.required),
       newProduct: this.fb.group({
         id: new FormControl('', Validators.required),
         product_name: new FormControl('', Validators.required),
         quantity: new FormControl('', Validators.required),
-        prixOfficiel: new FormControl('', Validators.required),
-        prixClient: new FormControl('', Validators.required)
+        prixAchatDistributeur: new FormControl('', Validators.required),
+        prixVenteDistributeur: new FormControl('', Validators.required),
+        dateExpiration: new FormControl('',Validators.required),
       }),
       typeEchange: this.fb.array([], Validators.required),
       newTypeEchange: this.fb.group({
@@ -84,6 +90,7 @@ export class BuyComponent implements OnInit{
     this.apiService.refreshTokenLocal();
     this.apiService.updateUserLocal();
     this.getUserData();
+    this.getAllDistributeur();
     this.getAllPos();
     this.getTypeEchange();
     console.log('venteForm', this.aprovisionForm.value);
@@ -95,6 +102,26 @@ export class BuyComponent implements OnInit{
     console.log('selected source',this.selectedSource)
   }
 
+  // pour distributeur
+  getAllDistributeur(){
+    this.apiService.getAllDistributeur().subscribe({
+      next: (dataDistr: any) => {
+        this.allDistributeur = dataDistr.results;
+        console.log('distributeur', this.allDistributeur);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de distributeur', err);
+      }
+    })
+  }
+
+  selectDistributeur(event: Event){
+    this.selectedDistrId = Number((event.target as HTMLSelectElement).value);
+    this.selectedDistrData = this.allDistributeur.find((item:any) => item.id === this.selectedDistrId);
+    console.log('selected distributeur', this.selectedDistrData);
+  }
+
+  // pour pos
   getAllPos(){
     this.apiService.getAllPos().subscribe({
       next: (dataPos: any) => {
@@ -107,6 +134,13 @@ export class BuyComponent implements OnInit{
     })
   }
 
+  selectPos(event: Event){
+    this.selectedPosId = Number((event.target as HTMLSelectElement).value);
+    this.selectedPosData = this.allPos.find((item:any) => item.id === this.selectedPosId);
+    console.log('selected POS', this.selectedPosData);
+  }
+
+  // fonction pour user
   getUserData(){
     this.apiService.currentUser.subscribe({
       next: (data) => {
@@ -117,6 +151,14 @@ export class BuyComponent implements OnInit{
         console.error('erreur de recuperation de dataUser',err);
       }
     })
+  }
+
+  // fonction de type echange
+  selectedTypeEchange(event: Event){
+    this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
+    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+    
+    console.log('selected type', this.selectedTypeData)
   }
 
   getTypeEchange(){
@@ -131,6 +173,46 @@ export class BuyComponent implements OnInit{
     })
   }
 
+  removeModePay(index:number){
+    if(this.tabModePay.length > 1){
+      this.tabModePay.splice(index,1);
+    }
+  }
+
+  addTypeEchange() {
+    this.listTypeEchange.push(this.fb.group({
+      id: this.selectedTypeId,
+      typeName: this.selectedTypeData.nom,
+      montant: new FormControl(this.newTypeEchange.value.montant, Validators.required),
+      bordereau: new FormControl(this.newTypeEchange.value.bordereau, Validators.required)
+    }));
+
+    let newPay = 0;
+    for(let type of this.listTypeEchange.value){
+      newPay += type.montant;
+    }
+    this.totalPaye = newPay;
+    this.resteImpaye = this.totalReel - this.totalPaye;
+
+    // Réinitialiser le FormGroup pour le nouveau produit
+    this.newTypeEchange.reset();
+    console.log('list des types dans form', this.aprovisionForm.value);
+  }
+
+
+  // fonction de product
+  selectProduct(event: Event){
+    this.selectedProductId = Number((event.target as HTMLSelectElement).value);
+    if(this.selectedSource == 2){
+      this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.id === this.selectedProductId);
+    }else if(this.selectedSource == 1){
+      this.selectedProductData = this.selectedDistrData.product_list.find((item:any) => item.id === this.selectedProductId);
+    }
+    
+    console.log('selected product data', this.selectedProductData);
+    
+  }
+
   removeProduct(data:any){
     if(this.tabProducts.length > 1){
       this.tabProducts.splice(data, 1);
@@ -138,31 +220,39 @@ export class BuyComponent implements OnInit{
     console.log('resultat aprs suppression de product dans vente', this.tabProducts);
   }
 
-  removeModePay(index:number){
-    if(this.tabModePay.length > 1){
-      this.tabModePay.splice(index,1);
+  addProductByForm() {
+    let prixAchat = 0;
+    let prixVente = 0;
+    let date_expiration = '';
+    let product_name = '';
+    if(this.selectedSource == 2){
+      prixAchat = this.selectedProductData.prixAchat;
+      prixVente = this.selectedProductData.prixVente;
+      product_name = this.selectedProductData.product_name;
+      date_expiration = this.selectedProductData.date_expiration;
+    }else{
+      prixAchat = this.newProduct.value.prixAchatDistributeur;
+      prixVente = this.newProduct.value.prixVenteDistributeur;
+      product_name = this.selectedProductData.name;
+      date_expiration = this.newProduct.value.dateExpiration;
     }
-  }
+    this.listProduct.push(this.fb.group({
+      id: this.selectedProductId,
+      product_name: product_name,
+      quantity: new FormControl(this.newProduct.value.quantity, Validators.required),
+      prixAchat: prixAchat,
+      prixVente: prixVente,
+      date_expiration: date_expiration,
+    }));
+    let newTotal = 0;
+    for(let product of this.listProduct.value){
+      newTotal += (product.prixAchat * product.quantity);
+    };
+    this.totalReel = newTotal;
 
-  selectPos(event: Event){
-    this.selectedPosId = Number((event.target as HTMLSelectElement).value);
-    this.selectedPosData = this.allPos.find((item:any) => item.id === this.selectedPosId);
-    console.log('selected POS', this.selectedPosData);
-  }
-
-  selectProduct(event: Event){
-    this.selectedProductId = Number((event.target as HTMLSelectElement).value);
-    this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.id === this.selectedProductId);
-    
-    console.log('selected product data', this.selectedProductData);
-    
-  }
-
-  selectedTypeEchange(event: Event){
-    this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
-    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
-    
-    console.log('selected type', this.selectedTypeData)
+    // Réinitialiser le FormGroup pour le nouveau produit
+    this.newProduct.reset();
+    console.log('list des products dans form', this.listProduct.value);
   }
 
   // recuperations des info dans le form
@@ -186,48 +276,10 @@ export class BuyComponent implements OnInit{
     return this.aprovisionForm.get('typeEchange') as FormArray;
   }
 
-  addProductByForm() {
-    this.listProduct.push(this.fb.group({
-      id: this.selectedProductId,
-      product_name: this.selectedProductData.product_name,
-      quantity: new FormControl(this.newProduct.value.quantity, Validators.required),
-      prixAchat: this.selectedProductData.prixAchat,
-      prixVente: this.selectedProductData.prixVente,
-      date_expiration: this.selectedProductData.date_expiration,
-    }));
-    let newTotal = 0;
-    for(let product of this.listProduct.value){
-      newTotal += (product.prixAchat * product.quantity);
-    };
-    this.totalReel = newTotal;
-
-    // Réinitialiser le FormGroup pour le nouveau produit
-    this.newProduct.reset();
-    console.log('list des products dans form', this.listProduct.value);
-  }
-
-  addTypeEchange() {
-    this.listTypeEchange.push(this.fb.group({
-      id: this.selectedTypeId,
-      typeName: this.selectedTypeData.nom,
-      montant: new FormControl(this.newTypeEchange.value.montant, Validators.required),
-      bordereau: new FormControl(this.newTypeEchange.value.bordereau, Validators.required)
-    }));
-
-    let newPay = 0;
-    for(let type of this.listTypeEchange.value){
-      newPay += type.montant;
-    }
-    this.totalPaye = newPay;
-    this.resteImpaye = this.totalReel - this.totalPaye;
-
-    // Réinitialiser le FormGroup pour le nouveau produit
-    this.newTypeEchange.reset();
-    console.log('list des types dans form', this.aprovisionForm.value);
-  }
+  
 
   createAchat(){
-    console.log(this.aprovisionForm.value);
+    console.log('data dans form',this.aprovisionForm.value);
     const data = {
       posDistributeur: this.selectedPosId,
       posCible: this.idPos,

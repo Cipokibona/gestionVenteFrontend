@@ -41,6 +41,11 @@
                     </div>
                     <div class="m-2">
                         <h6>Stock</h6>
+                        @for (product of pos.list_product; track $index) {
+                        <span>
+                            {{$index + 1}}. {{product.product_name}} ({{product.quantity}} box)
+                        </span>
+                        <br>}
                         <a routerLink="approvisionnementPOS/{{pos.id}}" class="btn button secondary rounded-pill m-1 p-1">
                             + prod
                         </a>
