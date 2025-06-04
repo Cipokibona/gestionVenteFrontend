@@ -39,56 +39,22 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create user</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create client</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form class="needs-validation" [formGroup]="clientForm" (ngSubmit)="createClient()" novalidate>
                     <div class="ms-auto me-auto mb-2">
-                        <label for="firstUser" class="visually-hidden">Name</label>
-                        <input type="text" class="form-control" formControlName="first_name" name=" nameClient " id="nameUser " placeholder="name " required>
+                        <label for="fullName" class="visually-hidden">Name</label>
+                        <input type="text" class="form-control" formControlName="fullName" name="fullName" id="fullName" placeholder="Full name" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
-                        <label for="lastname" class="visually-hidden">Prenom</label>
-                        <input type="text" class="form-control" formControlName="last_name" name="lastname" id="lastname" placeholder="Prenom " required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="email" class="visually-hidden ">Email</label>
-                        <input type="email" class="form-control" formControlName="email" name="email" id="email" placeholder="email" required>
+                        <label for="adress" class="visually-hidden">Adress</label>
+                        <input type="text" class="form-control" formControlName="adress" name="adress" id="adress" placeholder="Adress" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 ">
                         <label for="tel" class="visually-hidden ">Tel</label>
                         <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="agent" value="agent" checked>
-                        <label class="form-check-label" for="agent">
-                            Agent commercial
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="respo" value="respo">
-                        <label class="form-check-label" for="respo">
-                            Responsable d'un POV
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="admin" value="admin">
-                        <label class="form-check-label" for="admin">
-                            Admin
-                        </label>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="username" class="visually-hidden ">Username</label>
-                        <input type="text" class="form-control" formControlName="username" name="username" id="username" placeholder="Username" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="password" class="visually-hidden ">Password</label>
-                        <input type="password" class="form-control" formControlName="password" name="password" id="password" placeholder="password" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="confirmPassword" class="visually-hidden">confirm Password</label>
-                        <input type="password" class="form-control" formControlName="confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="confirm Password" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
                         <button type="submit " class="button principal p-1 m-1 ">

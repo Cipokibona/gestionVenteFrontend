@@ -22,15 +22,9 @@ export class ListComponent implements OnInit{
   error!: string | null;
 
   clientForm = new FormGroup({
-    first_name: new FormControl('', Validators.required),
-    last_name: new FormControl('', Validators.required),
+    fullName: new FormControl('', Validators.required),
+    adress: new FormControl('', Validators.required),
     tel: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    poste: new FormControl('', Validators.required),
-    role: new FormControl('agent', Validators.required),
-    username: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
-    confirmPassword: new FormControl('', Validators.required),
   });
 
   constructor(private apiService: ApiServiceService) {
@@ -86,5 +80,21 @@ export class ListComponent implements OnInit{
     console.log('vente avec credit', this.venteCreditClient);
   }
 
-  createClient(){}
+  createClient(){
+    const newClient = {
+      respo: this.userData.id,
+      fullName: this.clientForm.value.fullName,
+      adress: this.clientForm.value.adress,
+      tel: this.clientForm.value.tel
+    }
+    console.log('data client a envoye', newClient);
+    this.apiService.createCustomer(newClient).subscribe({
+      next: (data:any) => {
+        console.log('new client create', data);
+      },
+      error: (err) => {
+        console.error('new client create', err);
+      }
+    })
+  }
 }

@@ -318,7 +318,7 @@ export class BuyComponent implements OnInit{
 
           forkJoin(requests).subscribe({
             next: (resp:any) => {
-              // this.router.navigate(['/home']);
+              this.router.navigate(['/listPOS']);
               console.log('creation reussi', resp);
             },
             error: (err) => {
@@ -371,7 +371,7 @@ export class BuyComponent implements OnInit{
 
           forkJoin(requests).subscribe({
             next: (resp:any) => {
-              // this.router.navigate(['/home']);
+              this.router.navigate(['/listPOS']);
               console.log('creation reussi', resp);
             },
             error: (err) => {

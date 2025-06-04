@@ -242,6 +242,12 @@ export class ApiServiceService {
     return this.http.get(`${this.basketAgentUrl}${id}/`);
   }
 
+  createCustomer(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.customerUrl}`, data, {headers});
+  }
+
   // fonction sur vent, achat approvisionnement
   getAllVente(){
     return this.http.get(`${this.ventesUrl}`);
