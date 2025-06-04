@@ -265,7 +265,7 @@ export class BuyComponent implements OnInit{
 
         forkJoin(requests).subscribe({
           next: (resp:any) => {
-            this.router.navigate(['/home']);
+            // this.router.navigate(['/home']);
             console.log('creation reussi', resp);
           },
           error: (err) => {
