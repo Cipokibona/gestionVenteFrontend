@@ -279,57 +279,112 @@ export class BuyComponent implements OnInit{
   
 
   createAchat(){
-    console.log('data dans form',this.aprovisionForm.value);
-    const data = {
-      posDistributeur: this.selectedPosId,
-      posCible: this.idPos,
-      montant: this.totalPaye,
-      reste: this.resteImpaye,
-      date_recouvrement: this.aprovisionForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
-    }
-    this.apiService.createProvisionPos(data).subscribe({
-      next: (data:any) => {
-        console.log('approvisionnement enregistrer', data);
-        const requests = [];
-        for(let product of this.listProduct.value){
-          const dataProduct = {
-            approvisionnement: data.id,
-            product: product.id,
-            quantity: product.quantity,
-            prixAchat: product.prixAchat,
-            prixVente: product.prixVente,
-            date_expiration: product.date_expiration,
-          }
-          const request = this.apiService.createListProductProvisionPos(dataProduct);
-          requests.push(request);
-        };
-
-        for(let pay of this.listTypeEchange.value){
-          const dataPay = {
-            approvisionnement: data.id,
-            typeEchange: pay.id,
-            montant: pay.montant,
-            bordereau: pay.bordereau  || 'pas de bordereau',
-          }
-          const request = this.apiService.createListPayApprovisionnementPos(dataPay);
-          requests.push(request);
-        };
-
-        forkJoin(requests).subscribe({
-          next: (resp:any) => {
-            // this.router.navigate(['/home']);
-            console.log('creation reussi', resp);
-          },
-          error: (err) => {
-            this.apiService.deleteProvisionPos(data.id);
-            console.error('erreur de creation et suppression de vente', err);
-          }
-        });
-      },
-      error: (err) => {
-        console.error('erreur de creation de provision pos', err);
+    if(this.selectedSource == 2){
+      console.log('approvisionnement dans form',this.aprovisionForm.value);
+      const data = {
+        posDistributeur: this.selectedPosId,
+        posCible: this.idPos,
+        montant: this.totalPaye,
+        reste: this.resteImpaye,
+        date_recouvrement: this.aprovisionForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
       }
-    });
-    console.log('data a envoyer', data);
+      this.apiService.createProvisionPos(data).subscribe({
+        next: (data:any) => {
+          console.log('approvisionnement enregistrer', data);
+          const requests = [];
+          for(let product of this.listProduct.value){
+            const dataProduct = {
+              approvisionnement: data.id,
+              product: product.id,
+              quantity: product.quantity,
+              prixAchat: product.prixAchat,
+              prixVente: product.prixVente,
+              date_expiration: product.date_expiration,
+            }
+            const request = this.apiService.createListProductProvisionPos(dataProduct);
+            requests.push(request);
+          };
+
+          for(let pay of this.listTypeEchange.value){
+            const dataPay = {
+              approvisionnement: data.id,
+              typeEchange: pay.id,
+              montant: pay.montant,
+              bordereau: pay.bordereau  || 'pas de bordereau',
+            }
+            const request = this.apiService.createListPayApprovisionnementPos(dataPay);
+            requests.push(request);
+          };
+
+          forkJoin(requests).subscribe({
+            next: (resp:any) => {
+              // this.router.navigate(['/home']);
+              console.log('creation reussi', resp);
+            },
+            error: (err) => {
+              this.apiService.deleteProvisionPos(data.id);
+              console.error('erreur de creation et suppression de vente', err);
+            }
+          });
+        },
+        error: (err) => {
+          console.error('erreur de creation de provision pos', err);
+        }
+      });
+      console.log('data a envoyer', data);
+    }else if(this.selectedSource == 1){
+      console.log('approvisionnement dans form',this.aprovisionForm.value);
+      const data = {
+        distributeur: this.selectedDistrId,
+        posCible: this.idPos,
+        montant: this.totalPaye,
+        reste: this.resteImpaye,
+        date_recouvrement: this.aprovisionForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
+      }
+      this.apiService.createAchatPos(data).subscribe({
+        next: (data:any) => {
+          console.log('achat enregistrer', data);
+          const requests = [];
+          for(let product of this.listProduct.value){
+            const dataProduct = {
+              achat: data.id,
+              product: product.id,
+              quantity: product.quantity,
+              prixAchat: product.prixAchat,
+              prixVente: product.prixVente,
+              date_expiration: product.date_expiration,
+            }
+            const request = this.apiService.createListProductAchatPos(dataProduct);
+            requests.push(request);
+          };
+
+          for(let pay of this.listTypeEchange.value){
+            const dataPay = {
+              achat: data.id,
+              typeEchange: pay.id,
+              montant: pay.montant,
+              bordereau: pay.bordereau  || 'pas de bordereau',
+            }
+            const request = this.apiService.createListPayAchatPos(dataPay);
+            requests.push(request);
+          };
+
+          forkJoin(requests).subscribe({
+            next: (resp:any) => {
+              // this.router.navigate(['/home']);
+              console.log('creation reussi', resp);
+            },
+            error: (err) => {
+              this.apiService.deleteProvisionPos(data.id);
+              console.error('erreur de creation et suppression de vente', err);
+            }
+          });
+        },
+        error: (err) => {
+          console.error('erreur de creation de provision pos', err);
+        }
+      });
+      console.log('data a envoyer', data);
+    }
   }
 }

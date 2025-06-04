@@ -40,15 +40,19 @@ export class ApiServiceService {
   private productUrl = `${this.url}product/`;
   private posUrl = `${this.url}pointVente/`;
   private responsablePosUrl = `${this.url}respoPos/`;
+  
   private provisionPosUrl = `${this.url}approvisionnementPos/`;
+  private achatPosUrl = `${this.url}achat/`;
 
   // list product vente, achat, approvisionnement
   private listProductApprovisionnementPosUrl = `${this.url}list_approvisionnement_pos/`
   private listProductVenteUrl = `${this.url}list_product_vente/`;
+  private listProductAchatUrl = `${this.url}list_product_achat_pos/`;
   
   // list pay vente, achat, approvisionnement
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
   private listPayApprovPosUrl = `${this.url}list_pay_approv_pos/`;
+  private listPayAchatPosUrl = `${this.url}list_pay_achat_pos/`;
 
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
@@ -267,6 +271,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listPayApprovPosUrl}`, data, {headers});
   }
 
+  createListPayAchatPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listPayAchatPosUrl}`, data, {headers});
+  }
+
   // fonction sur product
   createListProductVente(data: any){
     const token = this.getTokenLocal();
@@ -284,6 +294,12 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.productUrl}`, data, {headers});
+  }
+
+  createListProductAchatPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listProductAchatUrl}`, data, {headers});
   }
 
   // fonction sur poste
@@ -348,6 +364,12 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.provisionPosUrl}`, data, {headers});
+  }
+
+  createAchatPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.achatPosUrl}`, data, {headers});
   }
 
   deleteProvisionPos(id:number){
