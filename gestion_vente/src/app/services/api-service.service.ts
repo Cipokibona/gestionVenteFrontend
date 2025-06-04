@@ -42,10 +42,13 @@ export class ApiServiceService {
   private responsablePosUrl = `${this.url}respoPos/`;
   private provisionPosUrl = `${this.url}approvisionnementPos/`;
 
+  // list product vente, achat, approvisionnement
   private listProductApprovisionnementPosUrl = `${this.url}list_approvisionnement_pos/`
-
   private listProductVenteUrl = `${this.url}list_product_vente/`;
+  
+  // list pay vente, achat, approvisionnement
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
+  private listPayApprovPosUrl = `${this.url}list_pay_approv_pos/`;
 
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
@@ -71,6 +74,7 @@ export class ApiServiceService {
     this.isAuthenticate$.next(data);
   }
 
+  // fonction sur les user
   getUser(userId: number, token: any): Observable<Object> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     
@@ -81,11 +85,77 @@ export class ApiServiceService {
     this.user$.next(data);
     localStorage.setItem('user', JSON.stringify(data));
   }
+  
+  updateUserLocal(){
+    const tokenLocal = this.getTokenLocal();
+    if (tokenLocal){
+      const decodeToken = jwtDecode<any>(tokenLocal.access);
+      this.getUser(decodeToken.user_id, tokenLocal).subscribe({
+        next: (data) => {
+          this.updateUser(data);
+          this.updateAuth(true);
+        }
+      })
+    }else{
+      this.logout();
+    }
+  }
 
+  getAllUser(){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.get<any>(`${this.usersUrl}`, {headers});
+  }
+
+  createUser(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.usersUrl}`, data, {headers});
+  }
+
+  deleteUser(id: number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.usersUrl}${id}/`, {headers});
+  }
+
+  // fonction sur type echange
   updateTypeEchange(data: any){
     this.typeEchange$.next(data);
   }
+  getTypeEchange(){
+    return this.http.get(`${this.typeEchangeUrl}`)
+  }
 
+  createTypeEchange(data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.typeEchangeUrl}`, data, {headers});
+  }
+
+  editTypeEchange(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.typeEchangeUrl}${id}/`, data, {headers});
+  }
+  deleteTypeEchange(id:number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.typeEchangeUrl}${id}/`, {headers});
+  }
+
+  // fonction sur les transactions
+  getTransaction(){
+    return this.http.get(`${this.transactionUrl}`);
+  }
+
+  createTransaction(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.transactionUrl}`, data, {headers});
+  }
+
+  // operation sur les tokens
   saveToken(token: any){
     localStorage.setItem('jwt', JSON.stringify(token));
   }
@@ -126,21 +196,7 @@ export class ApiServiceService {
     }
   }
 
-  updateUserLocal(){
-    const tokenLocal = this.getTokenLocal();
-    if (tokenLocal){
-      const decodeToken = jwtDecode<any>(tokenLocal.access);
-      this.getUser(decodeToken.user_id, tokenLocal).subscribe({
-        next: (data) => {
-          this.updateUser(data);
-          this.updateAuth(true);
-        }
-      })
-    }else{
-      this.logout();
-    }
-  }
-
+  // fonction sur les wallets
   getWallet(){
     return this.http.get(`${this.walletUrl}`)
   }
@@ -157,65 +213,19 @@ export class ApiServiceService {
     return this.http.patch<any>(`${this.walletUrl}${id}/`, data, {headers});
   }
 
-  getTypeEchange(){
-    return this.http.get(`${this.typeEchangeUrl}`)
-  }
-
-  createTypeEchange(data:any){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.typeEchangeUrl}`, data, {headers});
-  }
-
-  editTypeEchange(id:number, data:any){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.patch<any>(`${this.typeEchangeUrl}${id}/`, data, {headers});
-  }
-  deleteTypeEchange(id:number){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.delete<any>(`${this.typeEchangeUrl}${id}/`, {headers});
-  }
-
+  // fonction sur taux echange
   createTauxEchange(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.tauxEchangeUrl}`, data, {headers});
   }
 
-  getTransaction(){
-    return this.http.get(`${this.transactionUrl}`);
-  }
-
-  createTransaction(data: any){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.transactionUrl}`, data, {headers});
-  }
-
   getBasketAgent(){
     return this.http.get(`${this.basketAgentUrl}`);
   }
-  
-  getAllUser(){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.get<any>(`${this.usersUrl}`, {headers});
-  }
 
-  createUser(data: any){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.usersUrl}`, data, {headers});
-  }
 
-  deleteUser(id: number){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.delete<any>(`${this.usersUrl}${id}/`, {headers});
-  }
-
+  // fonction sur client
   getAllCustomers(){
     return this.http.get(`${this.customerUrl}`);
   }
@@ -228,6 +238,7 @@ export class ApiServiceService {
     return this.http.get(`${this.basketAgentUrl}${id}/`);
   }
 
+  // fonction sur vent, achat approvisionnement
   getAllVente(){
     return this.http.get(`${this.ventesUrl}`);
   }
@@ -244,6 +255,19 @@ export class ApiServiceService {
     return this.http.delete<any>(`${this.ventesUrl}${id}/`, {headers});
   }
 
+  createListPayVente(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listPayVenteUrl}`, data, {headers});
+  }
+
+  createListPayApprovisionnementPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listPayApprovPosUrl}`, data, {headers});
+  }
+
+  // fonction sur product
   createListProductVente(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -256,12 +280,13 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listProductApprovisionnementPosUrl}`, data, {headers});
   }
 
-  createListPayVente(data: any){
+  createProduct(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.listPayVenteUrl}`, data, {headers});
+    return this.http.post<any>(`${this.productUrl}`, data, {headers});
   }
 
+  // fonction sur poste
   getAllPoste(){
     return this.http.get(`${this.posteUrl}`);
   }
@@ -288,6 +313,7 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.salarUrl}`, data, {headers});
   }
 
+  // fonction sur distributeur et pos
   getAllDistributeur(){
     return this.http.get(`${this.distributeurUrl}`);
   }
@@ -296,12 +322,6 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.distributeurUrl}`, data, {headers});
-  }
-
-  createProduct(data: any){
-    const token = this.getTokenLocal();
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
-    return this.http.post<any>(`${this.productUrl}`, data, {headers});
   }
 
   getAllPos(){

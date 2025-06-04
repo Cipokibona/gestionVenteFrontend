@@ -231,8 +231,8 @@ export class BuyComponent implements OnInit{
     const data = {
       posDistributeur: this.selectedPosId,
       posCible: this.idPos,
-      montant: 1000,
-      reste: 0,
+      montant: this.totalPaye,
+      reste: this.resteImpaye,
       date_recouvrement: this.aprovisionForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
     }
     this.apiService.createProvisionPos(data).subscribe({
@@ -254,12 +254,12 @@ export class BuyComponent implements OnInit{
 
         for(let pay of this.listTypeEchange.value){
           const dataPay = {
-            vente: data.id,
+            approvisionnement: data.id,
             typeEchange: pay.id,
             montant: pay.montant,
             bordereau: pay.bordereau  || 'pas de bordereau',
           }
-          const request = this.apiService.createListPayVente(dataPay);
+          const request = this.apiService.createListPayApprovisionnementPos(dataPay);
           requests.push(request);
         };
 
