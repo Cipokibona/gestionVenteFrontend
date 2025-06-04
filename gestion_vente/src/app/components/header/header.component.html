@@ -8,50 +8,50 @@
           </button>}
         <div class="offcanvas offcanvas-end text-bg-dark background principal" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a routerLink="home" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Home
+                        </a>
+                    </li>
                     @if (userData && userData.is_admin) {
                     <li class="nav-item">
-                        <a routerLink="listTypeEchange" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">Type echange</a>
+                        <a routerLink="listTypeEchange" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Type echange
+                        </a>
                     </li>
                     } @if (userData && userData.is_respo_pos) {
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Responsable</a>
+                        <a routerLink="userList" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Agent commerciaux
+                        </a>
                     </li>
                     }
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a routerLink="listPOS" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Paniers
+                        </a>
                     </li>
                     <li class="nav-item">
+                        <a routerLink="listPOS" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Point de vente
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="client" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Clients
+                        </a>
+                    </li>
+                    <li class="nav-item border-top mt-4">
                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
                             Logout
                         </button>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <button class="dropdown-item" (click)="logout()">
-                                    Logout
-                                </button>
-                            </li>
-                        </ul>
-                    </li> -->
                 </ul>
-                <!-- <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                                </form> -->
             </div>
         </div>
     </div>

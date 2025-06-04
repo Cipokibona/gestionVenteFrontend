@@ -105,7 +105,7 @@ export class ListTypeEchangeComponent implements OnInit{
         console.error('erreur de creation de type',err)
       }
     });
-    location.reload();
+    // location.reload();
   }
 
   editType(id: number){
