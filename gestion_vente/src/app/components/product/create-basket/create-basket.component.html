@@ -1,0 +1,118 @@
+<div class="container justify-content-center">
+    <h5 class="text-center">Approvisionner un agent</h5>
+    <div class="row">
+        <form class="needs-validation" [formGroup]="basketForm" (ngSubmit)="createVente()">
+            <div class="ms-auto me-auto mb-2">
+                <label for="nameClient" class="visually-hidden">Full name</label>
+                <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataClient.fullName}}" disabled>
+            </div>
+            @if (agentBasket) {
+            <div class="container border p-2 rounded">
+                <h5>Panier</h5>
+                <select class="form-select mb-2" aria-label="Default select example" name="panier" (change)="selectBasket($event)" formControlName="panier">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (basket of agentBasket; track basket.id) {
+                    <option value={{basket.id}}>Pris dans {{basket.depot_name}}</option>
+                }
+                </select> @if(selectedBasketData){
+                <h4 for="product">New product</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedBasketData.list_product; track product.id) {
+                    <option value={{product.id}}>{{product.product_name}}</option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
+                    <div class="col-auto mb-2">
+                        <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
+                        <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 formControlName="quantity" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <label for="pureel" class="visually">PU reel en Bif</label>
+                        <input type="number" class="form-control" name="pureel" id="pureel" formControlName="prixClient" required>
+                        <p class="text-secondary">
+                            Prix unitaire officiel:
+                            <span class="text-danger">
+                            {{selectedProductData.pricePerUnitOfficiel}} Bif
+                        </span>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + Save
+                        </button>
+                        <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
+                            Delete
+                        </button> -->
+                    </div>
+                </div>
+                }}
+            </div>}
+            <div class="row">
+                <div class="container">
+                    <h6>Mode de payement du client</h6>
+                    <div class="row">
+                        <div class="col-auto mb-2">
+                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)" formArrayName="typeEchange">
+                                <option selected>Mode payement</option>
+                                @for (type of typeEchangeData; track type.id) {
+                                <option value={{type.id}}>{{type.nom}}</option>}
+                            </select>
+                        </div>@if (selectedTypeData) {
+                        <div [formGroup]="newTypeEchange">
+                            <div class="col-auto mb-2">
+                                <label for="montantCash" class="visually-hidden">montant</label>
+                                <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" formControlName="montant" required>
+                            </div>@if (selectedTypeData.is_bordereau) {
+                            <div class="col-auto mb-2">
+                                <label for="numero" class="visually-hidden ">Bordereau</label>
+                                <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" formControlName="bordereau" required>
+                            </div>}
+                            <div class="col">
+                                <button type="button" class="btn button secondary rounded-pill m-1 p-1 " (click)="addTypeEchange()">
+                                    + save
+                                </button>
+                                <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1 " (click)="removeModePay(selectedTypeData)">
+                                    Delete
+                                </button> -->
+                            </div>
+                        </div>}
+                    </div>
+                </div>
+                <div class="col">
+                    @if(venteForm.value.list_product && venteForm.value.list_product.length > 0){
+                    <h5>Produit vendu</h5>
+                    <ul> @for (product of venteForm.value.list_product; track product.id) {
+                        <li>{{product.product_name}} {{product.quantity}}*{{product.pricePerUnitOfficiel}}: <br>
+                            <span class="text-danger">{{product.pricePerUnitOfficiel * product.quantity}} BIF</span>
+                        </li>
+                        }
+                        <li>Total pour client:<br>
+                            <span class="text-danger"> {{totalReel}}BIF</span>
+                        </li>
+                    </ul>} @if (venteForm.value.typeEchange && venteForm.value.typeEchange.length > 0 ){
+                    <h5>Mode Payement</h5>
+                    <ul>
+                        @for (pay of venteForm.value.typeEchange; track pay.id) {
+                        <li>{{pay.typeName}}:
+                            <span class="text-danger">{{pay.montant}} BIF</span>
+                        </li>
+                        }
+                        <li>Total paye:<br>
+                            <span class="text-danger">{{totalPaye}} BIF</span>
+                        </li>
+                        <li>Reste a Paye: <br>
+                            <span class="text-danger">{{resteImpaye}} BIF</span>
+                        </li>
+                        <label for="dateDette">Payera le</label>
+                        <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
+                    </ul> }
+                </div>
+            </div>
+            <div class=" ms-auto me-auto mb-2 mt-3 ">
+                <button type="submit " class="button principal p-1 m-1 ">
+                    <span class="ms-5 me-5 ">Vente</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

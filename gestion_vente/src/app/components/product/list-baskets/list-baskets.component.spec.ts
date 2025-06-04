@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToAgentComponent } from './to-agent.component';
+import { ListBasketsComponent } from './list-baskets.component';
 
-describe('ToAgentComponent', () => {
-  let component: ToAgentComponent;
-  let fixture: ComponentFixture<ToAgentComponent>;
+describe('ListBasketsComponent', () => {
+  let component: ListBasketsComponent;
+  let fixture: ComponentFixture<ListBasketsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToAgentComponent]
+      imports: [ListBasketsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ToAgentComponent);
+    fixture = TestBed.createComponent(ListBasketsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

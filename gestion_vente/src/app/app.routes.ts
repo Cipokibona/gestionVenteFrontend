@@ -7,11 +7,12 @@ import { ListUserComponent } from './components/user/list-user/list-user.compone
 import { TransactionComponent } from './components/wallet/transaction/transaction.component';
 import { ListProductComponent } from './components/product/list-product/list-product.component';
 import { BuyComponent } from './components/product/buy/buy.component';
-import { ToAgentComponent } from './components/product/to-agent/to-agent.component';
 import { ListPOSComponent } from './components/pointOfSell/list-pos/list-pos.component';
 import { ListAllVenteComponent } from './components/vente/list-all-vente/list-all-vente.component';
 import { ListPosteComponent } from './components/poste/list-poste/list-poste.component';
 import { ListTypeEchangeComponent } from './components/wallet/list-type-echange/list-type-echange.component';
+import { ListBasketsComponent } from './components/product/list-baskets/list-baskets.component';
+import { CreateBasketComponent } from './components/product/create-basket/create-basket.component';
 
 export const routes: Routes = [
     { 
@@ -50,9 +51,14 @@ export const routes: Routes = [
         component: BuyComponent,
     },
     {
-        path:'approvisionnementAgent',
-        title: 'approvisionnement Agent page',
-        component: ToAgentComponent,
+        path:'liste_panier',
+        title: 'Panier Agent page',
+        component: ListBasketsComponent,
+    },
+    {
+        path:'create_panier',
+        title: 'Create Agent page',
+        component: CreateBasketComponent,
     },
     {
         path: 'userList',
