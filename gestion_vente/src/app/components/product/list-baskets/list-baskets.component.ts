@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-list-baskets',
@@ -93,6 +94,45 @@ export class ListBasketsComponent implements OnInit{
       },
       error: (err) => {
         console.error('new client create', err);
+      }
+    })
+  }
+
+  rendre(id:number){
+    const basket = this.paniers.find((item:any) => item.id > id);
+    const dataRendu = {
+      agent: basket.agent,
+      pos: basket.depot,
+    };
+    this.apiService.createRenderAgentPos(dataRendu).subscribe({
+      next: (dataRendu:any) => {
+        console.log('new dataRendu create', dataRendu);
+        const requests = [];
+        for(let product of basket.list_product){
+          const dataProduct = {
+            product: product.product,
+            render: dataRendu.id,
+            quantity: product.quantity,
+            pricePerUnitOfficiel: product.pricePerUnitOfficiel,
+            date_expiration: product.date_expiration,
+          }
+          const request = this.apiService.createProduitRenduPos(dataProduct);
+          requests.push(request);
+        };
+
+        forkJoin(requests).subscribe({
+                  next: (resp:any) => {
+                    // this.router.navigate(['/home']);
+                    console.log('creation reussi', resp);
+                  },
+                  error: (err) => {
+                    this.apiService.deleteVente(dataRendu.id);
+                    console.error('erreur de creation et suppression de vente', err);
+                  }
+                });
+      },
+      error: (err) => {
+        console.error('erreur create dataRendu', err);
       }
     })
   }

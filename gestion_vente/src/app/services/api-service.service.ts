@@ -57,6 +57,10 @@ export class ApiServiceService {
   private listPayApprovPosUrl = `${this.url}list_pay_approv_pos/`;
   private listPayAchatPosUrl = `${this.url}list_pay_achat_pos/`;
 
+  // rendre agent a posos/`;
+  private rendreProduitPosUrl = `${this.url}rendre_produit_pos/`;
+  private produitRenduPosUrl = `${this.url}produit_rendu_pos/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -404,6 +408,25 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.delete<any>(`${this.provisionPosUrl}${id}/`, {headers});
+  }
+
+  // rendre agent a pos
+  createRenderAgentPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.rendreProduitPosUrl}`, data, {headers});
+  }
+
+  deleteRenderAgentPos(id: number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.rendreProduitPosUrl}${id}/`, {headers});
+  }
+
+  createProduitRenduPos(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.produitRenduPosUrl}`, data, {headers});
   }
   
 }

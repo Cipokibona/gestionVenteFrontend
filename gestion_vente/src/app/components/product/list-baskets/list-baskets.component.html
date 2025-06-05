@@ -31,9 +31,9 @@
                         <span class="text-secondary">{{product.quantity}} box</span><br> }
                     </div>
                     <div>
-                        <a routerLink="vente/{{panier.id}}" class="button secondary rounded-pill m-1 p-1">
+                        <button class="button secondary rounded-pill m-1 p-1" (click)="rendre(panier.id)">
                             Rendre
-                        </a>
+                        </button>
                         <!-- <a routerLink="vente/{{panier.id}}" class="button secondary rounded-pill m-1 p-1">
                             + add
                         </a> -->
