@@ -143,7 +143,7 @@ export class SellComponent implements OnInit{
 
   selectProduct(event: Event){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
-    this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.id === this.selectedProductId);
+    this.selectedProductData = this.selectedBasketData.list_product.find((item:any) => item.product === this.selectedProductId);
     
     console.log('selected product data', this.selectedProductData);
     
@@ -187,7 +187,7 @@ export class SellComponent implements OnInit{
     }));
     let newTotal = 0;
     for(let product of this.listProduct.value){
-      newTotal += (product.pricePerUnitOfficiel * product.quantity);
+      newTotal += (product.pricePerUnitClient * product.quantity);
     };
     this.totalReel = newTotal;
 

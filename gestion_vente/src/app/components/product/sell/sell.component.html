@@ -83,11 +83,11 @@
                     <h5>Produit vendu</h5>
                     <ul> @for (product of venteForm.value.list_product; track product.id) {
                         <li>{{product.product_name}} {{product.quantity}}*{{product.pricePerUnitOfficiel}}: <br>
-                            <span class="text-danger">{{product.pricePerUnitOfficiel * product.quantity}} BIF</span>
+                            <span class="text-danger">{{product.pricePerUnitClient * product.quantity}} BIF</span>
                         </li>
                         }
                         <li>Total pour client:<br>
-                            <span class="text-danger"> {{totalReel}}BIF</span>
+                            <span class="text-danger"> {{totalReel}} BIF</span>
                         </li>
                     </ul>} @if (venteForm.value.typeEchange && venteForm.value.typeEchange.length > 0 ){
                     <h5>Mode Payement</h5>
