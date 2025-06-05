@@ -30,7 +30,9 @@ export class ApiServiceService {
   private transactionUrl = `${this.url}transactions/`
   private walletUrl = `${this.url}wallet/`
   private typeEchangeUrl = `${this.url}typeEchange/`
+  
   private basketAgentUrl = `${this.url}basketAgent/`;
+  
   private customerUrl = `${this.url}customers/`;
   private ventesUrl = `${this.url}ventes/`;
   private posteUrl = `${this.url}poste/`;
@@ -44,10 +46,11 @@ export class ApiServiceService {
   private provisionPosUrl = `${this.url}approvisionnementPos/`;
   private achatPosUrl = `${this.url}achat/`;
 
-  // list product vente, achat, approvisionnement
+  // list product vente, achat, approvisionnement, basket
   private listProductApprovisionnementPosUrl = `${this.url}list_approvisionnement_pos/`
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listProductAchatUrl = `${this.url}list_product_achat_pos/`;
+  private listProductBasketUrl = `${this.url}listProductBasket/`;
   
   // list pay vente, achat, approvisionnement
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -224,10 +227,32 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.tauxEchangeUrl}`, data, {headers});
   }
 
+  // fonction sur basket
   getBasketAgent(){
     return this.http.get(`${this.basketAgentUrl}`);
   }
 
+  createBasket(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.basketAgentUrl}`, data, {headers});
+  }
+  
+  getAgentBasketId(id: any){
+    return this.http.get(`${this.basketAgentUrl}${id}/`);
+  }
+
+  deleteBasket(id:number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.basketAgentUrl}${id}/`, {headers});
+  }
+
+  createListBasket(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.listProductBasketUrl}`, data, {headers});
+  }
 
   // fonction sur client
   getAllCustomers(){
@@ -238,9 +263,6 @@ export class ApiServiceService {
     return this.http.get(`${this.customerUrl}${id}/`);
   }
 
-  getAgentBasketId(id: any){
-    return this.http.get(`${this.basketAgentUrl}${id}/`);
-  }
 
   createCustomer(data: any){
     const token = this.getTokenLocal();

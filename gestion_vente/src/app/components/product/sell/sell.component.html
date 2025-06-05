@@ -19,7 +19,7 @@
                 <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
                     <option selected>Choisit un produit</option>
                     @for (product of selectedBasketData.list_product; track product.id) {
-                    <option value={{product.id}}>{{product.product_name}}</option>}
+                    <option value={{product.product}}>{{product.product_name}}</option>}
                 </select> @if (selectedProductData) {
                 <div [formGroup]="newProduct">
                     <div class="col-auto mb-2">

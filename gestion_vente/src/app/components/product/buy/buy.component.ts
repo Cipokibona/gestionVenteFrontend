@@ -204,7 +204,7 @@ export class BuyComponent implements OnInit{
   selectProduct(event: Event){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
     if(this.selectedSource == 2){
-      this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.id === this.selectedProductId);
+      this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.product === this.selectedProductId);
     }else if(this.selectedSource == 1){
       this.selectedProductData = this.selectedDistrData.product_list.find((item:any) => item.id === this.selectedProductId);
     }
