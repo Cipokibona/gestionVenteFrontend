@@ -126,7 +126,7 @@ export class ListBasketsComponent implements OnInit{
                     console.log('creation reussi', resp);
                   },
                   error: (err) => {
-                    this.apiService.deleteVente(dataRendu.id);
+                    this.apiService.deleteRenderAgentPos(dataRendu.id);
                     console.error('erreur de creation et suppression de vente', err);
                   }
                 });

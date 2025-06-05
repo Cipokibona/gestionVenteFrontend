@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-agent-commercial',
@@ -153,6 +154,44 @@ export class AgentCommercialComponent implements OnInit{
 
   getTotalTypeEchange(data:any): number {
     return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
+  }
+
+  rendre(id: number){
+    const pos = this.venteUser.find((item:any) => item.pos_id === id);
+    const dataRendu = {
+      agent: this.userData.id,
+      pos: pos.pos_id,
+    };
+    this.apiService.createRenderAgentPos(dataRendu).subscribe({
+          next: (dataRendu:any) => {
+            console.log('new dataRendu create', dataRendu);
+            const requests = [];
+            for(let type of pos.typeEchange_list){
+              const dataType = {
+                typeEchange: type.typeEchange,
+                render: dataRendu.id,
+                montant: type.montant,
+                bordereau: type.bordereau,
+              }
+              const request = this.apiService.createTypeEchangeRenduPos(dataType);
+              requests.push(request);
+            };
+    
+            forkJoin(requests).subscribe({
+                      next: (resp:any) => {
+                        // this.router.navigate(['/home']);
+                        console.log('creation reussi', resp);
+                      },
+                      error: (err) => {
+                        this.apiService.deleteRenderAgentPos(dataRendu.id);
+                        console.error('erreur de creation et suppression de vente', err);
+                      }
+                    });
+          },
+          error: (err) => {
+            console.error('erreur create dataRendu', err);
+          }
+        });
   }
 }
 

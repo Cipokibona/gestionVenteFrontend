@@ -18,8 +18,8 @@
                     Total: 
                     <span class="text-danger">{{getTotalTypeEchange(depot.typeEchange_list)}} BIF</span>
                 </strong>
-                <a href="#" class="button principal p-1 mt-2">
-                    <span class="ms-5 me-5">Depot</span>
-                </a>
+                <button class="button principal p-1 mt-2" (click)="rendre(depot.pos_id)">
+                    <span class="ms-5 me-5">Rendre</span>
+                </button>
             </div>
         </div>}
