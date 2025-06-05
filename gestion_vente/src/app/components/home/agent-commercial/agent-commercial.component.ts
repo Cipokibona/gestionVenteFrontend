@@ -3,10 +3,11 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-agent-commercial',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './agent-commercial.component.html',
   styleUrl: './agent-commercial.component.scss'
 })
@@ -65,7 +66,7 @@ export class AgentCommercialComponent implements OnInit{
     })
   }
 
-  transaction(){
+  transaction(id:number){
     const typeEchange = this.transactionForm.value.typeEchangeCible;
     let montant: any = this.transactionForm.value.montantTransaction;
     const walletSource = this.transactionForm.value.typeEchangeSource;
@@ -78,47 +79,6 @@ export class AgentCommercialComponent implements OnInit{
     const walletSourceData = {
       montant : montant
     };
-    // verification de montant cible
-    // for(let wallet of this.userData.wallet_user){
-    //   console.log('wallet.id et walletSource', wallet.id,walletSource);
-    //   if(wallet.id == walletSource){
-    //     if(montant && wallet.montant > montant){
-    //       this.apiService.createWallet(walletCibleData).subscribe({
-    //         next: (dataCreate) => {
-    //           console.log('resultat de create wallet', dataCreate);
-    //           this.apiService.updateWallet(walletSource, walletSourceData).subscribe({
-    //             next: (dataUpdate) => {
-    //               console.log('update de wallet source avec susses', dataUpdate);
-    //               const newTransaction = {
-    //                 author: this.userData.id,
-    //                 walletSource: walletSource,
-    //                 walletCible: dataUpdate.id,
-    //                 montant: montant,
-    //                 bordereau: dataCreate.bordereau,
-    //                 is_delivered: true,
-
-    //               };
-    //               this.apiService.createTransaction(newTransaction).subscribe({
-    //                 next: (dataTransaction) => {
-    //                   console.log('data Transaction', dataTransaction);
-    //                 },
-    //                 error: (err) => {
-    //                   console.error('errer de transaction', err);
-    //                 }
-    //               })
-    //             },
-    //             error: (err) => {
-    //               console.error('erreur de update', err);
-    //             }
-    //           })
-    //         },
-    //         error: (err) => {
-    //           console.error('erreur de create wallet',err);
-    //         }
-    //       });
-    //     }
-    //   }
-    // };
     this.router.navigate(['/home']).then(() => {
         location.reload();
     });

@@ -36,7 +36,6 @@ export class ListComponent implements OnInit{
     this.getUserData();
     this.getCustomers();
     this.getAllVente();
-    this.getCreditVenteClient();
   }
 
   getUserData(){
@@ -67,7 +66,8 @@ export class ListComponent implements OnInit{
     this.apiService.getAllVente().subscribe({
       next: (data:any) => {
         this.allVentes = data.results;
-        console.log('all vente',this.allVentes)
+        console.log('all vente',this.allVentes);
+        this.getCreditVenteClient();
       },
       error: (err) => {
         console.error('erreur de recuperation', err)
@@ -78,6 +78,15 @@ export class ListComponent implements OnInit{
   getCreditVenteClient(){
     this.venteCreditClient = this.allVentes.filter((item:any) => item.reste > 0);
     console.log('vente avec credit', this.venteCreditClient);
+  }
+
+  haveCredit(id:number){
+    let venteClientId = this.venteCreditClient.filter((item:any) => item.client == Number(id));
+    let montantCredit = 0;
+    for(let i of venteClientId){
+      montantCredit = montantCredit + i.reste;
+    }
+    return montantCredit;
   }
 
   createClient(){
