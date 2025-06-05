@@ -54,7 +54,15 @@ export class ListBasketsComponent implements OnInit{
   getBaskets(){
     this.apiService.getBasketAgent().subscribe({
       next: (dataPanier: any) => {
-        this.paniers = dataPanier.results;
+        const paniers = dataPanier.results;
+        // paniers pour admin
+        if(this.userData.is_admin){
+          this.paniers = paniers;
+        }else if(this.userData.is_respo_pos){
+          this.paniers = paniers.filter((item:any) => item.depot_respo.some((i: any) => i.respo === this.userData.id));
+        }else{
+          this.paniers = paniers.filter((item:any) => item.agent == this.userData.id);
+        }
         console.log('list des paniers', this.paniers);
       },
       error: (err) => {
