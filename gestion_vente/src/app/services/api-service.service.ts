@@ -62,6 +62,9 @@ export class ApiServiceService {
   private produitRenduPosUrl = `${this.url}produit_rendu_pos/`;
   private typeEchangeRenduPosUrl = `${this.url}rendre_typeEchange_pos/`;
 
+  // recouvrement
+  private recouvrementUrl = `${this.url}recouvrement/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -280,6 +283,10 @@ export class ApiServiceService {
     return this.http.get(`${this.ventesUrl}`);
   }
 
+  getVente(id: any){
+    return this.http.get(`${this.ventesUrl}${id}/`);
+  }
+
   createVente(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -308,6 +315,12 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.listPayAchatPosUrl}`, data, {headers});
+  }
+
+  createRecouvrement(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.recouvrementUrl}`, data, {headers});
   }
 
   // fonction sur product

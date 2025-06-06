@@ -29,11 +29,19 @@
                         Contact:
                         <span class="text-secondary">{{client.tel}}, {{client.adress}}</span>
                     </p>
+                    <h6 class="m-2">Dettes</h6>
                     <p class="m-2">
-                        Dettes: @for (vente of venteCreditClient; track $index) { @if (vente.client == client.id) {
+                        @for (vente of venteCreditClient; track $index) { @if (vente.client == client.id) {
                         <span class="text-secondary">
-                            {{vente.client}}, {{client.adress}}
-                        </span> <br>}}
+                            {{$index + 1}}.Date de payement {{vente.date_recouvrement | date: 'medium'}}
+                        </span>
+                        <span class="text-danger">
+                            {{vente.reste | number: '1.0-0' }} BIF
+                        </span>
+                        <a routerLink="recouvrement/{{vente.id}}" class="button secondary rounded-pill m-1 p-1">
+                            Recouvrir
+                        </a>
+                        <br>}}
                     </p>
                     <div>
                         <a routerLink="vente/{{client.id}}" class="button secondary rounded-pill m-1 p-1">

@@ -13,6 +13,7 @@ import { ListPosteComponent } from './components/poste/list-poste/list-poste.com
 import { ListTypeEchangeComponent } from './components/wallet/list-type-echange/list-type-echange.component';
 import { ListBasketsComponent } from './components/product/list-baskets/list-baskets.component';
 import { CreateBasketComponent } from './components/product/create-basket/create-basket.component';
+import { FormRecouvrementComponent } from './components/client/form-recouvrement/form-recouvrement.component';
 
 export const routes: Routes = [
     { 
@@ -39,6 +40,11 @@ export const routes: Routes = [
         path: 'client/vente/:id',
         title: 'vente client page',
         component: SellComponent,
+    },
+    {
+        path: 'client/recouvrement/:id',
+        title: 'recouvrement page',
+        component: FormRecouvrementComponent,
     },
     {
         path: 'vente',
