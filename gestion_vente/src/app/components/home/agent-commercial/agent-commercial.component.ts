@@ -41,6 +41,7 @@ export class AgentCommercialComponent implements OnInit{
     this.getTypeEchange();
     this.getBasketAgent();
     this.getVenteAgent();
+    this.getAllRecouvrement();
   }
 
   getUserData(){
@@ -113,6 +114,19 @@ export class AgentCommercialComponent implements OnInit{
     })
   }
 
+  getAllRecouvrement(){
+    this.apiService.getAllRecouvrement().subscribe({
+      next: (resp: any) => {
+        const data = resp.results;
+        this.recouvrementUser = data.filter((item:any) => item.respo === this.userData.id);
+        console.log('Recouvrement du user', this.recouvrementUser);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation du recouvrement', err);
+      }
+    })
+  }
+
   getTotalTypeEchange(data:any): number {
     return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
   }
@@ -153,6 +167,34 @@ export class AgentCommercialComponent implements OnInit{
             console.error('erreur create dataRendu', err);
           }
         });
+  }
+
+  rendreRecouvrement(id: number){
+    const recouvrement = this.recouvrementUser.find((item:any) => item.id == id);
+    const dataRendu = {
+      agent: this.userData.id,
+      pos: recouvrement.depot_id,
+    };
+    this.apiService.createRenderAgentPos(dataRendu).subscribe({
+      next: (resp:any) => {
+        console.log('new dataRendu create', resp);
+        const dataType = {
+          typeEchange: recouvrement.typeEchange,
+          render: resp.id,
+          montant: recouvrement.montant,
+          bordereau: recouvrement.bordereau,
+        };
+        this.apiService.createTypeEchangeRenduPos(dataType).subscribe({
+          next: (resp:any) => {
+            console.log('creation reussi', resp);
+          },
+          error: (err) => {
+            this.apiService.deleteRenderAgentPos(resp.id);
+            console.error('erreur de creation et suppression de vente', err);
+          }
+        });
+      }
+    });
   }
 }
 

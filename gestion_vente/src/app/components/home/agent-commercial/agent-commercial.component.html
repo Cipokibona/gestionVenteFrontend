@@ -27,55 +27,31 @@
                             {{getTotalTypeEchange(depot.typeEchange_list) | number: '1.0-0'}} BIF
                         </strong>
                     </div>
-                    <!-- <button class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createTransaction' + $index">
-                        Change
-                    </button> -->
                     <button class="button secondary rounded-pill m-1 p-1" (click)="rendre(depot.pos_id)">
                         Rendre
                     </button>
                 </div>
             </div>
-        </div>
-
-        <!-- modal de transaction -->
-        <!-- <div class="modal fade" [attr.id]="'createTransaction' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Transaction</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction(depot.id)">
-                        <div class="modal-body">
-                            <div class="ms-auto me-auto mb-2">
-                                <label for="nameOldPoste" class="visually">Compte source</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="ms-auto me-auto mb-2">
-                                <label for="nameOldPoste" class="visually">Compte cible</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="ms-auto me-auto mb-2">
-                                <label for="montantTransaction" class="visually-hidden">Montant</label>
-                                <input type="number" class="form-control" formControlName="salaireOldPoste" name="montantTransaction" id="montantTransaction" placeholder="Montant de transaction" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn button secondary">Transit</button>
-                        </div>
-                    </form>
-                </div>
+        </div>} @for (recouvrement of recouvrementUser; track $index) {
+        <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
+            <h5 class="card-header">{{recouvrement.depot_name}}</h5>
+            <h6 class="text-secondary ms-3">Recouvrement</h6>
+            <div class="card-body">
+                <h6>{{recouvrement.date | date:'fullDate'}}</h6>
+                <p>
+                    Client: {{recouvrement.client_name}} <br>
+                    <strong class="text-danger">
+                        {{recouvrement.montant | number: '1.0-0'}} BIF
+                    </strong> <br>
+                    <span>
+                        ({{recouvrement.bordereau}})
+                    </span>
+                </p>
             </div>
-        </div> -->
+            <button class="button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
+                    Rendre
+            </button>
+        </div>
         }
+    </div>
+</div>

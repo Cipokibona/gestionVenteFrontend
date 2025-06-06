@@ -323,6 +323,10 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.recouvrementUrl}`, data, {headers});
   }
 
+  getAllRecouvrement(){
+    return this.http.get(`${this.recouvrementUrl}`);
+  }
+
   // fonction sur product
   createListProductVente(data: any){
     const token = this.getTokenLocal();
