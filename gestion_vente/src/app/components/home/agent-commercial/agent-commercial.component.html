@@ -4,6 +4,7 @@
         @for (depot of venteUser; track $index) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{depot.pos_name}}</h5>
+            <h6 class="text-secondary ms-3">Vente</h6>
             <div class="card-body">
                 <h6>{{depot.date | date:'fullDate'}}</h6>
                 @for (pay of depot.typeEchange_list; track $index) {

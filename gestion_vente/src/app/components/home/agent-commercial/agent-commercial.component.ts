@@ -19,6 +19,7 @@ export class AgentCommercialComponent implements OnInit{
   typeEchange: any;
   basketUser!: any;
   venteUser!: any;
+  recouvrementUser!: any;
 
   // form
   transactionForm = new FormGroup({

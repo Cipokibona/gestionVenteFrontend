@@ -134,13 +134,14 @@ export class FormRecouvrementComponent implements OnInit{
     const requests = [];
     for(let pay of this.listTypeEchange.value){
       const dataPay = {
-            vente: this.idVente,
-            typeEchange: pay.id,
-            montant: pay.montant,
-            bordereau: pay.bordereau  || 'pas de bordereau',
-          }
-          const request = this.apiService.createRecouvrement(dataPay);
-          requests.push(request);
+        respo: this.userData.id,
+        vente: this.idVente,
+        typeEchange: pay.id,
+        montant: pay.montant,
+        bordereau: pay.bordereau  || 'pas de bordereau',
+        }
+      const request = this.apiService.createRecouvrement(dataPay);
+      requests.push(request);
     };
     forkJoin(requests).subscribe({
           next: (resp:any) => {
