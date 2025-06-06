@@ -429,6 +429,10 @@ export class ApiServiceService {
   }
 
   // rendre agent a pos
+  getAllRender(){
+    return this.http.get(`${this.rendreProduitPosUrl}`);
+  }
+
   createRenderAgentPos(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);

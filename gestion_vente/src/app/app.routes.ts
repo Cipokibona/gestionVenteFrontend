@@ -14,6 +14,7 @@ import { ListTypeEchangeComponent } from './components/wallet/list-type-echange/
 import { ListBasketsComponent } from './components/product/list-baskets/list-baskets.component';
 import { CreateBasketComponent } from './components/product/create-basket/create-basket.component';
 import { FormRecouvrementComponent } from './components/client/form-recouvrement/form-recouvrement.component';
+import { ListReceptionComponent } from './components/pointOfSell/list-reception/list-reception.component';
 
 export const routes: Routes = [
     { 
@@ -95,5 +96,10 @@ export const routes: Routes = [
         path:'listTypeEchange',
         title:'type echange page',
         component:ListTypeEchangeComponent
+    },
+    {
+        path:'reception',
+        title:'reception page',
+        component:ListReceptionComponent
     }
 ];

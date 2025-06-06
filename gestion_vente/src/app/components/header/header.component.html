@@ -30,6 +30,11 @@
                             Agent commerciaux
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a routerLink="reception" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Receptions
+                        </a>
+                    </li>
                     }
                     <li class="nav-item">
                         <a routerLink="liste_panier" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
@@ -48,7 +53,7 @@
                     </li>
                     <li class="nav-item border-top mt-4">
                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                            Logout
+                            Logout @if(userData){({{userData.username}})}
                         </button>
                     </li>
                 </ul>

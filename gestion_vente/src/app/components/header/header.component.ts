@@ -24,6 +24,7 @@ export class HeaderComponent {
     this.apiService.currentUser.subscribe({
       next: (data:any) => {
         this.userData = data;
+        console.log('userdata dans header',this.userData)
       },
       error: (err) => {
         this.logout()
