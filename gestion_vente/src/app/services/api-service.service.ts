@@ -65,6 +65,9 @@ export class ApiServiceService {
   // recouvrement
   private recouvrementUrl = `${this.url}recouvrement/`;
 
+  // caisse pour point de vente
+  private caisseUrl = `${this.url}caisse/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -439,6 +442,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.rendreProduitPosUrl}`, data, {headers});
   }
 
+  updateRenderAgentPos(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.rendreProduitPosUrl}${id}/`, data, {headers});
+  }
+
   deleteRenderAgentPos(id: number){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -455,6 +464,13 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.typeEchangeRenduPosUrl}`, data, {headers});
+  }
+
+  // caisse de point de vente
+  createCaisse(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.caisseUrl}`, data, {headers});
   }
   
 }

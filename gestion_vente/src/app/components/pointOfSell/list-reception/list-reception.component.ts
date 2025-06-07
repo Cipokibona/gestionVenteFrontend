@@ -61,30 +61,17 @@ export class ListReceptionComponent implements OnInit{
     })
   }
 
-  receveid(id: number){
-    const recouvrement = this.recouvrementData.find((item:any) => item.id == id);
+  received(id: number){
     const dataRendu = {
-      agent: this.userData.id,
-      pos: recouvrement.depot_id,
+      receiver: this.userData.id,
+      is_received: true,
     };
-    this.apiService.createRenderAgentPos(dataRendu).subscribe({
+    this.apiService.updateRenderAgentPos(id, dataRendu).subscribe({
       next: (resp:any) => {
-        console.log('new dataRendu create', resp);
-        const dataType = {
-          typeEchange: recouvrement.typeEchange,
-          render: resp.id,
-          montant: recouvrement.montant,
-          bordereau: recouvrement.bordereau,
-        };
-        this.apiService.createTypeEchangeRenduPos(dataType).subscribe({
-          next: (resp:any) => {
-            console.log('creation reussi', resp);
-          },
-          error: (err) => {
-            this.apiService.deleteRenderAgentPos(resp.id);
-            console.error('erreur de creation et suppression de vente', err);
-          }
-        });
+        console.log('update render', resp);
+      },
+      error: (err) => {
+        console.error('erreur de update',err);
       }
     });
   }
