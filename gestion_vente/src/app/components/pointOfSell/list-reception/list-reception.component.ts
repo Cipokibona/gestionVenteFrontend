@@ -85,6 +85,7 @@ export class ListReceptionComponent implements OnInit{
     this.apiService.updateRenderAgentPos(id, dataRendu).subscribe({
       next: (resp:any) => {
         console.log('update render', resp);
+        this.getAllRender();
       },
       error: (err) => {
         console.error('erreur de update',err);

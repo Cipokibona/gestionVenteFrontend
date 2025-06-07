@@ -111,6 +111,7 @@ export class ListBasketsComponent implements OnInit{
     const dataRendu = {
       agent: basket.agent,
       pos: basket.depot,
+      panier: id,
     };
     this.apiService.createRenderAgentPos(dataRendu).subscribe({
       next: (dataRendu:any) => {

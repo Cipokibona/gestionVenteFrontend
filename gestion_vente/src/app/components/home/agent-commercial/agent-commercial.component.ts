@@ -132,16 +132,17 @@ export class AgentCommercialComponent implements OnInit{
   }
 
   rendre(id: number){
-    const pos = this.venteUser.find((item:any) => item.pos_id === id);
+    const vente = this.venteUser.find((item:any) => item.id === id);
     const dataRendu = {
       agent: this.userData.id,
-      pos: pos.pos_id,
+      pos: vente.pos_id,
+      vente: id,
     };
     this.apiService.createRenderAgentPos(dataRendu).subscribe({
           next: (dataRendu:any) => {
             console.log('new dataRendu create', dataRendu);
             const requests = [];
-            for(let type of pos.typeEchange_list){
+            for(let type of vente.typeEchange_list){
               const dataType = {
                 typeEchange: type.typeEchange,
                 render: dataRendu.id,
@@ -174,6 +175,7 @@ export class AgentCommercialComponent implements OnInit{
     const dataRendu = {
       agent: this.userData.id,
       pos: recouvrement.depot_id,
+      recouvrement: id,
     };
     this.apiService.createRenderAgentPos(dataRendu).subscribe({
       next: (resp:any) => {
