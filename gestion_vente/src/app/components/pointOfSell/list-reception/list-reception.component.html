@@ -28,6 +28,9 @@
                     <button class="button secondary rounded-pill m-1 p-1" (click)="received(render.id)">
                         Recus
                     </button>
+                    <button class="btn btn-danger rounded-pill m-1 p-1" (click)="noReceived(render.id)">
+                        Non
+                    </button>
                 </div>}@else if (render.type_list.length > 0) {
                 <div class="row border-bottom">
                     <div class="col-6">
@@ -50,6 +53,9 @@
                 <div class="row border-top mt-3">
                     <button class="button secondary rounded-pill m-1 p-1" (click)="received(render.id)">
                         Recus
+                    </button>
+                    <button class="btn btn-danger rounded-pill m-1 p-1" (click)="noReceived(render.id)">
+                        Non
                     </button>
                 </div> }
             </div>

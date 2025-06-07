@@ -51,7 +51,7 @@ export class ListReceptionComponent implements OnInit{
   getAllRender(){
     this.apiService.getAllRender().subscribe({
       next: (resp: any) => {
-        const data = resp.results;
+        const data = resp.results.filter((item:any) => item.receiver == null);
         this.allRender = data;
         console.log('all render du pos', this.allRender);
       },
@@ -65,6 +65,22 @@ export class ListReceptionComponent implements OnInit{
     const dataRendu = {
       receiver: this.userData.id,
       is_received: true,
+    };
+    this.apiService.updateRenderAgentPos(id, dataRendu).subscribe({
+      next: (resp:any) => {
+        console.log('update render', resp);
+        this.getAllRender();
+      },
+      error: (err) => {
+        console.error('erreur de update',err);
+      }
+    });
+  }
+
+  noReceived(id: number){
+    const dataRendu = {
+      receiver: this.userData.id,
+      is_received: false,
     };
     this.apiService.updateRenderAgentPos(id, dataRendu).subscribe({
       next: (resp:any) => {
