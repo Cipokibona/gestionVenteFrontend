@@ -29,10 +29,7 @@ export class AgentCommercialComponent implements OnInit{
     bordereauTransaction: new FormControl('', Validators.required),
   });
   
-  constructor(private apiService: ApiServiceService, private router: Router){ 
-    
-    
-   }
+  constructor(private apiService: ApiServiceService, private router: Router){ }
 
   ngOnInit(): void {
     this.apiService.refreshTokenLocal();

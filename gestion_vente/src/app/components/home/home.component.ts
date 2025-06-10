@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AgentCommercialComponent } from "./agent-commercial/agent-commercial.component";
 import { ApiServiceService } from '../../services/api-service.service';
+import { RespoPosComponent } from './respo-pos/respo-pos.component';
+import { AdminComponent } from './admin/admin.component';
 
 @Component({
   selector: 'app-home',
-  imports: [AgentCommercialComponent],
+  imports: [AgentCommercialComponent, RespoPosComponent, AdminComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
