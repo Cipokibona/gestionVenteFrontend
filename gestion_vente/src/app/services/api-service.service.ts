@@ -65,6 +65,9 @@ export class ApiServiceService {
   // recouvrement
   private recouvrementUrl = `${this.url}recouvrement/`;
 
+  // depenses
+  private depenseUrl = `${this.url}depenses/`;
+
   // caisse pour point de vente
   private caisseUrl = `${this.url}caisse/`;
 
@@ -491,6 +494,17 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.patch<any>(`${this.toolsUrl}${id}/`, data, {headers});
+  }
+
+  // depenses
+  getAllDepenses(){
+    return this.http.get(`${this.depenseUrl}`);
+  }
+
+  createDepense(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.depenseUrl}`, data, {headers});
   }
   
 }
