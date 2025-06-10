@@ -15,6 +15,7 @@ import { ListBasketsComponent } from './components/product/list-baskets/list-bas
 import { CreateBasketComponent } from './components/product/create-basket/create-basket.component';
 import { FormRecouvrementComponent } from './components/client/form-recouvrement/form-recouvrement.component';
 import { ListReceptionComponent } from './components/pointOfSell/list-reception/list-reception.component';
+import { ToolsForUserComponent } from './components/user/tools-for-user/tools-for-user.component';
 
 export const routes: Routes = [
     { 
@@ -101,5 +102,10 @@ export const routes: Routes = [
         path:'reception',
         title:'reception page',
         component:ListReceptionComponent
+    },
+    {
+        path:'tools',
+        title:'tools page',
+        component:ToolsForUserComponent
     }
 ];

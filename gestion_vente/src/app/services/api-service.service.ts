@@ -68,6 +68,9 @@ export class ApiServiceService {
   // caisse pour point de vente
   private caisseUrl = `${this.url}caisse/`;
 
+  // tools
+  private toolsUrl = `${this.url}tools/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -471,6 +474,23 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.caisseUrl}`, data, {headers});
+  }
+
+  // tools
+  getAllTools(){
+    return this.http.get(`${this.toolsUrl}`);
+  }
+
+  createTools(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.toolsUrl}`, data, {headers});
+  }
+
+  editTools(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.toolsUrl}${id}/`, data, {headers});
   }
   
 }
