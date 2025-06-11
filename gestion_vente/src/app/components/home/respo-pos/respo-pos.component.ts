@@ -39,7 +39,7 @@ export class RespoPosComponent implements OnInit{
     this.apiService.getAllPos().subscribe({
       next: (data:any) => {
         const dataPos = data.results;
-        this.posData = dataPos.filter((item:any) => item.list_respo.filter((i:any) => i.respo == this.userData.id));
+        this.posData = dataPos.find((item: any) => item.list_respo.some((i: any) => i.respo === this.userData.id));
         console.log('pos du respo:', this.posData);
       },error: () => {
         this.apiService.logout();

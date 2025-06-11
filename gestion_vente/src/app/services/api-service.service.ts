@@ -67,6 +67,7 @@ export class ApiServiceService {
 
   // depenses
   private depenseUrl = `${this.url}depenses/`;
+  private depenseSalaireUrl = `${this.url}depense_salaire/`;
 
   // caisse pour point de vente
   private caisseUrl = `${this.url}caisse/`;
@@ -505,6 +506,10 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.depenseUrl}`, data, {headers});
+  }
+
+  getDepenseSalar(){
+    return this.http.get(`${this.depenseSalaireUrl}`);
   }
   
 }

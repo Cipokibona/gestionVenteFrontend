@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-list-user',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.scss'
 })
@@ -12,13 +13,19 @@ export class ListUserComponent implements OnInit{
   userData!: any;
   allUser!: any;
   
-  allSalaire!: any;
+  allSalaire: any = [];
   allVenteUser!: any;
+
+  lastSalarData!: any;
+  depenseSalaire: any = [];
 
   allPoste!: any;
 
   loadingPage!: boolean;
   error!: string | null;
+
+  allPos!: any;
+  selectedPosData!: any;
 
   userForm = new FormGroup({
     first_name: new FormControl('', Validators.required),
@@ -32,6 +39,11 @@ export class ListUserComponent implements OnInit{
     confirmPassword: new FormControl('', Validators.required),
   });
 
+  payForm = new FormGroup({
+    caisse: new FormControl('', Validators.required),
+    montant: new FormControl(0, Validators.required),
+  });
+
   constructor(private apiService: ApiServiceService){}
 
   ngOnInit(): void {
@@ -42,6 +54,8 @@ export class ListUserComponent implements OnInit{
     this.getAllSalarUser();
     this.getVenteUser();
     this.getAllPoste();
+    this.getAllPos();
+    this.getDepenseSalaire();
   }
 
   getUser(){
@@ -92,6 +106,37 @@ export class ListUserComponent implements OnInit{
     });
   }
 
+  getDepenseSalaire(){
+    this.apiService.getDepenseSalar().subscribe({
+      next: (dataDepenseSalar: any) => {
+        this.depenseSalaire = dataDepenseSalar.results;
+        console.log('info depense salaire', this.depenseSalaire);
+      },
+      error: (err) => {
+        console.error('erreur de depense salaire', err);
+      }
+    });
+  }
+
+  // fonction de dernier salaire et dernier date pay
+  getDepenseSalaireUser(id: number){
+    const data = this.depenseSalaire.filter((item:any) => item.user_depense == id);
+    const lastItem = data[data.length - 1];
+    if (!lastItem){
+      return null
+    }
+    return lastItem.montant
+  }
+
+  getDateSalaireUser(id: number){
+    const data = this.depenseSalaire.filter((item:any) => item.user_depense == id);
+    const lastItem = data[data.length - 1];
+    if (!lastItem){
+      return null
+    }
+    return lastItem.date
+  }
+
   getSalarUser(id:number){
     const data = this.allSalaire.find((item:any) => item.user === Number(id));
     if(data){
@@ -117,6 +162,27 @@ export class ListUserComponent implements OnInit{
         console.error('erreur de vente', err);
       }
     });
+  }
+  // pos
+  getAllPos(){
+    this.apiService.getAllPos().subscribe({
+      next: (dataVente: any) => {
+        this.allPos = dataVente.results;
+        console.log('info pos', this.allPos);
+      },
+      error: (err) => {
+        console.error('erreur de pos', err);
+      }
+    });
+  }
+
+  selectedPos(event: Event, id:number){
+    const salar = this.getSalarUser(id);
+    this.payForm.patchValue({ montant: salar });
+    const data = Number((event.target as HTMLSelectElement).value);
+    this.selectedPosData = this.allPos.find((item:any) => item.id === data);
+    
+    console.log('selected type', this.selectedPosData)
   }
 
   createUser(){
@@ -183,6 +249,27 @@ export class ListUserComponent implements OnInit{
       },
       error: (err) => {
         console.error('erreur de recuperation de postes',err)
+      }
+    });
+  }
+
+  // creation pay
+  createPay(id: number){
+    const newPay = {
+      user: this.userData.id,
+      caisse: this.payForm.value.caisse,
+      montant: this.payForm.value.montant,
+      user_depense: Number(id),
+      description: 'Pay mensuel',
+      is_salaire: true,
+    };
+    console.log('data pour salar', newPay);
+    this.apiService.createDepense(newPay).subscribe({
+      next: (dataDepense:any) => {
+        console.log('creation de depense', dataDepense);
+      },
+      error: (err) => {
+        console.error('erreur de creation de depense',err)
       }
     });
   }

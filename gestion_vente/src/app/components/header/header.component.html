@@ -17,6 +17,16 @@
                         <a routerLink="home" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
                             Home
                         </a>
+                    </li> @if (userData && (userData.is_respo_pos || userData.is_admin)) {
+                    <li class="nav-item">
+                        <a routerLink="userList" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="reception" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
+                            Receptions
+                        </a>
                     </li>
                     @if (userData && userData.is_admin) {
                     <li class="nav-item">
@@ -39,17 +49,7 @@
                             Depenses
                         </a>
                     </li>
-                    } @if (userData && userData.is_respo_pos && !userData.is_admin) {
-                    <li class="nav-item">
-                        <a routerLink="userList" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Agent commerciaux
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a routerLink="reception" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Receptions
-                        </a>
-                    </li> }
+                    }}
                     <li class="nav-item">
                         <a routerLink="liste_panier" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
                             Paniers
