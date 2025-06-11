@@ -26,8 +26,11 @@
                     <p>
                         {{tool.description}}
                     </p>
-                    <button class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                    <button class="btn button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
                         Edit
+                    </button>
+                    <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#depenseTool' + $index">
+                        Depense
                     </button>
                 </div>
             </div>
@@ -43,7 +46,7 @@
                     <form class="needs-validation" [formGroup]="editToolForm" (ngSubmit)="editTool(tool.id)">
                         <div class="modal-body">
                             <div class="ms-auto me-auto mb-2">
-                                <label for="nameOldPoste" class="visually-hidden">name</label>
+                                <label for="nameOldTool" class="visually-hidden">name</label>
                                 <input type="text" class="form-control" formControlName="nameOldTool" name="nameOldTool" id="nameOldTool" value="{{tool.name}}" required>
                             </div>
                             <div class="ms-auto me-auto mb-2">
@@ -67,38 +70,83 @@
                 </div>
             </div>
         </div>
+        <!-- modal de depense tool -->
+        <div class="modal fade" [attr.id]="'depenseTool' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Depense</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="depenseToolForm" (ngSubmit)="depenseTool(tool.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="pos" class="visually">Source Pos</label>
+                                <select class="form-select" aria-label="Default select example" name="pos" (change)="selectedPos($event)">
+                                    <option selected>Select source point de vente</option>
+                                    @for (pos of allPos; track $index) {
+                                    <option value={{pos.id}}>{{$index + 1}}. {{pos.fullName}}</option>
+                                }
+                                </select>
+                            </div>@if (selectedPosData) {
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="caisse" class="visually">Caisse</label>
+                                <select class="form-select" aria-label="Default select example" name="caisse" formControlName="caisse">
+                                    @for (caisse of selectedPosData.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>{{$index + 1}}. {{caisse.typeEchange_name}}</option>
+                                }
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="montant" class="visually">Montant</label>
+                                <input type="number" class="form-control" formControlName="montant" name="montant" id="montantDepense" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="description" class="visually">Description</label>
+                                <input type="text" class="form-control" formControlName="description" name="description" id="description" required>
+                            </div>
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn button secondary">Effectuer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         }
     </div> }@else {
-    <h4 class="text-center">{{error}}</h4>}}
+    <h4 class="text-center ">{{error}}</h4>}}
     <!-- fin de condition de posteData -->
 </div>
-<div class="modal fade" id="creationTool" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newPosteTitle">New tool</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade " id="creationTool" tabindex="-1 " aria-labelledby="exampleModalLabel " aria-hidden="true ">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5 " id="newPosteTitle ">New tool</h1>
+                <button type="button" class="btn-close " data-bs-dismiss="modal " aria-label="Close "></button>
             </div>
-            <form class="needs-validation" [formGroup]="newToolForm" (ngSubmit)="createTool()">
-                <div class="modal-body">
-                    <div class="ms-auto me-auto mb-2">
+            <form class="needs-validation " [formGroup]="newToolForm " (ngSubmit)="createTool() ">
+                <div class="modal-body ">
+                    <div class="ms-auto me-auto mb-2 ">
                         <label for="nameTool" class="visually-hidden">Tool</label>
-                        <input type="text" class="form-control" formControlName="nameTool" name="nameTool" id="nameTool" placeholder="Name outils ..." required>
+                        <input type="text" class="form-control" formControlName="nameTool" name="nameTool" id="nameTool" placeholder="Name outils ... " required>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="responsable" class="visually">Responsable</label>
-                        <select class="form-select" aria-label="Default select example" formControlName="user" name="responsable">
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="responsabl" class="visually">Responsable</label>
+                        <select class="form-select " aria-label="Default select example " formControlName="user" name="responsable">
                              @for (user of allUser; track $index) {
                                 <option value={{user.id}}>{{$index + 1}}. {{user.username}}</option>
                             }
                         </select>
                     </div>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="description" class="visually-hidden">Descriptioin</label>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="description " class="visually-hidden ">Descriptioin</label>
                         <input type="text" class="form-control" formControlName="description" name="description" placeholder="Description" required>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer ">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn button secondary">Save</button>
                 </div>

@@ -17,6 +17,10 @@ export class ToolsForUserComponent implements OnInit{
   loadingPage!: boolean;
   error!: string | null;
 
+  allPos!: any;
+
+  selectedPosData!: any;
+
   newToolForm = new FormGroup({
     nameTool: new FormControl('', Validators.required),
     user: new FormControl('', Validators.required),
@@ -29,6 +33,12 @@ export class ToolsForUserComponent implements OnInit{
     description: new FormControl('', Validators.required),
   });
 
+  depenseToolForm = new FormGroup({
+    caisse: new FormControl('', Validators.required),
+    montant: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+  });
+
   constructor(private apiService: ApiServiceService, private router: Router){}
 
   ngOnInit(): void {
@@ -36,6 +46,7 @@ export class ToolsForUserComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUser();
     this.getAllUser();
+    this.getAllPos();
     this.getAllTools();
   }
 
@@ -99,6 +110,26 @@ export class ToolsForUserComponent implements OnInit{
     location.reload();
   }
 
+  // pos
+  getAllPos(){
+    this.apiService.getAllPos().subscribe({
+      next: (data: any) => {
+        this.allPos = data.results;
+        console.log('all tools', this.allPos);
+      },
+      error: (err) => {
+        this.loadingPage = false;
+        this.error = 'Erreur pendant le telechargement de tools';
+      }
+    })
+  }
+
+  selectedPos(event: Event){
+    const id = Number((event.target as HTMLSelectElement).value);
+    this.selectedPosData = this.allPos.find((item:any) => item.id === id);
+    console.log('selected pos', this.selectedPosData);
+  }
+
   editTool(id: number){
     const data = {
       name: this.editToolForm.value.nameOldTool,
@@ -112,6 +143,27 @@ export class ToolsForUserComponent implements OnInit{
       },
       error: (err) => {
         console.error('erreur de edit', err)
+      }
+    });
+    location.reload();
+  }
+
+  depenseTool(id: number){
+    const data = {
+      user: this.userDate.id,
+      caisse: this.depenseToolForm.value.caisse,
+      tool: id,
+      description: this.depenseToolForm.value.description,
+      montant: this.depenseToolForm.value.montant,
+      is_tool: true
+    };
+    console.log('data depense',data);
+    this.apiService.createDepense(data).subscribe({
+      next: (data:any) => {
+        console.log('depense reussis', data)
+      },
+      error: (err) => {
+        console.error('erreur de depense', err)
       }
     });
     location.reload();
