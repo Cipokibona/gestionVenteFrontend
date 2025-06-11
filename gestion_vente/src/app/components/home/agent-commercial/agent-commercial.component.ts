@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-agent-commercial',
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './agent-commercial.component.html',
   styleUrl: './agent-commercial.component.scss'
 })
@@ -25,7 +25,7 @@ export class AgentCommercialComponent implements OnInit{
   transactionForm = new FormGroup({
     typeEchangeSource: new FormControl('', Validators.required),
     typeEchangeCible: new FormControl('', Validators.required),
-    montantTransaction: new FormControl('', Validators.required),
+    montantTransaction: new FormControl(0, Validators.required),
     bordereauTransaction: new FormControl('', Validators.required),
   });
   
@@ -66,22 +66,39 @@ export class AgentCommercialComponent implements OnInit{
   }
 
   transaction(id:number){
-    const typeEchange = this.transactionForm.value.typeEchangeCible;
-    let montant: any = this.transactionForm.value.montantTransaction;
-    const walletSource = this.transactionForm.value.typeEchangeSource;
-    const walletCibleData = {
-      user: this.userData.id,
-      typeEchange: typeEchange || '',
-      montant: montant || '',
-      bordereau: this.transactionForm.value.bordereauTransaction || '',
-    };
-    const walletSourceData = {
-      montant : montant
-    };
-    this.router.navigate(['/home']).then(() => {
-        location.reload();
-    });
-    console.log('transactionData sur submit', walletCibleData);
+    const vente = this.venteUser.find((item:any) => item.id == id);
+    const idTypeEdit = this.transactionForm.value.typeEchangeSource;
+    const typeEchangeVente = vente.typeEchange_list.find((item:any) => item.typeEchange == idTypeEdit);
+    const newMontant = typeEchangeVente.montant - Number(this.transactionForm.value.montantTransaction);
+    if(newMontant >= 0){
+      const typeEditData = {
+        montant: newMontant,
+      };
+      const newTypeData = {
+        typeEchange: this.transactionForm.value.typeEchangeCible,
+        vente: vente.id,
+        montant : this.transactionForm.value.montantTransaction,
+        bordereau: this.transactionForm.value.bordereauTransaction
+      };
+      this.apiService.updateTypeVente(typeEchangeVente.id,typeEditData).subscribe({
+        next: (dataEditType: any) => {
+          console.log('update reussi', dataEditType);
+          this.apiService.createListPayVente(newTypeData).subscribe({
+            next: (dataNewTypeVente: any) => {
+              console.log('newTypeVente', dataNewTypeVente);
+            },
+            error: (err) => {
+              console.error('erreur de creation de type vente', err);
+            }
+          })
+        },
+        error: (err) => {
+          console.error('erreur de update', err);
+        }
+      });
+    }
+    
+    console.log('transactionData sur submit', vente);
     
   }
 

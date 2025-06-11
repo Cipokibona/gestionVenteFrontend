@@ -27,9 +27,55 @@
                             {{getTotalTypeEchange(vente.typeEchange_list) | number: '1.0-0'}} BIF
                         </strong>
                     </div>
-                    <button class="button secondary rounded-pill m-1 p-1" (click)="rendre(vente.id)">
+                    <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#transaction' + $index">
+                        Transaction
+                    </button>
+                    <button class="btn button secondary rounded-pill m-1 p-1" (click)="rendre(vente.id)">
                         Rendre
                     </button>
+                </div>
+            </div>
+        </div>
+        <!-- modal de transaction -->
+        <div class="modal fade" [attr.id]="'transaction' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content text-start">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Transaction</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction(vente.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="typeSource" class="visually">Source</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="typeEchangeSource">
+                                    <option selected>Select source</option>
+                                    @for (type of vente.typeEchange_list; track $index) {
+                                    <option value={{type.typeEchange}}>{{type.typeEchange_name}} (max: {{type.montant | number: '1.0-0' }} BIF)</option>}
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="typeSource" class="visually">Cible</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="typeEchangeCible">
+                                    <option selected>Select cible</option>
+                                    @for (type of typeEchange; track $index) {
+                                    <option value={{type.id}}>{{type.nom}} ({{type.description}})</option>}
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="montantTransaction" class="visually">Montant</label>
+                                <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="bordereauTransaction" class="visually">Bordereau</label>
+                                <input type="text" class="form-control" formControlName="bordereauTransaction" name="bordereauTransaction" id="bordereauTransaction" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn button secondary">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>} @for (recouvrement of recouvrementUser; track $index) {
@@ -44,12 +90,15 @@
                         {{recouvrement.montant | number: '1.0-0'}} BIF
                     </strong> <br>
                     <span>
-                        ({{recouvrement.bordereau}})
+                        ({{recouvrement.bordereau}}) en {{recouvrement.type_name}}
                     </span>
                 </p>
             </div>
-            <button class="button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
-                    Rendre
+            <button class="btn btn-warning rounded-pill m-1 p-1" (click)="rendre(recouvrement.id)">
+                Transaction
+            </button>
+            <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
+                Rendre
             </button>
         </div>
         }

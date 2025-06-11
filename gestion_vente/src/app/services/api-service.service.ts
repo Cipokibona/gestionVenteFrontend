@@ -309,10 +309,23 @@ export class ApiServiceService {
     return this.http.delete<any>(`${this.ventesUrl}${id}/`, {headers});
   }
 
+  // type echange vente
   createListPayVente(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.listPayVenteUrl}`, data, {headers});
+  }
+
+  updateTypeVente(id: any, data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.listPayVenteUrl}${id}/`, data, {headers});
+  }
+
+  deleteTypeVente(id:number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.listPayVenteUrl}${id}/`, {headers});
   }
 
   createListPayApprovisionnementPos(data: any){
