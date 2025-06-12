@@ -17,6 +17,7 @@ import { FormRecouvrementComponent } from './components/client/form-recouvrement
 import { ListReceptionComponent } from './components/pointOfSell/list-reception/list-reception.component';
 import { ToolsForUserComponent } from './components/user/tools-for-user/tools-for-user.component';
 import { ListDepensesComponent } from './components/depenses/list-depenses/list-depenses.component';
+import { CaisseBordereauComponent } from './components/caisse-bordereau/caisse-bordereau.component';
 
 export const routes: Routes = [
     { 
@@ -113,5 +114,10 @@ export const routes: Routes = [
         path:'depenses',
         title:'depenses page',
         component:ListDepensesComponent
+    },
+    {
+        path:'home/bordereau/:id',
+        title:'liste bordereau page',
+        component:CaisseBordereauComponent
     }
 ];

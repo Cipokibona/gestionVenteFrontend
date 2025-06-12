@@ -507,6 +507,10 @@ export class ApiServiceService {
     return this.http.patch<any>(`${this.caisseUrl}${id}/`, data, {headers});
   }
 
+  getCaisseById(id: number){
+    return this.http.get(`${this.caisseUrl}${id}/`);
+  }
+
   createBordereauCaisse(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
