@@ -71,6 +71,7 @@ export class ApiServiceService {
 
   // caisse pour point de vente
   private caisseUrl = `${this.url}caisse/`;
+  private boredereauCaisseUrl = `${this.url}bordereau_caisse/`;
 
   // tools
   private toolsUrl = `${this.url}tools/`;
@@ -498,6 +499,18 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.caisseUrl}`, data, {headers});
+  }
+
+  updateCaisse(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.caisseUrl}${id}/`, data, {headers});
+  }
+
+  createBordereauCaisse(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.boredereauCaisseUrl}`, data, {headers});
   }
 
   // tools
