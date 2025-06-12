@@ -340,6 +340,7 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listPayAchatPosUrl}`, data, {headers});
   }
 
+  // recouvrement
   createRecouvrement(data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
@@ -348,6 +349,12 @@ export class ApiServiceService {
 
   getAllRecouvrement(){
     return this.http.get(`${this.recouvrementUrl}`);
+  }
+
+  updateRecouvrement(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.recouvrementUrl}${id}/`, data, {headers});
   }
 
   // fonction sur product

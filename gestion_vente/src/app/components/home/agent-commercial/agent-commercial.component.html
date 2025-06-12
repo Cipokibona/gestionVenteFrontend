@@ -10,7 +10,7 @@
                 @for (pay of vente.typeEchange_list; track $index) {
                 <div class="row">
                     <div class="col-6">
-                        {{pay.typeEchange_name}}:
+                        {{pay.typeEchange_name}} ({{pay.bordereau}}):
                     </div>
                     <div class="col-6 text-end text-danger">
                         {{pay.montant | number: '1.0-0'}} BIF
@@ -94,12 +94,47 @@
                     </span>
                 </p>
             </div>
-            <button class="btn btn-warning rounded-pill m-1 p-1" (click)="rendre(recouvrement.id)">
+            <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#transactionRecouvrement' + $index">
                 Transaction
             </button>
             <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
                 Rendre
             </button>
+        </div>
+        <!-- modal de transaction -->
+        <div class="modal fade" [attr.id]="'transactionRecouvrement' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content text-start">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Transaction</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="recouvrementForm" (ngSubmit)="recouvrementNewTypeEchange(recouvrement.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="typeSource" class="visually">Cible</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="typeEchangeCible">
+                                    <option selected>Select cible</option>
+                                    @for (type of typeEchange; track $index) {
+                                    <option value={{type.id}}>{{type.nom}} ({{type.description}})</option>}
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="montantTransaction" class="visually">Montant</label>
+                                <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="bordereauTransaction" class="visually">Bordereau</label>
+                                <input type="text" class="form-control" formControlName="bordereauTransaction" name="bordereauTransaction" id="bordereauTransaction" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn button secondary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         }
     </div>

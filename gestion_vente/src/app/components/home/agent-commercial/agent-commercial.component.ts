@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 export class AgentCommercialComponent implements OnInit{
 
   userData!: any;
-  walletSumTotal!: number;
   data!: any;
   typeEchange: any;
   basketUser!: any;
@@ -24,6 +23,12 @@ export class AgentCommercialComponent implements OnInit{
   // form
   transactionForm = new FormGroup({
     typeEchangeSource: new FormControl('', Validators.required),
+    typeEchangeCible: new FormControl('', Validators.required),
+    montantTransaction: new FormControl(0, Validators.required),
+    bordereauTransaction: new FormControl('', Validators.required),
+  });
+
+  recouvrementForm = new FormGroup({
     typeEchangeCible: new FormControl('', Validators.required),
     montantTransaction: new FormControl(0, Validators.required),
     bordereauTransaction: new FormControl('', Validators.required),
@@ -45,7 +50,6 @@ export class AgentCommercialComponent implements OnInit{
     this.apiService.currentUser.subscribe({
       next: (data:any) => {
         this.userData = data;
-        this.walletSumTotal = 0;
         // for(let wallet of this.userData.wallet_user){
         //   this.walletSumTotal = this.walletSumTotal + wallet.montant;
         // }
@@ -65,6 +69,7 @@ export class AgentCommercialComponent implements OnInit{
     })
   }
 
+  // pour les transactions
   transaction(id:number){
     const vente = this.venteUser.find((item:any) => item.id == id);
     const idTypeEdit = this.transactionForm.value.typeEchangeSource;
@@ -100,6 +105,39 @@ export class AgentCommercialComponent implements OnInit{
     
     console.log('transactionData sur submit', vente);
     
+  }
+
+  recouvrementNewTypeEchange(id:number){
+    const recouvrement = this.recouvrementUser.find((item:any) => item.id == id);
+    const newMontant = recouvrement.montant - Number(this.recouvrementForm.value.montantTransaction);
+    if(newMontant >= 0){
+      const typeEditData = {
+        montant: newMontant,
+      };
+      const newTypeData = {
+        respo: recouvrement.respo,
+        typeEchange: this.recouvrementForm.value.typeEchangeCible,
+        vente: recouvrement.vente,
+        montant : this.recouvrementForm.value.montantTransaction,
+        bordereau: this.recouvrementForm.value.bordereauTransaction
+      };
+      this.apiService.updateRecouvrement(id,typeEditData).subscribe({
+        next: (dataEditType: any) => {
+          console.log('update reussi', dataEditType);
+          this.apiService.createRecouvrement(newTypeData).subscribe({
+            next: (dataNewTypeVente: any) => {
+              console.log('new type recouvrement', dataNewTypeVente);
+            },
+            error: (err) => {
+              console.error('erreur de creation de type recouvrement', err);
+            }
+          })
+        },
+        error: (err) => {
+          console.error('erreur de update', err);
+        }
+      });
+    }
   }
 
   getBasketAgent(){
