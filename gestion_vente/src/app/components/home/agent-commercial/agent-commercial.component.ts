@@ -20,6 +20,16 @@ export class AgentCommercialComponent implements OnInit{
   venteUser!: any;
   recouvrementUser!: any;
 
+  // loading et error
+  loading!: boolean;
+  error!: string | null ;
+
+  loadingRendre!: boolean;
+  errorRendre!: string | null ;
+
+  loadingTransaction!: boolean;
+  errorTransaction!: string | null ;
+
   // form
   transactionForm = new FormGroup({
     typeEchangeSource: new FormControl('', Validators.required),
@@ -76,6 +86,7 @@ export class AgentCommercialComponent implements OnInit{
     const typeEchangeVente = vente.typeEchange_list.find((item:any) => item.typeEchange == idTypeEdit);
     const newMontant = typeEchangeVente.montant - Number(this.transactionForm.value.montantTransaction);
     if(newMontant >= 0){
+      this.loadingTransaction = true;
       const typeEditData = {
         montant: newMontant,
       };
@@ -90,14 +101,19 @@ export class AgentCommercialComponent implements OnInit{
           console.log('update reussi', dataEditType);
           this.apiService.createListPayVente(newTypeData).subscribe({
             next: (dataNewTypeVente: any) => {
+              this.loadingTransaction = false;
               console.log('newTypeVente', dataNewTypeVente);
             },
             error: (err) => {
+              this.loadingTransaction = false;
+              this.errorTransaction = 'Erreur pendant l\'operation';
               console.error('erreur de creation de type vente', err);
             }
           })
         },
         error: (err) => {
+          this.loadingTransaction = false;
+          this.errorTransaction = 'Erreur pendant l\'operation';
           console.error('erreur de update', err);
         }
       });
@@ -154,13 +170,17 @@ export class AgentCommercialComponent implements OnInit{
   }
 
   getVenteAgent(){
+    this.loading = true;
     this.apiService.getAllVente().subscribe({
       next: (dataVente: any) => {
+        this.loading = false;
         const data = dataVente.results;
         this.venteUser = data.filter((item:any) => item.agent_id === this.userData.id);
         console.log('Vente du user', this.venteUser);
       },
       error: (err) => {
+        this.loading = false;
+        this.error = 'Erreur de connexion';
         console.error('erreur de recuperation de vente', err);
       }
     })
@@ -184,6 +204,7 @@ export class AgentCommercialComponent implements OnInit{
   }
 
   rendre(id: number){
+    this.loadingRendre = true;
     const vente = this.venteUser.find((item:any) => item.id === id);
     const dataRendu = {
       agent: this.userData.id,
@@ -207,22 +228,28 @@ export class AgentCommercialComponent implements OnInit{
     
             forkJoin(requests).subscribe({
                       next: (resp:any) => {
+                        this.loadingRendre = false;
                         // this.router.navigate(['/home']);
                         console.log('creation reussi', resp);
                       },
                       error: (err) => {
+                        this.loadingRendre = false;
+                        this.errorRendre = 'Erreur pendant l\'operation';
                         this.apiService.deleteRenderAgentPos(dataRendu.id);
                         console.error('erreur de creation et suppression de vente', err);
                       }
                     });
           },
           error: (err) => {
+            this.loadingRendre = false;
+            this.errorRendre = 'Erreur pendant l\'operation';
             console.error('erreur create dataRendu', err);
           }
         });
   }
 
   rendreRecouvrement(id: number){
+    this.loadingRendre = true;
     const recouvrement = this.recouvrementUser.find((item:any) => item.id == id);
     const dataRendu = {
       agent: this.userData.id,
@@ -240,9 +267,12 @@ export class AgentCommercialComponent implements OnInit{
         };
         this.apiService.createTypeEchangeRenduPos(dataType).subscribe({
           next: (resp:any) => {
+            this.loadingRendre = false;
             console.log('creation reussi', resp);
           },
           error: (err) => {
+            this.loadingRendre = false;
+            this.errorRendre = 'Erreur pendant l\'operation';
             this.apiService.deleteRenderAgentPos(resp.id);
             console.error('erreur de creation et suppression de vente', err);
           }

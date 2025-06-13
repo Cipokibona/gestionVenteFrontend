@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-respo-pos',
@@ -15,6 +16,13 @@ export class RespoPosComponent implements OnInit{
   data!: any;
   typeEchange: any;
   posData!: any;
+
+  // loading
+  loading!: boolean;
+  error!: string | null ;
+
+  loadingTransaction!: boolean;
+  errorTransaction!: string | null ;
 
   // form
     transactionForm = new FormGroup({
@@ -45,12 +53,16 @@ export class RespoPosComponent implements OnInit{
   }
 
   getPos(){
+    this.loading = true;
     this.apiService.getAllPos().subscribe({
       next: (data:any) => {
+        this.loading = false;
         const dataPos = data.results;
         this.posData = dataPos.find((item: any) => item.list_respo.some((i: any) => i.respo === this.userData.id));
         console.log('pos du respo:', this.posData);
       },error: () => {
+        this.loading = false;
+        this.error = 'Retry';
         this.apiService.logout();
       }
     });
@@ -66,36 +78,27 @@ export class RespoPosComponent implements OnInit{
       name: this.transactionForm.value.bordereauTransaction,
     }
     if(newMontantSource >= 0){
+      this.loadingTransaction = true;
       const sourceData = {
         montant: newMontantSource,
       };
       const cibleData = {
         montant: newMontantCible,
       };
-      // update du caisse source
-      this.apiService.updateCaisse(dataSource.id,sourceData).subscribe({
-        next: (dataEditType: any) => {
-          console.log('update reussi', dataEditType);
+      const requests = [];
+      requests.push(this.apiService.updateCaisse(dataSource.id,sourceData));
+      requests.push(this.apiService.updateCaisse(dataCible.id,cibleData));
+      requests.push(this.apiService.createBordereauCaisse(newBordereau));
+      forkJoin(requests).subscribe({
+        next: (resp:any) => {
+          this.loadingTransaction = false;
+          this.errorTransaction = null;
+          console.log('creation reussi', resp);
         },
         error: (err) => {
-          console.error('erreur de update', err);
-        }
-      });
-      // update du caisse cible
-      this.apiService.updateCaisse(dataCible.id,cibleData).subscribe({
-        next: (dataEditType: any) => {
-          console.log('update reussi', dataEditType);
-          this.apiService.createBordereauCaisse(newBordereau).subscribe({
-            next: (dataNewBordereau: any) => {
-              console.log('new bordereau', dataNewBordereau);
-            },
-            error: (err) => {
-              console.error('erreur de creation de bordereau', err);
-            }
-          })
-        },
-        error: (err) => {
-          console.error('erreur de update', err);
+          this.loadingTransaction = false;
+          this.errorTransaction = 'Erreur retry';
+          console.error('erreur', err);
         }
       });
     }

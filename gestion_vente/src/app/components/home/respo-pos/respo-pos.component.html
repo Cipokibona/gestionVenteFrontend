@@ -1,6 +1,14 @@
 <div class="container">
     <h2 class="text-center">Caisse</h2>
-    @if (posData) {
+    @if (loading) {
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    }@else {@if(error){
+    <h1>{{error}}</h1>
+    } @if (posData) {
     <div class="card text-center">
         <div class="card-header">
             {{posData?.list_caisse.length}} type d'echange dispo
@@ -28,7 +36,7 @@
         <div class="card-footer text-body-secondary">
             {{posData.date | date: 'longDate' }} last modification
         </div>
-    </div>}
+    </div>}}
 </div>
 
 <!-- modal de transaction -->
@@ -67,8 +75,16 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @if (loadingTransaction) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <span class="text-danger">{{errorTransaction}}</span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn button secondary">Save</button>
+                    <button type="submit" class="btn button secondary">Make</button>}
                 </div>
             </form>
         </div>
