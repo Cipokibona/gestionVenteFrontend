@@ -6,6 +6,7 @@
                 <label for="nameClient" class="visually-hidden">Full name</label>
                 <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataPos.fullName}}" disabled>
             </div>
+            @if (!showPayement) {
             <h6>Source d'approvisionnement</h6>
             <!-- button radio -->
             <div class="form-check">
@@ -54,7 +55,10 @@
                     </div>
                     <div class="col">
                         <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
-                            + Save
+                            + panier
+                        </button>
+                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                            end
                         </button>
                         <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
                             Delete
@@ -105,7 +109,10 @@
                     </div>
                     <div class="col">
                         <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
-                            + Save
+                            + panier
+                        </button>
+                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                            end
                         </button>
                         <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
                             Delete
@@ -114,24 +121,25 @@
                 </div>
                 }}
             </div>
-            }
+            }}
             <!-- fin condition de distributeur -->
+            @if (showPayement) {
             <div class="row">
                 <div class="container">
-                    <h6>Mode de payement du client</h6>
+                    <h6>Payement</h6>
                     <div class="row">
                         <div class="col-auto mb-2">
-                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)" formArrayName="typeEchange">
-                                <option selected>Mode payement</option>
-                                @for (type of typeEchangeData; track type.id) {
-                                <option value={{type.id}}>{{type.nom}}</option>}
+                            <select class="form-select" aria-label="Default select example" (change)="selectedCaisse($event)" formArrayName="typeEchange">
+                                <option selected>Source caisse</option>
+                                @for (caisse of caisseData; track caisse.id) {
+                                <option value={{caisse.id}}>{{caisse.pos_name}} {{caisse.montant | number: '1.0-0' }} BIF ({{caisse.typeEchange_name}})</option>}
                             </select>
-                        </div>@if (selectedTypeData) {
+                        </div>@if (selectedCaisseData) {
                         <div [formGroup]="newTypeEchange">
                             <div class="col-auto mb-2">
                                 <label for="montantCash" class="visually-hidden">montant</label>
                                 <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" formControlName="montant" required>
-                            </div>@if (selectedTypeData.is_bordereau) {
+                            </div>@if (selectedCaisseData.is_bordereau) {
                             <div class="col-auto mb-2">
                                 <label for="numero" class="visually-hidden ">Bordereau</label>
                                 <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" formControlName="bordereau" required>
@@ -151,35 +159,35 @@
                     @if(aprovisionForm.value.list_product && aprovisionForm.value.list_product.length > 0){
                     <h5>Produit recus</h5>
                     <ul> @for (product of aprovisionForm.value.list_product; track product.id) {
-                        <li>{{product.product_name}} {{product.quantity}}*{{product.prixAchat}} BIF: <br>
-                            <span class="text-danger">{{product.prixAchat * product.quantity}} BIF</span>
+                        <li>{{product.product_name}} {{product.quantity}}*{{product.prixAchat | number: '1.0-0' }} BIF: <br>
+                            <span class="text-danger">{{product.prixAchat * product.quantity | number: '1.0-0' }} BIF</span>
                         </li>
                         }
                         <li>Total a paye:<br>
-                            <span class="text-danger"> {{totalReel}}BIF</span>
+                            <span class="text-danger"> {{totalReel | number: '1.0-0' }}BIF</span>
                         </li>
                     </ul>} @if (aprovisionForm.value.typeEchange && aprovisionForm.value.typeEchange.length > 0 ){
                     <h5>Mode Payement</h5>
                     <ul>
                         @for (pay of aprovisionForm.value.typeEchange; track pay.id) {
-                        <li>{{pay.typeName}}:
-                            <span class="text-danger">{{pay.montant}} BIF</span>
+                        <li>Caisse {{pay.caisse}}:
+                            <span class="text-danger">{{pay.montant | number: '1.0-0' }} BIF</span>
                         </li>
                         }
                         <li>Total paye:<br>
-                            <span class="text-danger">{{totalPaye}} BIF</span>
+                            <span class="text-danger">{{totalPaye | number: '1.0-0' }} BIF</span>
                         </li>
                         <li>Reste a Paye: <br>
-                            <span class="text-danger">{{resteImpaye}} BIF</span>
+                            <span class="text-danger">{{resteImpaye | number: '1.0-0' }} BIF</span>
                         </li>
                         <label for="dateDette">Payera le</label>
                         <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
                     </ul> }
                 </div>
-            </div>
+            </div>}
             <div class=" ms-auto me-auto mb-2 mt-3 ">
                 <button type="submit " class="button principal p-1 m-1 ">
-                    <span class="ms-5 me-5 ">Vente</span>
+                    <span class="ms-5 me-5 ">Achat</span>
                 </button>
             </div>
         </form>

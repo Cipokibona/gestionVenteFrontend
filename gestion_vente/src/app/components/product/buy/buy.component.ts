@@ -19,7 +19,7 @@ export class BuyComponent implements OnInit{
 
   selectedSource!: number;
   
-  typeEchangeData!: any;
+  caisseData!: any;
   
   allPos!: any;
   allDistributeur!: any;
@@ -39,14 +39,17 @@ export class BuyComponent implements OnInit{
   selectedProductId!: number;
   selectedProductData!: any;
   
-  selectedTypeId!: number;
-  selectedTypeData!: any;
+  selectedCaisseId!: number;
+  selectedCaisseData!: any;
 
   aprovisionForm: FormGroup;
 
   totalReel: number = 0;
   totalPaye: number = 0;
   resteImpaye: number = 0;
+
+  // affichage div
+  showPayement: boolean = false;
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.aprovisionForm = this.fb.group({
@@ -92,7 +95,7 @@ export class BuyComponent implements OnInit{
     this.getUserData();
     this.getAllDistributeur();
     this.getAllPos();
-    this.getTypeEchange();
+    this.getCaisse();
     console.log('venteForm', this.aprovisionForm.value);
   }
 
@@ -154,21 +157,21 @@ export class BuyComponent implements OnInit{
   }
 
   // fonction de type echange
-  selectedTypeEchange(event: Event){
-    this.selectedTypeId = Number((event.target as HTMLSelectElement).value);
-    this.selectedTypeData = this.typeEchangeData.find((item:any) => item.id === this.selectedTypeId);
+  selectedCaisse(event: Event){
+    this.selectedCaisseId = Number((event.target as HTMLSelectElement).value);
+    this.selectedCaisseData = this.caisseData.find((item:any) => item.id === this.selectedCaisseId);
     
-    console.log('selected type', this.selectedTypeData)
+    console.log('selected caisse', this.selectedCaisseData)
   }
 
-  getTypeEchange(){
-    this.apiService.getTypeEchange().subscribe({
-      next: (dataEchange:any) => {
-        this.typeEchangeData = dataEchange.results;
-        console.log('type echange', this.typeEchangeData);
+  getCaisse(){
+    this.apiService.getAllCaisse().subscribe({
+      next: (dataCaisse:any) => {
+        this.caisseData = dataCaisse.results;
+        console.log('Caisses', this.caisseData);
       },
       error: (err) => {
-        console.error('erreur de recuperation de type echange', err);
+        console.error('erreur de recuperation de caisses', err);
       }
     })
   }
@@ -181,8 +184,9 @@ export class BuyComponent implements OnInit{
 
   addTypeEchange() {
     this.listTypeEchange.push(this.fb.group({
-      id: this.selectedTypeId,
-      typeName: this.selectedTypeData.nom,
+      caisse_id: this.selectedCaisseId,
+      typeEchange_id: this.selectedCaisseData.typeEchange,
+      caisse: this.selectedCaisseData.pos_name,
       montant: new FormControl(this.newTypeEchange.value.montant, Validators.required),
       bordereau: new FormControl(this.newTypeEchange.value.bordereau, Validators.required)
     }));
@@ -279,6 +283,7 @@ export class BuyComponent implements OnInit{
   
 
   createAchat(){
+    // si source est pos
     if(this.selectedSource == 2){
       console.log('approvisionnement dans form',this.aprovisionForm.value);
       const data = {
@@ -308,7 +313,7 @@ export class BuyComponent implements OnInit{
           for(let pay of this.listTypeEchange.value){
             const dataPay = {
               approvisionnement: data.id,
-              typeEchange: pay.id,
+              typeEchange: pay.typeEchange_id,
               montant: pay.montant,
               bordereau: pay.bordereau  || 'pas de bordereau',
             }
@@ -332,7 +337,9 @@ export class BuyComponent implements OnInit{
         }
       });
       console.log('data a envoyer', data);
-    }else if(this.selectedSource == 1){
+    }
+    // si source distributeur
+    else if(this.selectedSource == 1){
       console.log('approvisionnement dans form',this.aprovisionForm.value);
       const data = {
         distributeur: this.selectedDistrId,
@@ -361,7 +368,7 @@ export class BuyComponent implements OnInit{
           for(let pay of this.listTypeEchange.value){
             const dataPay = {
               achat: data.id,
-              typeEchange: pay.id,
+              caisse: pay.caisse_id,
               montant: pay.montant,
               bordereau: pay.bordereau  || 'pas de bordereau',
             }
@@ -386,5 +393,10 @@ export class BuyComponent implements OnInit{
       });
       console.log('data a envoyer', data);
     }
+  }
+
+  // fonction d'affichage
+  payementShow(){
+    this.showPayement = true
   }
 }
