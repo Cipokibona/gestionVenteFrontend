@@ -35,6 +35,10 @@
                             {{getTotalTypeEchange(vente.typeEchange_list) | number: '1.0-0'}} BIF
                         </strong>
                     </div>
+                    @if (renderSend(vente.id)) {
+                    <span class="text-warning">
+                        Wait reception...
+                    </span> }@else {
                     <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#transaction' + $index">
                         Transaction
                     </button> @if (loadingRendre) {
@@ -47,7 +51,7 @@
                     <span class="text-danger">{{errorRendre}}</span>
                     <button class="btn button secondary rounded-pill m-1 p-1" (click)="rendre(vente.id)">
                         Rendre
-                    </button>}
+                    </button>}}
                 </div>
             </div>
         </div>
@@ -117,6 +121,10 @@
                     </span>
                 </p>
             </div>
+            @if (renderRecouvrementSend(recouvrement.id)) {
+            <span class="text-warning m-2">
+                Wait reception...
+            </span> }@else {
             <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#transactionRecouvrement' + $index">
                 Transaction
             </button> @if (loadingRendre) {
@@ -129,7 +137,7 @@
             <span class="text-danger">{{errorRendre}}</span>
             <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
                 Rendre
-            </button>}
+            </button>}}
         </div>
         <!-- modal de transaction -->
         <div class="modal fade" [attr.id]="'transactionRecouvrement' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -276,6 +276,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listProductBasketUrl}`, data, {headers});
   }
 
+  updateProductBasket(id: any, data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.listProductBasketUrl}${id}/`, data, {headers});
+  }
+
   updateBasket(id: any, data: any){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);

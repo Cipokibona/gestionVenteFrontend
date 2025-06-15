@@ -240,6 +240,24 @@ export class SellComponent implements OnInit{
           }
           const request = this.apiService.createListProductVente(dataProduct);
           requests.push(request);
+          // update de basket
+          const productBasket = this.selectedProductData;
+          console.log('product du basket',productBasket);
+          const newQuantity = productBasket.quantity - product.quantity;
+          let dataProductBasket!: any;
+          //desactiver le produit basket si la qte est 0
+          if(newQuantity == 0){
+            dataProductBasket = {
+              quantity: newQuantity,
+              is_active: false
+            };
+          }else{
+            dataProductBasket = {
+              quantity: newQuantity,
+            }
+          };
+          const requestUpdateProductBasket = this.apiService.updateProductBasket(productBasket.id,dataProductBasket);
+          requests.push(requestUpdateProductBasket);
         };
 
         for(let pay of this.listTypeEchange.value){

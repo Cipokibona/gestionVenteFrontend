@@ -20,6 +20,8 @@ export class AgentCommercialComponent implements OnInit{
   venteUser!: any;
   recouvrementUser!: any;
 
+  allRender!: any;
+
   // loading et error
   loading!: boolean;
   error!: string | null ;
@@ -53,6 +55,7 @@ export class AgentCommercialComponent implements OnInit{
     this.getTypeEchange();
     this.getBasketAgent();
     this.getVenteAgent();
+    this.getAllRender();
     this.getAllRecouvrement();
   }
 
@@ -203,6 +206,42 @@ export class AgentCommercialComponent implements OnInit{
     return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
   }
 
+  // verification du bouton rendre
+  getAllRender(){
+    this.apiService.getAllRender().subscribe({
+      next: (data:any) => {
+        this.allRender = data.results;
+        console.log('all render',this.allRender)
+      },
+      error: (err) => {
+        console.error('erreur de recuperation', err)
+      }
+    })
+  }
+
+  renderSend(id: number){
+    const render = this.allRender.filter((item:any) => item.vente == id);
+    const lastRender = render[render.length - 1];
+    console.log('render avec id', id, lastRender);
+    if(!lastRender || (!lastRender.is_receiver && lastRender.receiver)){
+      return false
+    }else{
+      return true
+    }
+  }
+
+  renderRecouvrementSend(id: number){
+    const render = this.allRender.filter((item:any) => item.recouvrement == id);
+    const lastRender = render[render.length - 1];
+    console.log('render avec id', id, lastRender);
+    if(!lastRender || (!lastRender.is_receiver && lastRender.receiver)){
+      return false
+    }else{
+      return true
+    }
+  }
+
+
   rendre(id: number){
     this.loadingRendre = true;
     const vente = this.venteUser.find((item:any) => item.id === id);
@@ -229,6 +268,7 @@ export class AgentCommercialComponent implements OnInit{
             forkJoin(requests).subscribe({
                       next: (resp:any) => {
                         this.loadingRendre = false;
+                        this.getAllRender();
                         // this.router.navigate(['/home']);
                         console.log('creation reussi', resp);
                       },
@@ -268,6 +308,7 @@ export class AgentCommercialComponent implements OnInit{
         this.apiService.createTypeEchangeRenduPos(dataType).subscribe({
           next: (resp:any) => {
             this.loadingRendre = false;
+            this.getAllRender();
             console.log('creation reussi', resp);
           },
           error: (err) => {
