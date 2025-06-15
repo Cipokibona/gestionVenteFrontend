@@ -297,6 +297,7 @@ export class BuyComponent implements OnInit{
         next: (data:any) => {
           console.log('approvisionnement enregistrer', data);
           const requests = [];
+          // update product en backend
           for(let product of this.listProduct.value){
             const dataProduct = {
               approvisionnement: data.id,
@@ -305,7 +306,7 @@ export class BuyComponent implements OnInit{
               prixAchat: product.prixAchat,
               prixVente: product.prixVente,
               date_expiration: product.date_expiration,
-            }
+            };
             const request = this.apiService.createListProductProvisionPos(dataProduct);
             requests.push(request);
           };

@@ -21,6 +21,8 @@ export class CreateBasketComponent implements OnInit{
   posRespoData!: any;
   allPos!: any;
 
+  allProductPos!: any;
+
   selectedPosId!: any;
   selectedPosData!: any;
   
@@ -70,6 +72,7 @@ export class CreateBasketComponent implements OnInit{
         // this.posRespoData = this.allPos.list_respo.find((item:any) => item.respo === this.userData.id);
         console.log('pos du userId', this.posRespoData);
         this.selectedPosData = this.posRespoData;
+        this.getAllProductPos();
       },
       error: (err) => {
         console.error('erreur de recuperation de pos', err);
@@ -102,6 +105,20 @@ export class CreateBasketComponent implements OnInit{
     })
   }
 
+  getAllProductPos(){
+    this.apiService.getAllProductPos().subscribe({
+      next: (data:any) => {
+        const allProductPos = data.results;
+        console.log('all product pos', allProductPos);
+        this.allProductPos = allProductPos.filter((item:any) => item.pos == this.selectedPosData.id);
+        console.log('product for this pos', this.allProductPos);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de product pos',err);
+      }
+    })
+  }
+
   selectPos(event: Event){
     this.selectedPosId = Number((event.target as HTMLSelectElement).value);
     this.selectedPosData = this.allPos.find((item:any) => item.id === this.selectedPosId);
@@ -110,7 +127,7 @@ export class CreateBasketComponent implements OnInit{
 
   selectProduct(event: Event){
     this.selectedProductId = Number((event.target as HTMLSelectElement).value);
-    this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.id === this.selectedProductId);
+    this.selectedProductData = this.selectedPosData.list_product.find((item:any) => item.product === this.selectedProductId);
     
     console.log('selected product data', this.selectedProductData);
     
@@ -174,9 +191,20 @@ export class CreateBasketComponent implements OnInit{
             quantity: product.quantity,
             pricePerUnitOfficiel: product.pricePerUnitOfficiel,
             date_expiration: product.date_expiration
-          }
+          };
           const request = this.apiService.createListBasket(dataProduct);
           requests.push(request);
+          // update product dans pos
+          const productPos = this.allProductPos.find(
+            (item:any) => item.product == product.id && item.prixVente == product.pricePerUnitOfficiel && item.date_expiration == product.date_expiration
+          );
+          console.log('produit a modifier', product);
+          const newQuantity = productPos.quantity - product.quantity;
+          const newDataProduct = {
+            quantity: newQuantity,
+          }
+          const requestUpdate = this.apiService.updateProductPos(productPos.id,newDataProduct);
+          requests.push(requestUpdate);
         };
 
         forkJoin(requests).subscribe({

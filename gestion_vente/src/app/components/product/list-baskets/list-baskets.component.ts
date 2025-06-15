@@ -18,6 +18,8 @@ export class ListBasketsComponent implements OnInit{
 
   userData!: any;
 
+  allProductPos!: any;
+
   loadingPage!: boolean;
   error!: string | null;
 
@@ -36,6 +38,7 @@ export class ListBasketsComponent implements OnInit{
     this.getUserData();
     this.getBaskets();
     this.getAllVente();
+    this.getAllProductPos();
     this.getCreditVenteClient();
   }
 
@@ -83,6 +86,20 @@ export class ListBasketsComponent implements OnInit{
     })
   }
 
+  getAllProductPos(){
+    this.apiService.getAllProductPos().subscribe({
+      next: (data:any) => {
+        const allProductPos = data.results;
+        console.log('all product pos', allProductPos);
+        this.allProductPos = allProductPos;
+        console.log('product for this pos', this.allProductPos);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de product pos',err);
+      }
+    })
+  }
+
   getCreditVenteClient(){
     this.venteCreditClient = this.allVentes.filter((item:any) => item.reste > 0);
     console.log('vente avec credit', this.venteCreditClient);
@@ -107,7 +124,7 @@ export class ListBasketsComponent implements OnInit{
   }
 
   rendre(id:number){
-    const basket = this.paniers.find((item:any) => item.id > id);
+    const basket = this.paniers.find((item:any) => item.id == id);
     const dataRendu = {
       agent: basket.agent,
       pos: basket.depot,
@@ -127,6 +144,17 @@ export class ListBasketsComponent implements OnInit{
           }
           const request = this.apiService.createProduitRenduPos(dataProduct);
           requests.push(request);
+          // update de produit dans receptions
+          // const productPos = this.allProductPos.find(
+          //   (item:any) => item.pos == basket.depot && item.product == product.product && item.prixVente == product.pricePerUnitOfficiel && item.date_expiration == product.date_expiration
+          // );
+          // console.log('productPos a modifier', productPos);
+          // const newQuantity = productPos.quantity + product.quantity;
+          // const newDataProduct = {
+          //   quantity: newQuantity,
+          // }
+          // const requestUpdate = this.apiService.updateProductPos(productPos.id,newDataProduct);
+          // requests.push(requestUpdate);
         };
 
         forkJoin(requests).subscribe({

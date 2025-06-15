@@ -51,6 +51,9 @@ export class ApiServiceService {
   private listProductVenteUrl = `${this.url}list_product_vente/`;
   private listProductAchatUrl = `${this.url}list_product_achat_pos/`;
   private listProductBasketUrl = `${this.url}listProductBasket/`;
+
+  // list produits point de vente
+  private productPointVenteUrl = `${this.url}product_point_de_vente/`;
   
   // list pay vente, achat, approvisionnement
   private listPayVenteUrl = `${this.url}list_pay_vente/`;
@@ -273,6 +276,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.listProductBasketUrl}`, data, {headers});
   }
 
+  updateBasket(id: any, data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.basketAgentUrl}${id}/`, data, {headers});
+  }
+
   // fonction sur client
   getAllCustomers(){
     return this.http.get(`${this.customerUrl}`);
@@ -381,6 +390,16 @@ export class ApiServiceService {
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
     return this.http.post<any>(`${this.listProductAchatUrl}`, data, {headers});
+  }
+
+  getAllProductPos(){
+    return this.http.get(`${this.productPointVenteUrl}`);
+  }
+
+  updateProductPos(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.productPointVenteUrl}${id}/`, data, {headers});
   }
 
   // fonction sur poste

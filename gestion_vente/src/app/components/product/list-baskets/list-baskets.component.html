@@ -44,39 +44,3 @@
         </div> }}
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="createClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create client</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="needs-validation" [formGroup]="clientForm" (ngSubmit)="createClient()" novalidate>
-                    <div class="ms-auto me-auto mb-2">
-                        <label for="fullName" class="visually-hidden">Name</label>
-                        <input type="text" class="form-control" formControlName="fullName" name="fullName" id="fullName" placeholder="Full name" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="adress" class="visually-hidden">Adress</label>
-                        <input type="text" class="form-control" formControlName="adress" name="adress" id="adress" placeholder="Adress" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 ">
-                        <label for="tel" class="visually-hidden ">Tel</label>
-                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
-                    </div>
-                    <div class="ms-auto me-auto mb-2 mt-3 ">
-                        <button type="submit " class="button principal p-1 m-1 ">
-                            <span class="ms-5 me-5 ">Create</span>
-                        </button>
-                        <a class="button secondary p-1 m-1 ">
-                            <span class="ms-5 me-5 ">Back</span>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- old html -->
