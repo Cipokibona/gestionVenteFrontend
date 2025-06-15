@@ -31,9 +31,13 @@
                         <span class="text-secondary">{{product.quantity}} box</span><br> }
                     </div>
                     <div>
-                        <button class="button secondary rounded-pill m-1 p-1" (click)="rendre(panier.id)">
+                        @if (renderSend(panier.id)) {
+                        <div class="text-warning m-2">
+                            Waiting confirmation...
+                        </div> }@else {
+                        <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendre(panier.id)">
                             Rendre
-                        </button>
+                        </button>}
                         <!-- <a routerLink="vente/{{panier.id}}" class="button secondary rounded-pill m-1 p-1">
                             + add
                         </a> -->

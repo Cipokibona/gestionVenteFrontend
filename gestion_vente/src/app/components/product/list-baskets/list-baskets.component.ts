@@ -20,6 +20,8 @@ export class ListBasketsComponent implements OnInit{
 
   allProductPos!: any;
 
+  allRender!: any;
+
   loadingPage!: boolean;
   error!: string | null;
 
@@ -38,6 +40,7 @@ export class ListBasketsComponent implements OnInit{
     this.getUserData();
     this.getBaskets();
     this.getAllVente();
+    this.getAllRender();
     this.getAllProductPos();
     this.getCreditVenteClient();
   }
@@ -50,6 +53,18 @@ export class ListBasketsComponent implements OnInit{
       },
       error: (err) => {
         console.error('erreur de recuperation de dataUser',err);
+      }
+    })
+  }
+
+  getAllRender(){
+    this.apiService.getAllRender().subscribe({
+      next: (data:any) => {
+        this.allRender = data.results;
+        console.log('all render',this.allRender)
+      },
+      error: (err) => {
+        console.error('erreur de recuperation', err)
       }
     })
   }
@@ -123,6 +138,18 @@ export class ListBasketsComponent implements OnInit{
     })
   }
 
+  // verification du bouton rendre
+  renderSend(id: number){
+    const render = this.allRender.filter((item:any) => item.panier == id);
+    const lastRender = render[render.length - 1];
+    console.log('render avec id', id, lastRender);
+    if(!lastRender || (!lastRender.is_receiver && lastRender.receiver)){
+      return false
+    }else{
+      return true
+    }
+  }
+
   rendre(id:number){
     const basket = this.paniers.find((item:any) => item.id == id);
     const dataRendu = {
@@ -161,6 +188,7 @@ export class ListBasketsComponent implements OnInit{
                   next: (resp:any) => {
                     // this.router.navigate(['/home']);
                     console.log('creation reussi', resp);
+                    this.getAllRender();
                   },
                   error: (err) => {
                     this.apiService.deleteRenderAgentPos(dataRendu.id);
