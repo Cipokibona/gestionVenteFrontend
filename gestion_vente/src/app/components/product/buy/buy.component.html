@@ -6,7 +6,7 @@
                 <label for="nameClient" class="visually-hidden">Full name</label>
                 <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataPos.fullName}}" disabled>
             </div>
-            @if (!showPayement) {
+            @if (showPayement) {
             <h6>Source d'approvisionnement</h6>
             <!-- button radio -->
             <div class="form-check">
@@ -57,9 +57,9 @@
                         <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
                             + panier
                         </button>
-                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                        <!-- <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
                             end
-                        </button>
+                        </button> -->
                         <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
                             Delete
                         </button> -->
@@ -111,9 +111,9 @@
                         <button type="button" class="btn button secondary rounded-pill m-1 p-1" (click)="addProductByForm()">
                             + panier
                         </button>
-                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                        <!-- <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
                             end
-                        </button>
+                        </button> -->
                         <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
                             Delete
                         </button> -->

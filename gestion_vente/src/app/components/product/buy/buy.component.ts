@@ -49,7 +49,7 @@ export class BuyComponent implements OnInit{
   resteImpaye: number = 0;
 
   // affichage div
-  showPayement: boolean = false;
+  showPayement: boolean = true;
 
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.aprovisionForm = this.fb.group({
@@ -292,7 +292,7 @@ export class BuyComponent implements OnInit{
         montant: this.totalPaye,
         reste: this.resteImpaye,
         date_recouvrement: this.aprovisionForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
-      }
+      };
       this.apiService.createProvisionPos(data).subscribe({
         next: (data:any) => {
           console.log('approvisionnement enregistrer', data);
@@ -316,9 +316,24 @@ export class BuyComponent implements OnInit{
               typeEchange: pay.typeEchange_id,
               montant: pay.montant,
               bordereau: pay.bordereau  || 'pas de bordereau',
-            }
+            };
             const request = this.apiService.createListPayApprovisionnementPos(dataPay);
             requests.push(request);
+            // update de caisse
+            const caisseCible = this.caisseData.find((item:any) => item.id == pay.caisse_id);
+            const caisseSource = this.caisseData.find((item:any) => item.typeEchange == pay.typeEchange_id && item.pos == this.selectedPosData.id);
+            const newMontantCaisseSource = caisseSource.montant + pay.montant;
+            const newMontantCaisseCible = caisseCible.montant - pay.montant;
+            const newDataCaisseSource = {
+              montant: newMontantCaisseSource
+            };
+            const newDataCaisseCible = {
+              montant: newMontantCaisseCible
+            };
+            const requestCaisseSource = this.apiService.updateCaisse(caisseSource.id,newDataCaisseSource);
+            const requestCaisseCible = this.apiService.updateCaisse(caisseCible.id,newDataCaisseCible);
+            requests.push(requestCaisseSource);
+            requests.push(requestCaisseCible);
           };
 
           forkJoin(requests).subscribe({
@@ -328,7 +343,7 @@ export class BuyComponent implements OnInit{
             },
             error: (err) => {
               this.apiService.deleteProvisionPos(data.id);
-              console.error('erreur de creation et suppression de vente', err);
+              console.error('erreur de creation et suppression de achat', err);
             }
           });
         },
@@ -371,9 +386,17 @@ export class BuyComponent implements OnInit{
               caisse: pay.caisse_id,
               montant: pay.montant,
               bordereau: pay.bordereau  || 'pas de bordereau',
-            }
+            };
             const request = this.apiService.createListPayAchatPos(dataPay);
             requests.push(request);
+            // update caisse
+            const caisse = this.caisseData.find((item:any) => item.id == pay.caisse_id);
+            const newMontantCaisse = caisse.montant - pay.montant;
+            const newDataCaisse = {
+              montant: newMontantCaisse,
+            };
+            const requestCaisse = this.apiService.updateCaisse(caisse.id,newDataCaisse);
+            requests.push(requestCaisse);
           };
 
           forkJoin(requests).subscribe({
