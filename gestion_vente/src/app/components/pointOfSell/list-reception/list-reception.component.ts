@@ -17,6 +17,7 @@ export class ListReceptionComponent implements OnInit{
   recouvrementData!: any;
   allRender!: any;
   allProduitPos!: any;
+  allCaisse!: any;
 
   
   constructor(private apiService: ApiServiceService, private router: Router){ 
@@ -29,6 +30,7 @@ export class ListReceptionComponent implements OnInit{
     this.getUserData();
     this.getTypeEchange();
     this.getAllRender();
+    this.getAllCaissePos();
     this.getAllProductPos();
   }
 
@@ -65,6 +67,20 @@ export class ListReceptionComponent implements OnInit{
     })
   }
 
+  // recuperation des caisses
+  getAllCaissePos(){
+    this.apiService.getAllCaisse().subscribe({
+      next: (resp: any) => {
+        const data = resp.results;
+        this.allCaisse = data;
+        console.log('all caisse du pos', this.allCaisse);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation caisse de pos', err);
+      }
+    })
+  }
+
   getAllRender(){
     this.apiService.getAllRender().subscribe({
       next: (resp: any) => {
@@ -79,17 +95,22 @@ export class ListReceptionComponent implements OnInit{
   }
 
   received(id: number){
+    // data de update de rendu
     const dataRendu = {
       receiver: this.userData.id,
       is_received: true,
     };
+    // table des requests
     const requests = [];
+    // requete de received
     const requestReceived = this.apiService.updateRenderAgentPos(id, dataRendu);
     requests.push(requestReceived);
+    // find de render par id parmis tous les render
     const render = this.allRender.find((item:any) => item.id == id);
+    // trouver les produits a partir du pos
     const listProductForThisPos = this.allProduitPos.filter((item:any) => item.pos == render.pos);
     // si c'est les produits rendu au pos par l'agent
-    if(render.product_list){
+    if(render.product_list.length > 0){
       for (let product of render.product_list){
         const dataProductPos = listProductForThisPos.find(
           (item:any) => 
@@ -124,16 +145,32 @@ export class ListReceptionComponent implements OnInit{
           }
         });
       }
-    }else if(render.type_list){}
-    // this.apiService.updateRenderAgentPos(id, dataRendu).subscribe({
-    //   next: (resp:any) => {
-    //     console.log('update render', resp);
-    //     this.getAllRender();
-    //   },
-    //   error: (err) => {
-    //     console.error('erreur de update',err);
-    //   }
-    // });
+    }else if(render.type_list.length > 0){
+      for (let type of render.type_list){
+        // recuperation du caisse du pos et son type
+        const dataCaisse = this.allCaisse.find(
+          (item:any) =>
+            item.typeEchange == type.typeEchange && item.pos == render.pos
+        );
+        // new data a enregistrer
+        const newDataCaisse = {
+          montant: dataCaisse.montant + type.montant,
+        };
+        // requete de update caisse
+        const requestUpdateCaisse = this.apiService.updateCaisse(dataCaisse.id,newDataCaisse);
+        requests.push(requestUpdateCaisse);
+
+        forkJoin(requests).subscribe({
+          next: (resp:any) => {
+            console.log('update de render et produit reussi', resp);
+            this.getAllRender();
+          },
+          error: (err) => {
+            console.error('erreur de update',err);
+          }
+        });
+      }
+    }
   }
 
   noReceived(id: number){
