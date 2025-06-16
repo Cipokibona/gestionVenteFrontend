@@ -179,7 +179,6 @@ export class ListReceptionComponent implements OnInit{
           const requestBordereau = this.apiService.createBordereauCaisse(dataBordereau);
           requests.push(requestBordereau);
         }
-        // desactiver le wallet de agent
 
         forkJoin(requests).subscribe({
           next: (resp:any) => {

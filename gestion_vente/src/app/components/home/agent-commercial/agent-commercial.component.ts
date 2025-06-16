@@ -206,7 +206,7 @@ export class AgentCommercialComponent implements OnInit{
     return data.reduce((sum: number, article: { montant: number }) => sum + article.montant, 0);
   }
 
-  // verification du bouton rendre
+  // verification de rendre
   getAllRender(){
     this.apiService.getAllRender().subscribe({
       next: (data:any) => {
@@ -222,7 +222,6 @@ export class AgentCommercialComponent implements OnInit{
   renderSend(id: number){
     const render = this.allRender.filter((item:any) => item.vente == id);
     const lastRender = render[render.length - 1];
-    console.log('render avec id', id, lastRender);
     if(!lastRender || (!lastRender.is_receiver && lastRender.receiver)){
       return false
     }else{
@@ -230,10 +229,30 @@ export class AgentCommercialComponent implements OnInit{
     }
   }
 
+  isReceived(id: number){
+    const render = this.allRender.filter((item:any) => item.vente == id);
+    const lastRender = render[render.length - 1];
+    if(lastRender && lastRender.is_received){
+      return true
+    }else{
+      return false
+    }
+  }
+
+  isRecouvrementReceived(id: number){
+    const render = this.allRender.filter((item:any) => item.recouvrement == id);
+    const lastRender = render[render.length - 1];
+    console.log('last recouvrement',lastRender);
+    if(lastRender && lastRender.is_received){
+      return true
+    }else{
+      return false
+    }
+  }
+
   renderRecouvrementSend(id: number){
     const render = this.allRender.filter((item:any) => item.recouvrement == id);
     const lastRender = render[render.length - 1];
-    console.log('render avec id', id, lastRender);
     if(!lastRender || (!lastRender.is_receiver && lastRender.receiver)){
       return false
     }else{

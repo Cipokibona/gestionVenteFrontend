@@ -9,7 +9,7 @@
         </div>
         }@else {@if(error) {
         <h1>{{error}}</h1>
-        }@for (vente of venteUser; track $index) {
+        }@for (vente of venteUser; track $index) { @if (!isReceived(vente.id)) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{vente.pos_name}}</h5>
             <h6 class="text-secondary ms-3">Vente</h6>
@@ -54,7 +54,7 @@
                     </button>}}
                 </div>
             </div>
-        </div>
+        </div>}
         <!-- modal de transaction -->
         <div class="modal fade" [attr.id]="'transaction' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -105,7 +105,7 @@
                     </form>
                 </div>
             </div>
-        </div>} @for (recouvrement of recouvrementUser; track $index) {
+        </div>} @for (recouvrement of recouvrementUser; track $index) { @if (!isRecouvrementReceived(recouvrement.id)) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{recouvrement.depot_name}}</h5>
             <h6 class="text-secondary ms-3">Recouvrement</h6>
@@ -138,7 +138,7 @@
             <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
                 Rendre
             </button>}}
-        </div>
+        </div>}
         <!-- modal de transaction -->
         <div class="modal fade" [attr.id]="'transactionRecouvrement' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
