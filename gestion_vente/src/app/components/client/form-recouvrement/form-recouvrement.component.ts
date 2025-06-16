@@ -142,6 +142,12 @@ export class FormRecouvrementComponent implements OnInit{
         }
       const request = this.apiService.createRecouvrement(dataPay);
       requests.push(request);
+      // update de vente
+      const newDataVente = {
+        reste: this.dataVente.reste - pay.montant,
+      };
+      const requestUpdateVente = this.apiService.updateVente(this.idVente,newDataVente);
+      requests.push(requestUpdateVente);
     };
     forkJoin(requests).subscribe({
           next: (resp:any) => {

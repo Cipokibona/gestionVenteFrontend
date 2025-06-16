@@ -53,6 +53,16 @@ export class ListReceptionComponent implements OnInit{
     })
   }
 
+  // verification du bordereau pour le type echange
+  needBordereau(id:any){
+    const type = this.typeEchange.find((item:any) => item.id == id);
+    if(type.is_bordereau){
+      return true
+    }else{
+      return false
+    }
+  }
+
   // product pos
   getAllProductPos(){
     this.apiService.getAllProductPos().subscribe({
@@ -159,6 +169,17 @@ export class ListReceptionComponent implements OnInit{
         // requete de update caisse
         const requestUpdateCaisse = this.apiService.updateCaisse(dataCaisse.id,newDataCaisse);
         requests.push(requestUpdateCaisse);
+        // enregister les bordereau
+        const haveBordereau = this.needBordereau(type.typeEchange);
+        if(haveBordereau){
+          const dataBordereau = {
+            caisse: dataCaisse.id,
+            name: type.bordereau
+          };
+          const requestBordereau = this.apiService.createBordereauCaisse(dataBordereau);
+          requests.push(requestBordereau);
+        }
+        // desactiver le wallet de agent
 
         forkJoin(requests).subscribe({
           next: (resp:any) => {

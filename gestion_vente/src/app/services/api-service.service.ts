@@ -319,6 +319,12 @@ export class ApiServiceService {
     return this.http.post<any>(`${this.ventesUrl}`, data, {headers});
   }
 
+  updateVente(id: any, data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.ventesUrl}${id}/`, data, {headers});
+  }
+
   deleteVente(id:number){
     const token = this.getTokenLocal();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
