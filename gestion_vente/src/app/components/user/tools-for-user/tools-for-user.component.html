@@ -64,7 +64,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn button secondary">Save</button>
+                            <button type="submit" class="btn button secondary" [disabled]="!editToolForm.valid">
+                                Save
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -109,7 +111,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn button secondary">Effectuer</button>
+                            <button type="submit" class="btn button secondary" [disabled]="!depenseToolForm.valid">
+                                Effectuer
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -127,7 +131,7 @@
                 <h1 class="modal-title fs-5 " id="newPosteTitle ">New tool</h1>
                 <button type="button" class="btn-close " data-bs-dismiss="modal " aria-label="Close "></button>
             </div>
-            <form class="needs-validation " [formGroup]="newToolForm " (ngSubmit)="createTool() ">
+            <form class="needs-validation " [formGroup]="newToolForm" (ngSubmit)="createTool() ">
                 <div class="modal-body ">
                     <div class="ms-auto me-auto mb-2 ">
                         <label for="nameTool" class="visually-hidden">Tool</label>
@@ -148,7 +152,9 @@
                 </div>
                 <div class="modal-footer ">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn button secondary">Save</button>
+                    <button type="submit" class="btn button secondary" [disabled]="!newToolForm.valid">
+                        Save
+                    </button>
                 </div>
             </form>
         </div>

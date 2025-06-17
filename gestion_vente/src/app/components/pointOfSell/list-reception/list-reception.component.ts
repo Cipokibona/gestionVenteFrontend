@@ -174,7 +174,8 @@ export class ListReceptionComponent implements OnInit{
         if(haveBordereau){
           const dataBordereau = {
             caisse: dataCaisse.id,
-            name: type.bordereau
+            name: type.bordereau,
+            montant: type.montant
           };
           const requestBordereau = this.apiService.createBordereauCaisse(dataBordereau);
           requests.push(requestBordereau);

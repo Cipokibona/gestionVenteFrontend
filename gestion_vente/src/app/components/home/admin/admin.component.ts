@@ -64,7 +64,7 @@ export class AdminComponent implements OnInit{
       },error: () => {
         this.loading = false;
         this.error = 'Retry';
-        this.apiService.logout();
+        // this.apiService.logout();
       }
     });
   }

@@ -72,7 +72,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn button secondary">Save</button>
+                            <button type="submit" class="btn button secondary" [disabled]="!editTypeForm.valid">
+                                Save
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -119,7 +121,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn button secondary">Save</button>
+                    <button type="submit" class="btn button secondary" [disabled]="!newTypeForm.valid">
+                        Save
+                    </button>
                 </div>
             </form>
         </div>
