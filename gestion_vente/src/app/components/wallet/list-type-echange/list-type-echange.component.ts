@@ -21,17 +21,17 @@ export class ListTypeEchangeComponent implements OnInit{
   newTypeForm = new FormGroup({
     nameType: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    is_bordereau: new FormControl('', Validators.required),
-    is_devise: new FormControl('', Validators.required),
-    tauxEchange: new FormControl('', Validators.required),
+    is_bordereau: new FormControl(''),
+    is_devise: new FormControl(''),
+    tauxEchange: new FormControl(''),
   });
 
   editTypeForm = new FormGroup({
     nameType: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    is_bordereau: new FormControl('', Validators.required),
-    is_devise: new FormControl('', Validators.required),
-    tauxEchange: new FormControl('', Validators.required),
+    is_bordereau: new FormControl(''),
+    is_devise: new FormControl(''),
+    tauxEchange: new FormControl(''),
   });
 
   constructor(private apiService: ApiServiceService, private router: Router){}
@@ -99,7 +99,8 @@ export class ListTypeEchangeComponent implements OnInit{
               this.apiService.deleteTypeEchange(data.id);
             }
           })
-        }
+        };
+        location.reload();
       },
       error: (err) => {
         console.error('erreur de creation de type',err)

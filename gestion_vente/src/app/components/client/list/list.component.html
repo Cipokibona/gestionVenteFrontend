@@ -12,9 +12,9 @@
             </button>
         </div>
     </div>
-    <h5>Liste des clients</h5>
     <div class="row text-start gap-1">
-        @if (loadingPage) {loading...}@else {@if (customers) {
+        @if (loadingPage) {loading...}@else {@if (customers && customers.length > 0) {
+        <h5>Liste des clients</h5>
         <div class="accordion" id="accordionUsers">
             @for (client of customers; track $index) {
             <div class="accordion-item">
@@ -51,7 +51,17 @@
                 </div>
             </div>
             }
-        </div> }}
+        </div> }@else {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Ajoutez des clients sur +add !!!
+                </p>
+            </div>
+        </div>
+        }}
     </div>
 </div>
 <!-- Modal -->
@@ -77,12 +87,9 @@
                         <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
-                        <button type="submit" class="button principal p-1 m-1 " [disabled]="!clientForm.valid">
+                        <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!clientForm.valid">
                             <span class="ms-5 me-5 ">Create</span>
                         </button>
-                        <a class="button secondary p-1 m-1 ">
-                            <span class="ms-5 me-5 ">Back</span>
-                        </a>
                     </div>
                 </form>
             </div>

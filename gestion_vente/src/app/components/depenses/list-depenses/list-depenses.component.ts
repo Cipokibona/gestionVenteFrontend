@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-list-depenses',
@@ -18,8 +19,13 @@ export class ListDepensesComponent implements OnInit{
   selectedPosId!: number;
   selectedPosData!: any;
 
+  allCaisse!: any;
+
   loadingPage!: boolean;
   error!: string | null;
+
+  loadingSaving!: boolean;
+  errorSaving!: string | null;
 
   newDepenseForm = new FormGroup({
     caisse: new FormControl('', Validators.required),
@@ -35,6 +41,7 @@ export class ListDepensesComponent implements OnInit{
     this.getUser();
     this.getAlldepenses();
     this.getAllPos();
+    this.getAllCaisse();
   }
 
   getUser(){
@@ -53,6 +60,17 @@ export class ListDepensesComponent implements OnInit{
     });
   }
 
+  getAllCaisse(){
+    this.apiService.getAllCaisse().subscribe({
+      next: (dataCaisse: any) => {
+        this.allCaisse = dataCaisse.results;
+        console.log('info caisse', this.allCaisse);
+      },
+      error: (err) => {
+        console.error('erreur de caisse', err);
+      }
+    });
+  }
 
   getAlldepenses(){
     this.loadingPage = true;
@@ -88,21 +106,36 @@ export class ListDepensesComponent implements OnInit{
   }
 
   createDepense(){
+    this.loadingSaving = true;
     const data = {
       user: this.userDate.id,
       caisse: this.newDepenseForm.value.caisse,
       description: this.newDepenseForm.value.description,
       montant: this.newDepenseForm.value.montant
     };
-    console.log('data a envoyer',data);
-    this.apiService.createDepense(data).subscribe({
-      next: (dataDepense:any) => {
-        console.log('creation reussi de depenses', dataDepense);
+    // mis a jour du montant caisse
+    const caisseSelected = this.allCaisse.find(
+      (item:any) =>
+        item.id == this.newDepenseForm.value.caisse
+    );
+    const newMontantCaisse = {
+      montant: caisseSelected.montant - Number(this.newDepenseForm.value.montant),
+    };
+    const requests = [];
+    // joindre les requetes
+    const requestDepense = this.apiService.createDepense(data);
+    requests.push(requestDepense);
+    const requestUpdateCaisse = this.apiService.updateCaisse(caisseSelected.id,newMontantCaisse);
+    requests.push(requestUpdateCaisse);
+    
+    forkJoin(requests).subscribe({
+      next: (data:any) => {
+        console.log('creation de depense', data);
+        location.reload();
       },
       error: (err) => {
         console.error('erreur de creation de depense',err)
       }
     });
-    location.reload();
   }
 }

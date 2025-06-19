@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tools-for-user',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './tools-for-user.component.html',
   styleUrl: './tools-for-user.component.scss'
 })
@@ -16,6 +17,9 @@ export class ToolsForUserComponent implements OnInit{
 
   loadingPage!: boolean;
   error!: string | null;
+
+  loadingSaving!: boolean;
+  errorSaving!: string | null;
 
   allPos!: any;
 
@@ -94,6 +98,7 @@ export class ToolsForUserComponent implements OnInit{
   }
 
   createTool(){
+    this.loadingSaving = true;
     const data = {
       name: this.newToolForm.value.nameTool,
       user: this.newToolForm.value.user,
@@ -101,9 +106,12 @@ export class ToolsForUserComponent implements OnInit{
     };
     this.apiService.createTools(data).subscribe({
       next: (data:any) => {
+        this.loadingSaving = false;
         console.log('creation reussi de tool', data);
       },
       error: (err) => {
+        this.loadingSaving = false;
+        this.errorSaving = 'Erreur';
         console.error('erreur de creation de tool',err)
       }
     });
@@ -131,6 +139,7 @@ export class ToolsForUserComponent implements OnInit{
   }
 
   editTool(id: number){
+    this.loadingSaving = true;
     const data = {
       name: this.editToolForm.value.nameOldTool,
       user: this.editToolForm.value.user,
@@ -139,9 +148,12 @@ export class ToolsForUserComponent implements OnInit{
     console.log('data edit',data);
     this.apiService.editTools(id,data).subscribe({
       next: (data:any) => {
+        this.loadingSaving = false;
         console.log('edit reussis', data)
       },
       error: (err) => {
+        this.loadingSaving = false;
+        this.errorSaving = 'Erreur';
         console.error('erreur de edit', err)
       }
     });
@@ -149,6 +161,7 @@ export class ToolsForUserComponent implements OnInit{
   }
 
   depenseTool(id: number){
+    this.loadingSaving = true;
     const data = {
       user: this.userDate.id,
       caisse: this.depenseToolForm.value.caisse,
@@ -160,9 +173,12 @@ export class ToolsForUserComponent implements OnInit{
     console.log('data depense',data);
     this.apiService.createDepense(data).subscribe({
       next: (data:any) => {
+        this.loadingSaving = false;
         console.log('depense reussis', data)
       },
       error: (err) => {
+        this.loadingSaving = false;
+        this.errorSaving = 'Erreur';
         console.error('erreur de depense', err)
       }
     });

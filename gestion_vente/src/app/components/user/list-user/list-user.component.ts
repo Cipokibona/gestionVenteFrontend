@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-list-user',
@@ -24,8 +25,13 @@ export class ListUserComponent implements OnInit{
   loadingPage!: boolean;
   error!: string | null;
 
+  loadingCreation!: boolean;
+  errorCreation!: string | null;
+
   allPos!: any;
   selectedPosData!: any;
+
+  allCaisse!: any;
 
   userForm = new FormGroup({
     first_name: new FormControl('', Validators.required),
@@ -55,6 +61,7 @@ export class ListUserComponent implements OnInit{
     this.getVenteUser();
     this.getAllPoste();
     this.getAllPos();
+    this.getAllCaisse();
     this.getDepenseSalaire();
   }
 
@@ -86,6 +93,18 @@ export class ListUserComponent implements OnInit{
         this.loadingPage = false;
         this.error = 'Erreur pendant le telechargement des users';
         console.error('erreur de allusers', err);
+      }
+    });
+  }
+
+  getAllCaisse(){
+    this.apiService.getAllCaisse().subscribe({
+      next: (dataCaisse: any) => {
+        this.allCaisse = dataCaisse.results;
+        console.log('info caisse', this.allCaisse);
+      },
+      error: (err) => {
+        console.error('erreur de caisse', err);
       }
     });
   }
@@ -186,6 +205,7 @@ export class ListUserComponent implements OnInit{
   }
 
   createUser(){
+    this.loadingCreation = true;
     let admin = false;
     let respo = false;
     let agent = false;
@@ -221,9 +241,13 @@ export class ListUserComponent implements OnInit{
         }
         this.apiService.createSalar(dataSalar).subscribe({
           next: (dataSalar:any) => {
-            console.log('creation salar', dataSalar)
+            this.loadingCreation = false;
+            console.log('creation salar', dataSalar);
+            location.reload();
           },
           error: (err) => {
+            this.loadingCreation = false;
+            this.errorCreation = 'Erreur pendant l\'operation!!!';
             this.apiService.deleteUser(dataNewUser.id).subscribe({
               error: (err) => {
                 console.error('erreur de delete user', err)
@@ -234,6 +258,8 @@ export class ListUserComponent implements OnInit{
         })
       },
       error: (err) => {
+        this.loadingCreation = false;
+        this.errorCreation = 'Erreur pendant l\'operation!!!';
         console.error('erreur de creation de user',err)
       }
     });
@@ -263,10 +289,25 @@ export class ListUserComponent implements OnInit{
       description: 'Pay mensuel',
       is_salaire: true,
     };
-    console.log('data pour salar', newPay);
-    this.apiService.createDepense(newPay).subscribe({
-      next: (dataDepense:any) => {
-        console.log('creation de depense', dataDepense);
+    // mis a jour du montant du caisse
+    const caisseSelected = this.allCaisse.find(
+      (item:any) =>
+        item.id == this.payForm.value.caisse
+    );
+    const newMontantCaisse = {
+      montant: caisseSelected.montant - Number(this.payForm.value.montant),
+    };
+    const requests = [];
+    // joindre les requetes
+    const requestDepense = this.apiService.createDepense(newPay);
+    requests.push(requestDepense);
+    const requestUpdateCaisse = this.apiService.updateCaisse(caisseSelected.id,newMontantCaisse);
+    requests.push(requestUpdateCaisse);
+
+    forkJoin(requests).subscribe({
+      next: (data:any) => {
+        console.log('creation de depense', data);
+        location.reload();
       },
       error: (err) => {
         console.error('erreur de creation de depense',err)

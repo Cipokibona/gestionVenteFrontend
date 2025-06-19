@@ -51,6 +51,10 @@ export class BuyComponent implements OnInit{
   // affichage div
   showPayement: boolean = true;
 
+  // loading
+  loadingAchat!: boolean;
+  errorAchat!: string | null;
+
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.aprovisionForm = this.fb.group({
       pos: this.fb.control('', Validators.required),
@@ -285,6 +289,7 @@ export class BuyComponent implements OnInit{
   createAchat(){
     // si source est pos
     if(this.selectedSource == 2){
+      this.loadingAchat = true;
       console.log('approvisionnement dans form',this.aprovisionForm.value);
       const data = {
         posDistributeur: this.selectedPosId,
@@ -341,14 +346,19 @@ export class BuyComponent implements OnInit{
             next: (resp:any) => {
               this.router.navigate(['/listPOS']);
               console.log('creation reussi', resp);
+              this.loadingAchat = false;
             },
             error: (err) => {
               this.apiService.deleteProvisionPos(data.id);
               console.error('erreur de creation et suppression de achat', err);
+              this.loadingAchat = false;
+              this.errorAchat = 'Une erreur est survenue pendant l\'achat';
             }
           });
         },
         error: (err) => {
+          this.loadingAchat = false;
+          this.errorAchat = 'Une erreur est survenue pendant l\'achat';
           console.error('erreur de creation de provision pos', err);
         }
       });
@@ -356,6 +366,7 @@ export class BuyComponent implements OnInit{
     }
     // si source distributeur
     else if(this.selectedSource == 1){
+      this.loadingAchat = true;
       console.log('approvisionnement dans form',this.aprovisionForm.value);
       const data = {
         distributeur: this.selectedDistrId,
@@ -404,14 +415,19 @@ export class BuyComponent implements OnInit{
             next: (resp:any) => {
               this.router.navigate(['/listPOS']);
               console.log('creation reussi', resp);
+              this.loadingAchat = false;
             },
             error: (err) => {
               this.apiService.deleteProvisionPos(data.id);
+              this.loadingAchat = false;
+              this.errorAchat = 'Une erreur est survenue pendant l\'achat';
               console.error('erreur de creation et suppression de vente', err);
             }
           });
         },
         error: (err) => {
+          this.loadingAchat = false;
+          this.errorAchat = 'Une erreur est survenue pendant l\'achat';
           console.error('erreur de creation de provision pos', err);
         }
       });

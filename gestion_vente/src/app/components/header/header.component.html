@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top background principal" data-bs-theme="dark">
     <div class="container-fluid">
         <img class="me-3" [ngSrc]="logo" alt="logo" width="40" height="40">
-        <h4>Application</h4>
+        <h4>EasyPOS</h4>
         @if (isAuthenticate) {
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
                         <a routerLink="home" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
                             Home
                         </a>
-                    </li> @if (userData && (userData.is_respo_pos || userData.is_admin)) {
+                    </li> @if (userData && userData.is_admin) {
                     <li class="nav-item">
                         <a routerLink="userList" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
                             Users
@@ -93,8 +93,7 @@
                 Are you sure? confirm your action
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" (click)="logout()">Yes</button>
+                <button type="button" class="btn btn-warning" (click)="logout()">Yes</button>
             </div>
         </div>
     </div>

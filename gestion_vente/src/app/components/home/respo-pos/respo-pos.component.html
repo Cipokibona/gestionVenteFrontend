@@ -36,7 +36,17 @@
         <div class="card-footer text-body-secondary">
             {{posData.date | date: 'longDate' }} last modification
         </div>
-    </div>}}
+    </div>} @else {
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+            <h3 class="text-center">Pas de point de vente pour vous!!!</h3>
+            <p class="text-center">
+                Contacter l'admin
+            </p>
+        </div>
+    </div>
+    }}
 </div>
 
 <!-- modal de transaction -->

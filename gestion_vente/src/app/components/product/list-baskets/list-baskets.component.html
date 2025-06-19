@@ -1,20 +1,14 @@
 <div class="container text-center mb-3">
     <div class="row">
         <div class="col">
-            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Toutes
-            </button>
-            <button type="button" class="button secondary rounded-pill m-1 p-1">
-                Poste 1
-            </button> -->
             <a [routerLink]="['/create_panier']" type="button" class="button secondary rounded-pill m-1 p-1">
                 + Add
             </a>
         </div>
     </div>
-    <h5>Liste des paniers</h5>
     <div class="row text-start gap-1">
-        @if (loadingPage) {loading...}@else {@if (paniers) {
+        @if (loadingPage) {loading...}@else {@if (paniers && paniers.length > 0) {
+        <h5>Liste des paniers</h5>
         <div class="accordion" id="accordionUsers">
             @for (panier of paniers; track $index) {
             <div class="accordion-item">
@@ -45,6 +39,25 @@
                 </div>
             </div>
             }
-        </div> }}
+        </div> }@else{ @if (userData && userData.is_agent_commercial) {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Panier vide</h3>
+                <p class="text-center">
+                    Vous n'avez aucun produit sur vous !!!
+                </p>
+            </div>
+        </div>}@else {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Pas de paniers</h3>
+                <p class="text-center">
+                    Vous n'avez aucun produit distribuer !!!
+                </p>
+            </div>
+        </div>
+        } }}
     </div>
 </div>

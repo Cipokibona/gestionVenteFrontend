@@ -78,6 +78,7 @@ export class AdminComponent implements OnInit{
     const newBordereau = {
       caisse: dataCible.id,
       name: this.transactionForm.value.bordereauTransaction,
+      montant: this.transactionForm.value.montantTransaction,
     }
     if(newMontantSource >= 0){
       this.loadingTransaction = true;
@@ -96,6 +97,7 @@ export class AdminComponent implements OnInit{
           this.loadingTransaction = false;
           this.errorTransaction = null;
           console.log('creation reussi', resp);
+          location.reload();
         },
         error: (err) => {
           this.loadingTransaction = false;

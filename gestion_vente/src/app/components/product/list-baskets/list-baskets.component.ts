@@ -42,7 +42,7 @@ export class ListBasketsComponent implements OnInit{
     this.getAllVente();
     this.getAllRender();
     this.getAllProductPos();
-    this.getCreditVenteClient();
+    // this.getCreditVenteClient();
   }
 
   getUserData(){
@@ -74,12 +74,14 @@ export class ListBasketsComponent implements OnInit{
       next: (dataPanier: any) => {
         const paniers = dataPanier.results;
         // paniers pour admin
-        if(this.userData.is_admin){
-          this.paniers = paniers;
-        }else if(this.userData.is_respo_pos){
-          this.paniers = paniers.filter((item:any) => item.depot_respo.some((i: any) => i.respo === this.userData.id));
-        }else{
-          this.paniers = paniers.filter((item:any) => item.agent == this.userData.id);
+        if(this.userData){
+          if(this.userData.is_admin){
+            this.paniers = paniers;
+          }else if(this.userData.is_respo_pos){
+            this.paniers = paniers.filter((item:any) => item.depot_respo.some((i: any) => i.respo === this.userData.id));
+          }else{
+            this.paniers = paniers.filter((item:any) => item.agent == this.userData.id);
+          }
         }
         console.log('list des paniers', this.paniers);
       },
@@ -115,10 +117,10 @@ export class ListBasketsComponent implements OnInit{
     })
   }
 
-  getCreditVenteClient(){
-    this.venteCreditClient = this.allVentes.filter((item:any) => item.reste > 0);
-    console.log('vente avec credit', this.venteCreditClient);
-  }
+  // getCreditVenteClient(){
+  //   this.venteCreditClient = this.allVentes.filter((item:any) => item.reste > 0);
+  //   console.log('vente avec credit', this.venteCreditClient);
+  // }
 
   createClient(){
     const newClient = {

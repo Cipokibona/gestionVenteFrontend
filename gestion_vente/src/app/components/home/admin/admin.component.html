@@ -1,6 +1,5 @@
 <div class="container">
     <div class="row">
-        <h2 class="text-center">Caisses</h2>
         @if (loading) {
         <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status">
@@ -9,7 +8,9 @@
         </div>
         }@else { @if (error) {
         <h1>{{error}}</h1>
-        } @if (posData) { @for (pos of posData; track $index) {
+        } @if (posData && posData.length > 0) {
+        <h2 class="text-center">Caisses</h2>
+        @for (pos of posData; track $index) {
         <div class="col">
             <div class="card text-center m-1 shadow-lg" style="width: 18rem;">
                 <div class="card-header">
@@ -30,10 +31,12 @@
                         {{caisse.montant | number: '1.0-0' }} BIF
                     </strong>
                         </div>
-                    </div> }
+                    </div> } @if (pos.list_caisse.length>1) {
                     <button class="btn btn-warning mt-4" data-bs-toggle="modal" [attr.data-bs-target]="'#transaction' + $index">
-                Transaction
-            </button>
+                        Transaction
+                    </button>}@else{
+                    <h5>{{pos.list_caisse.length}} caisse</h5>
+                    }
                 </div>
                 <div class="card-footer text-body-secondary">
                     {{pos.date | date: 'longDate' }} last modification
@@ -84,12 +87,23 @@
                             </div>
                             }@else {
                             <span class="text-danger">{{errorTransaction}}</span>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn button secondary">Save</button>}
+                            <button type="submit" class="btn button secondary" [disabled]="!transactionForm.valid">
+                                Save
+                            </button>}
                         </div>
                     </form>
                 </div>
             </div>
-        </div>}}}
+        </div>}}@else{
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Creez un point de vente d'abord
+                </p>
+            </div>
+        </div>
+        }}
     </div>
 </div>

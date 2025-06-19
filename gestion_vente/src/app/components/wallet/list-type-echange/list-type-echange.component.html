@@ -46,12 +46,14 @@
                     <form class="needs-validation" [formGroup]="editTypeForm" (ngSubmit)="editType(type.id)">
                         <div class="modal-body">
                             <div class="ms-auto me-auto mb-2">
-                                <label for="nameType" class="visually-hidden">Type Echange</label>
-                                <input type="text" class="form-control" formControlName="nameType" name="nameType" id="nameTypeEdit" value="{{type.nom}}" required>
+                                <label for="nameType" class="visually">Modifier mode d'echange</label>
+                                <input type="text" class="form-control" formControlName="nameType" name="nameType" id="nameTypeEdit" required>
+                                <span class="text-secondary">Ancien({{type.nom}})</span>
                             </div>
                             <div class="ms-auto me-auto mb-2">
-                                <label for="description" class="visually-hidden">Description</label>
-                                <input type="text" class="form-control" formControlName="description" name="description" id="descriptionEdit" value="{{type.description}}" required>
+                                <label for="description" class="visually">Modifier la description</label>
+                                <input type="text" class="form-control" formControlName="description" name="description" id="descriptionEdit" required>
+                                <span class="text-secondary">Ancien({{type.description}})</span>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" formControlName="is_bordereau" type="checkbox" value="" id="bordereau">
@@ -71,7 +73,6 @@
                             </div>}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn button secondary" [disabled]="!editTypeForm.valid">
                                 Save
                             </button>
@@ -82,7 +83,16 @@
         </div>
         }
     </div> }@else {
-    <h4 class="text-center">{{error}}</h4>}}
+    <h4 class="text-center">{{error}}</h4>
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+            <h3 class="text-center">Page vide</h3>
+            <p class="text-center">
+                Creez le moyen d'echange en appuyant sur +add!!!
+            </p>
+        </div>
+    </div>}}
     <!-- fin de condition de posteData -->
 </div>
 <div class="modal fade" id="creationTypeEchange" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -120,7 +130,6 @@
                     </div>}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn button secondary" [disabled]="!newTypeForm.valid">
                         Save
                     </button>

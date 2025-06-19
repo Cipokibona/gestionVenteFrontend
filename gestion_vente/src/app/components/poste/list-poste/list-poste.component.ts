@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-list-poste',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './list-poste.component.html',
   styleUrl: './list-poste.component.scss'
 })

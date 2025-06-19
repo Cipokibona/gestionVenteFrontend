@@ -100,6 +100,7 @@ export class ListComponent implements OnInit{
     this.apiService.createCustomer(newClient).subscribe({
       next: (data:any) => {
         console.log('new client create', data);
+        location.reload();
       },
       error: (err) => {
         console.error('new client create', err);

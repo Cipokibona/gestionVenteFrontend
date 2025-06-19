@@ -14,13 +14,13 @@
     </div>
     <h5>Liste des users</h5>
     <div class="row text-start gap-1">
-        @if (loadingPage) {loading...}@else {@if (allUser) {
+        @if (loadingPage) {loading...}@else {@if (allUser && allUser.length > 0) {
         <div class="accordion" id="accordionUsers">
             @for (user of allUser; track $index) {
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
-                        {{$index + 1}}. {{user.first_name}} {{user.last_name}}({{user.username}})
+                        {{$index + 1}}. {{user.first_name}} {{user.last_name}} ({{user.username}})
                     </button>
                 </h2>
                 <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
@@ -81,7 +81,9 @@
                                     <select class="form-select" aria-label="Default select example" formControlName="caisse">
                                         <option selected>Select caisse</option>
                                         @for (caisse of selectedPosData.list_caisse; track $index) {
-                                        <option value={{caisse.id}}>{{$index + 1}}. {{caisse.typeEchange_name}}</option>}
+                                        <option value={{caisse.id}}>
+                                            {{$index + 1}}. {{caisse.typeEchange_name}} (max: {{caisse.montant | number: '1.0-0' }} BIF)
+                                        </option>}
                                     </select>
                                 </div>
                                 <div class="ms-auto me-auto mb-2 ">
@@ -96,12 +98,9 @@
                                 </div>
                                 }
                                 <div class=" ms-auto me-auto mb-2 mt-3 ">
-                                    <button type="submit" class="button principal p-1 m-1 " [disabled]="!payForm.valid">
+                                    <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!payForm.valid">
                                         <span class="ms-5 me-5 ">Pay</span>
                                     </button>
-                                    <a class="button secondary p-1 m-1 ">
-                                        <span class="ms-5 me-5 ">Back</span>
-                                    </a>
                                 </div>
                             </form>
                         </div>
@@ -109,7 +108,18 @@
                 </div>
             </div>
             }
-        </div> }}
+        </div> }@else if (0>allUser.length && !loadingPage) {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Creez un user
+                </p>
+            </div>
+        </div>
+
+        }}
     </div>
 </div>
 <!-- Modal -->
@@ -141,7 +151,7 @@
                     <label for="salaire">Salaire mensuel</label>
                     <select class="form-select mb-2 " formControlName="poste" name="salaire" aria-label="Default">
                         @for (poste of allPoste; track $index) {
-                        <option value={{poste.id}}>{{poste.salar}} BIF ({{poste.name}})</option>}
+                        <option value={{poste.id}}>{{poste.salar | number: '1.0-0' }} BIF ({{poste.name}})</option>}
                     </select>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" formControlName="role" name="role" id="agent" value="agent" checked>
@@ -174,12 +184,9 @@
                         <input type="password" class="form-control " formControlName="confirmPassword" name="confirmPassword " id="confirmPassword " placeholder="confirm Password " required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
-                        <button type="submit" class="button principal p-1 m-1 " [disabled]="!userForm.valid">
+                        <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!userForm.valid">
                             <span class="ms-5 me-5 ">Create</span>
                         </button>
-                        <a class="button secondary p-1 m-1 ">
-                            <span class="ms-5 me-5 ">Back</span>
-                        </a>
                     </div>
                 </form>
             </div>

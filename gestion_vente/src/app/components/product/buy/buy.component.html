@@ -184,12 +184,19 @@
                         <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
                     </ul> }
                 </div>
-            </div>}
+            </div>}@if (loadingAchat) {
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            }@else {
             <div class=" ms-auto me-auto mb-2 mt-3 ">
-                <button type="submit" class="button principal p-1 m-1 " [disabled]="!aprovisionForm.valid">
+                <span class="text-danger">{{errorAchat}}</span> <br>
+                <button type="submit" class="btn button principal p-1 m-1 ">
                     <span class="ms-5 me-5 ">Achat</span>
                 </button>
-            </div>
+            </div>}
         </form>
     </div>
 </div>

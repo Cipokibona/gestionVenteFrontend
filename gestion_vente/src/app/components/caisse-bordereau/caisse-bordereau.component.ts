@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiServiceService } from '../../services/api-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-caisse-bordereau',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './caisse-bordereau.component.html',
   styleUrl: './caisse-bordereau.component.scss'
 })

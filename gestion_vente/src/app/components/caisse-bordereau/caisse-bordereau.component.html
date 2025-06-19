@@ -10,7 +10,10 @@
             <ul>
                 @for (bordereau of caisseData.list_bordereau; track $index) {
                 <li>
-                    {{$index + 1}}. {{bordereau.name}}
+                    {{$index + 1}}. {{bordereau.name}} (
+                    <span class="text-danger">
+                         {{bordereau.montant | number: '1.0-0' }} BIF
+                    </span>)
                 </li>}
             </ul>}@else {
             <p>
