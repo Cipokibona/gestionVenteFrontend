@@ -79,6 +79,10 @@ export class ApiServiceService {
   // tools
   private toolsUrl = `${this.url}tools/`;
 
+  // request panier
+  private requestBasketUrl = `${this.url}request/`;
+  private requestProductUrl = `${this.url}request_product/`;
+
   private tokenRefreshUrl = `${this.url}token/refresh/`;
 
   constructor(private router: Router) {  }
@@ -583,5 +587,33 @@ export class ApiServiceService {
   getDepenseSalar(){
     return this.http.get(`${this.depenseSalaireUrl}`);
   }
-  
+
+  // request panier
+  getAllRequest(){
+    return this.http.get(`${this.requestBasketUrl}`);
+  }
+
+  createRequest(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.requestBasketUrl}`, data, {headers});
+  }
+
+  deleteRequest(id: number){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.delete<any>(`${this.requestBasketUrl}${id}/`, {headers});
+  }
+
+  editRequest(id:number, data:any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.patch<any>(`${this.requestBasketUrl}${id}/`, data, {headers});
+  }
+
+  createRequestProduct(data: any){
+    const token = this.getTokenLocal();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token.access}`);
+    return this.http.post<any>(`${this.requestProductUrl}`, data, {headers});
+  }
 }

@@ -41,6 +41,10 @@ export class SellComponent implements OnInit{
   totalPaye: number = 0;
   resteImpaye: number = 0;
 
+  // loading
+  loadingVente!: boolean;
+  errorVente!: string | null;
+
   constructor(private apiService: ApiServiceService, private router: Router, private route: ActivatedRoute, private fb: FormBuilder){
     this.venteForm = this.fb.group({
       panier: this.fb.control('', Validators.required),
@@ -217,6 +221,7 @@ export class SellComponent implements OnInit{
   }
 
   createVente(){
+    this.loadingVente = true;
     console.log(this.venteForm.value);
     const data = {
       client: this.dataClient.id,
@@ -225,7 +230,7 @@ export class SellComponent implements OnInit{
       // typeEchange_list: this.listTypeEchange.value,
       reste: this.resteImpaye,
       date_recouvrement: this.venteForm.value.dateRecouvrement || new Date().toISOString().split('T')[0],
-    }
+    };
     this.apiService.createVente(data).subscribe({
       next: (data:any) => {
         console.log('vente enregistrer', data);
@@ -277,12 +282,16 @@ export class SellComponent implements OnInit{
             console.log('creation reussi', resp);
           },
           error: (err) => {
+            this.loadingVente = false;
+            this.errorVente = 'Erreur vente';
             this.apiService.deleteVente(data.id);
             console.error('erreur de creation et suppression de vente', err);
           }
         });
       },
       error: (err) => {
+        this.loadingVente = false;
+        this.errorVente = 'Erreur vente';
         console.error('erreur de creation de vente', err);
       }
     });
