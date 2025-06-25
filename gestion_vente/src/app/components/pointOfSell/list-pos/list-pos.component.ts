@@ -153,8 +153,8 @@ export class ListPOSComponent {
       };
       this.apiService.createRequestProduct(newProduct).subscribe({
         next: (data:any) => {
-          this.loadingCommand = false;
           location.reload();
+          this.loadingCommand = false;
           console.log('new product request', data);
         },
         error: (err) => {

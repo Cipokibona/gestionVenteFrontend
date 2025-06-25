@@ -18,6 +18,7 @@ import { ListReceptionComponent } from './components/pointOfSell/list-reception/
 import { ToolsForUserComponent } from './components/user/tools-for-user/tools-for-user.component';
 import { ListDepensesComponent } from './components/depenses/list-depenses/list-depenses.component';
 import { CaisseBordereauComponent } from './components/caisse-bordereau/caisse-bordereau.component';
+import { ListRequestComponent } from './components/pointOfSell/list-request/list-request.component';
 
 export const routes: Routes = [
     { 
@@ -64,6 +65,11 @@ export const routes: Routes = [
         path:'liste_panier',
         title: 'Panier Agent page',
         component: ListBasketsComponent,
+    },
+    {
+        path:'liste_request',
+        title: 'Request page',
+        component: ListRequestComponent,
     },
     {
         path:'create_panier',
