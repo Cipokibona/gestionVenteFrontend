@@ -31,14 +31,16 @@ export class ListRequestComponent implements OnInit{
     this.apiService.refreshTokenLocal();
     this.apiService.updateUserLocal();
     this.getUserData();
-    this.getAllPos();
+    // this.getAllPos();
     this.getAllRequest();
   }
 
   getUserData(){
+    this.loading = true;
     this.apiService.currentUser.subscribe({
       next: (data:any) => {
         this.userData = data;
+        this.loading = false;
         console.log('les data dans receptions component:', this.userData);
       },error: () => {
         this.apiService.logout();
@@ -47,41 +49,64 @@ export class ListRequestComponent implements OnInit{
   }
 
   getAllPos(){
+    // this.loading = true;
     this.apiService.getAllPos().subscribe({
       next: (data: any) => {
         this.posData = data.results;
+        // this.loading = false;
         console.log('pos', this.posData);
       },
       error: (err) => {
+        // this.loading = false;
+        // this.error = 'Erreur de chargement!!!';
         console.error('erreur de recuperation de request', err);
       }
-    })
+    });
   }
 
   getAllRequest(){
+    this.loading = true;
     this.apiService.getAllRequest().subscribe({
       next: (data: any) => {
         const requestData = data.results;
         if(this.userData.is_admin){
           this.requestData = requestData;
+          this.loading = false;
           console.log('request admin',this.requestData);
         }else if(this.userData.is_respo_pos){
-          console.log('pos data', this.posData);
-          const posUser = this.posData.find((item: any) =>
-            item.list_respo.some((i: any) => i.respo === this.userData.id)
-          );
-          this.requestData = requestData.filter(
-            (item:any) => item.pos == posUser.id
-          );
-          console.log('request respo',this.requestData);
+          // this.getAllPos();
+          // recuperation de posData
+          this.apiService.getAllPos().subscribe({
+            next: (data: any) => {
+              this.posData = data.results;
+              // find pos du user
+              const posUser = this.posData.find((item: any) =>
+                item.list_respo.some((i: any) => i.respo === this.userData.id)
+              );
+              // request du pos
+              this.requestData = requestData.filter(
+                (item:any) => item.pos == posUser.id
+              );
+              this.loading = false;
+              console.log('pos', this.posData);
+            },
+            error: (err) => {
+              this.loading = false;
+              this.error = 'Erreur de chargement!!!';
+              console.error('erreur de recuperation de request', err);
+            }
+          });
         }else{
           this.requestData = requestData.filter(
             (item:any) => item.agent == this.userData.id
           );
+          this.loading = false;
           console.log('request agent',this.requestData);
         }
       },
       error: (err) => {
+        this.loading = false;
+        this.error = 'Erreur pendant le chargement!!!';
         console.error('erreur de recuperation de request', err);
       }
     })

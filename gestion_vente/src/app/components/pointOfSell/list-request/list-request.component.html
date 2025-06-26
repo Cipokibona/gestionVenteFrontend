@@ -3,7 +3,8 @@
         <h5 class="mt-4">Demandes</h5>
         @if (loading) {
         <h3 class="text-center">Loading...</h3>
-        }@else { @for (request of requestData; track $index) {
+        }@else {@if (error) {
+        <h5>{{error}}</h5> } @for (request of requestData; track $index) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{request.agent_name}}</h5>
             <div class="card-body">
@@ -24,17 +25,16 @@
                     <div class="col-6 text-end text-secondary">
                         {{product.quantity}} Box
                     </div>
-                </div>}
-                @if(!userData.is_agent_commercial){
+                </div>} @if(!userData.is_agent_commercial){
                 <div class="row border-top mt-3">
                     @if(loadingAccept){
-                        <p>Wait a moment...</p>
+                    <p>Wait a moment...</p>
                     }@else{
-                        <span class='text-danger'>{{errorAccept}}</span>
-                        <button class="button secondary rounded-pill m-1 p-1" (click)="deliver(request.id)">
+                    <span class='text-danger'>{{errorAccept}}</span>
+                    <button class="button secondary rounded-pill m-1 p-1" (click)="deliver(request.id)">
                             Livrer
                         </button>
-                        <button class="btn btn-danger rounded-pill m-1 p-1" (click)="noDeliver(request.id)">
+                    <button class="btn btn-danger rounded-pill m-1 p-1" (click)="noDeliver(request.id)">
                             Refuser
                         </button>}
                 </div>}
