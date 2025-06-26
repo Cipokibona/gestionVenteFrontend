@@ -16,6 +16,8 @@ export class ListRequestComponent implements OnInit{
   requestData: any;
   posData: any;
 
+  allProductPos!: any;
+
   loading!: boolean;
   error!: string | null;
 
@@ -32,6 +34,7 @@ export class ListRequestComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUserData();
     // this.getAllPos();
+    this.getAllProductPos();
     this.getAllRequest();
   }
 
@@ -62,6 +65,18 @@ export class ListRequestComponent implements OnInit{
         console.error('erreur de recuperation de request', err);
       }
     });
+  }
+
+  getAllProductPos(){
+    this.apiService.getAllProductPos().subscribe({
+      next: (data:any) => {
+        this.allProductPos = data.results;
+        console.log('all product pos', this.allProductPos);
+      },
+      error: (err) => {
+        console.error('erreur de recuperation de product pos',err);
+      }
+    })
   }
 
   getAllRequest(){
@@ -112,7 +127,76 @@ export class ListRequestComponent implements OnInit{
     })
   }
 
-  deliver(request_id:number){}
+  deliver(request_id:number){
+    this.loadingAccept = true;
+    // recuperation de request par id
+    const requestSelected = this.requestData.find(
+      (item:any) => item.id == request_id
+    );
+    // data du new panier
+    const newBasket = {
+      agent: requestSelected.agent,
+      depot: requestSelected.pos,
+    };
+    // data de desactivation de request
+    const newDataRequest = {
+      is_active: false
+    };
+    // creation du new basket
+    this.apiService.createBasket(newBasket).subscribe({
+      next: (dataBasket:any) => {
+        const requests = [];
+        for(let product of requestSelected.list_product){
+          const dataProduct = {
+            basket: dataBasket.id,
+            product: product.product,
+            quantity: product.quantity,
+            pricePerUnitOfficiel: product.prixVente,
+            date_expiration: product.date_expiration
+          };
+          const request = this.apiService.createListBasket(dataProduct);
+          requests.push(request);
+          // update product dans pos
+          const productpos = this.allProductPos.filter(
+            (item:any) => item.pos == requestSelected.pos
+          );
+          const thisProduct = productpos.find(
+            (item:any) => item.product === product.product && item.prixVente === product.prixVente
+          );
+          console.log('product dans pos selected',thisProduct);
+          const newQuantity = thisProduct.quantity - product.quantity;
+          const newDataProduct = {
+            quantity: newQuantity,
+          };
+          const requestUpdate = this.apiService.updateProductPos(thisProduct.id,newDataProduct);
+          requests.push(requestUpdate);
+        };
+
+        // request de update de request
+        const requestUpdateRequest = this.apiService.editRequest(request_id,newDataRequest);
+        requests.push(requestUpdateRequest);
+
+        forkJoin(requests).subscribe({
+          next: (resp:any) => {
+            this.getAllRequest();
+            this.loadingAccept = false;
+            console.log('creation reussi', resp);
+          },
+          error: (err) => {
+            this.apiService.deleteBasket(dataBasket.id);
+            this.loadingAccept = false;
+            this.errorAccept = 'Erreur de creation de panier!!!';
+            console.error('erreur de creation de list product et suppression du new basket',err);
+          }
+        });
+      },
+      error: (err) => {
+        this.loadingAccept = false;
+        this.errorAccept = 'Erreur !!!';
+        console.error('erreur de creation', err);
+      }
+    });
+  }
 
   noDeliver(request_id:number){
     this.loadingAccept = true;

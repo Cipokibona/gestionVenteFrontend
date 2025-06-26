@@ -23,12 +23,12 @@
                         {{product.product_name}}:
                     </div>
                     <div class="col-6 text-end text-secondary">
-                        {{product.quantity}} Box
+                        {{product.quantity}} Box {{product.prixVente}}
                     </div>
                 </div>} @if(!userData.is_agent_commercial){
                 <div class="row border-top mt-3">
                     @if(loadingAccept){
-                    <p>Wait a moment...</p>
+                    <p class="text-warning">Wait a moment...</p>
                     }@else{
                     <span class='text-danger'>{{errorAccept}}</span>
                     <button class="button secondary rounded-pill m-1 p-1" (click)="deliver(request.id)">
