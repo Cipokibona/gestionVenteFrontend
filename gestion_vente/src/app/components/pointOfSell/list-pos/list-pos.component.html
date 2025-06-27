@@ -42,11 +42,11 @@
                                {{$index + 1}}. {{product.product_name}} 
                             </div>
                             <div class="col-6">
-                                <span class="p-1 rounded-pill"
+                                <span class="p-1 rounded-pill shadow-sm"
                                 [ngClass]="{
-                                    'bg-success-subtle text-success-emphasis':pourcentage(product.quantity, product.quantity_max) >= 50,
-                                    'bg-warning-subtle text-warning-emphasis': pourcentage(product.quantity, product.quantity_max) < 50 && pourcentage(product.quantity, product.quantity_max) >= 15,
-                                    'bg-danger-subtle text-danger-emphasis': pourcentage(product.quantity, product.quantity_max) < 15,
+                                    'bg-success-subtle text-success':pourcentage(product.quantity, product.quantity_max) >= 50,
+                                    'bg-warning-subtle text-warning': pourcentage(product.quantity, product.quantity_max) < 50 && pourcentage(product.quantity, product.quantity_max) >= 15,
+                                    'bg-danger-subtle text-danger': pourcentage(product.quantity, product.quantity_max) < 15,
                                 }">
                                 {{product.quantity}} box  
                                 </span>
