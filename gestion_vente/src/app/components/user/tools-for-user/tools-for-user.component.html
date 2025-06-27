@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationTool">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationTool">
                 + Add
             </button>
         </div>
@@ -26,7 +26,7 @@
                     <p>
                         {{tool.description}}
                     </p>
-                    <button class="btn button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                    <button class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
                         Edit
                     </button>
                     <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#depenseTool' + $index">
@@ -66,7 +66,7 @@
                         <span>Loading...</span> }@else {
                         <div class="modal-footer">
                             <span class="text-danger">{{errorSaving}}</span> <br>
-                            <button type="submit" class="btn button secondary" [disabled]="!editToolForm.valid">
+                            <button type="submit" class="btn btn-primary" [disabled]="!editToolForm.valid">
                                 Save
                             </button>
                         </div>}
@@ -120,7 +120,7 @@
                         <span>Loading...</span> }@else {
                         <div class="modal-footer">
                             <span class="text-danger">{{errorSaving}}</span>
-                            <button type="submit" class="btn button secondary" [disabled]="!depenseToolForm.valid">
+                            <button type="submit" class="btn btn-primary" [disabled]="!depenseToolForm.valid">
                                 Effectuer
                             </button>
                         </div>}
@@ -172,7 +172,7 @@
                 <span>Loading...</span> }@else {
                 <div class="modal-footer ">
                     <span class="text-danger">{{errorSaving}}</span>
-                    <button type="submit" class="btn button secondary" [disabled]="!newToolForm.valid">
+                    <button type="submit" class="btn btn-primary" [disabled]="!newToolForm.valid">
                         Save
                     </button>
                 </div>}

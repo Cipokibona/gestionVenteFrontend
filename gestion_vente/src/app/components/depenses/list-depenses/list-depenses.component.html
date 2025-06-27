@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationDepense">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationDepense">
                 + Add
             </button>
         </div>
@@ -97,7 +97,7 @@
                     <span class="text-danger">
                         {{errorSaving}}
                     </span> <br>
-                    <button type="submit" class="btn button secondary" [disabled]="!newDepenseForm.valid">
+                    <button type="submit" class="btn btn-warning" [disabled]="!newDepenseForm.valid">
                         Save
                     </button>
                 </div>}

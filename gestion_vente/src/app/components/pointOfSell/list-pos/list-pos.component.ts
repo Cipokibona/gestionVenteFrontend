@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-list-pos',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './list-pos.component.html',
   styleUrl: './list-pos.component.scss'
 })
@@ -198,5 +199,10 @@ export class ListPOSComponent {
         }
       });
     }
+  }
+
+  pourcentage(qte: number, max: number){
+    const newMax = (100 * qte)/max;
+    return newMax
   }
 }

@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createUser">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createUser">
                 + Add
             </button>
         </div>
@@ -50,7 +50,7 @@
                             <span class="text-success">
                                 {{getDepenseSalaireUser(user.id) | number: '1.0-0' }} BIF ({{getDateSalaireUser(user.id) | date: 'longDate'}})
                             </span>
-                        <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createPaye' + $index">
+                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createPaye' + $index">
                             new pay
                         </button>
                         </span><br>
@@ -98,7 +98,7 @@
                                 </div>
                                 }
                                 <div class=" ms-auto me-auto mb-2 mt-3 ">
-                                    <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!payForm.valid">
+                                    <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!payForm.valid">
                                         <span class="ms-5 me-5 ">Pay</span>
                                     </button>
                                 </div>
@@ -184,7 +184,7 @@
                         <input type="password" class="form-control " formControlName="confirmPassword" name="confirmPassword " id="confirmPassword " placeholder="confirm Password " required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
-                        <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!userForm.valid">
+                        <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!userForm.valid">
                             <span class="ms-5 me-5 ">Create</span>
                         </button>
                     </div>

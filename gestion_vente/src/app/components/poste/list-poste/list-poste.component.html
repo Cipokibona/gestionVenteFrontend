@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationPoste">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationPoste">
                 + Add
             </button>
         </div>
@@ -24,7 +24,7 @@
                         Salaire:
                         <span class="text-danger">{{poste.salar | number: '1.0-0' }} BIF</span>/mois
                     </h6>
-                    <button class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                    <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
                         Edit
                     </button>
                 </div>
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn button secondary" [disabled]="!editPosteForm.valid">
+                            <button type="submit" class="btn btn-primary" [disabled]="!editPosteForm.valid">
                                 Save
                             </button>
                         </div>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn button secondary" [disabled]="!newPosteForm.valid">
+                    <button type="submit" class="btn btn-primary" [disabled]="!newPosteForm.valid">
                         Save
                     </button>
                 </div>

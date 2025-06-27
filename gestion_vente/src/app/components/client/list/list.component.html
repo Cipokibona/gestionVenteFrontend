@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
                 + Add
             </button>
         </div>
@@ -17,11 +17,13 @@
         <h5>Liste des clients</h5>
         <div class="accordion" id="accordionUsers">
             @for (client of customers; track $index) {
-            <div class="accordion-item">
+            <div class="accordion-item shadow">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
                         {{$index + 1}}. {{client.fullName}}
-                        <span class="text-danger ms-2">Credit: {{haveCredit(client.id) | number: '1.0-0'}} BIF</span>
+                        <span class="p-1 rounded-pill bg-warning-subtle text-warning-emphasis">
+                            {{haveCredit(client.id) | number: '1.0-0'}} BIF credit
+                        </span>
                     </button>
                 </h2>
                 <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
@@ -29,7 +31,8 @@
                         Contact:
                         <span class="text-secondary">{{client.tel}}, {{client.adress}}</span>
                     </p>
-                    <h6 class="m-2">Dettes</h6>
+                    @if(venteCreditClient.length > 0){
+                    <h6 class="m-2">Dettes</h6>}
                     <p class="m-2">
                         @for (vente of venteCreditClient; track $index) { @if (vente.client == client.id) {
                         <span class="text-secondary">
@@ -38,13 +41,13 @@
                         <span class="text-danger">
                             {{vente.reste | number: '1.0-0' }} BIF
                         </span>
-                        <a routerLink="recouvrement/{{vente.id}}" class="button secondary rounded-pill m-1 p-1">
+                        <a routerLink="recouvrement/{{vente.id}}" class="btn btn-warning rounded-pill m-1 p-1">
                             Recouvrir
                         </a>
                         <br>}}
                     </p>
                     <div>
-                        <a routerLink="vente/{{client.id}}" class="button secondary rounded-pill m-1 p-1">
+                        <a routerLink="vente/{{client.id}}" class="btn btn-primary rounded-2 m-2 p-1">
                             Vendre
                         </a>
                     </div>
@@ -87,7 +90,7 @@
                         <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
                     </div>
                     <div class="ms-auto me-auto mb-2 mt-3 ">
-                        <button type="submit" class="btn button principal p-1 m-1 " [disabled]="!clientForm.valid">
+                        <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!clientForm.valid">
                             <span class="ms-5 me-5 ">Create</span>
                         </button>
                     </div>

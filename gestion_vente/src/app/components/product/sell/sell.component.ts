@@ -3,10 +3,11 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sell',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './sell.component.html',
   styleUrl: './sell.component.scss'
 })
