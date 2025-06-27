@@ -224,4 +224,9 @@ export class CreateBasketComponent implements OnInit{
     });
     console.log('data a envoyer', data);
   }
+
+  pourcentage(qte: number, max: number){
+    const newMax = (100 * qte)/max;
+    return newMax
+  }
 }

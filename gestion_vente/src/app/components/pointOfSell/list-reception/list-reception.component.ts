@@ -19,6 +19,12 @@ export class ListReceptionComponent implements OnInit{
   allProduitPos!: any;
   allCaisse!: any;
 
+  loading!: boolean;
+  error!: string | null;
+
+  loadingAccept!: boolean;
+  errorAccept!: string | null;
+
   
   constructor(private apiService: ApiServiceService, private router: Router){ 
     
@@ -92,19 +98,24 @@ export class ListReceptionComponent implements OnInit{
   }
 
   getAllRender(){
+    this.loading = true;
     this.apiService.getAllRender().subscribe({
       next: (resp: any) => {
         const data = resp.results.filter((item:any) => item.receiver == null);
         this.allRender = data;
+        this.loading = false;
         console.log('all render du pos', this.allRender);
       },
       error: (err) => {
+        this.loading = false;
+        this.error = 'Erreur du chargement!!!';
         console.error('erreur de recuperation du recouvrement', err);
       }
     })
   }
 
   received(id: number){
+    this.loadingAccept = true;
     // data de update de rendu
     const dataRendu = {
       receiver: this.userData.id,
@@ -151,6 +162,8 @@ export class ListReceptionComponent implements OnInit{
             this.getAllRender();
           },
           error: (err) => {
+            this.loadingAccept = false;
+            this.errorAccept = 'Erreur !!!';
             console.error('erreur de update',err);
           }
         });
@@ -187,6 +200,8 @@ export class ListReceptionComponent implements OnInit{
             this.getAllRender();
           },
           error: (err) => {
+            this.loadingAccept = false;
+            this.errorAccept = 'Erreur !!!';
             console.error('erreur de update',err);
           }
         });
@@ -195,6 +210,7 @@ export class ListReceptionComponent implements OnInit{
   }
 
   noReceived(id: number){
+    this.loadingAccept = true;
     const dataRendu = {
       receiver: this.userData.id,
       is_received: false,
@@ -205,6 +221,8 @@ export class ListReceptionComponent implements OnInit{
         this.getAllRender();
       },
       error: (err) => {
+        this.loadingAccept = false;
+        this.errorAccept = 'Erreur!!!';
         console.error('erreur de update',err);
       }
     });
