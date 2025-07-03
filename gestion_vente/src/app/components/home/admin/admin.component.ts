@@ -16,6 +16,8 @@ export class AdminComponent implements OnInit{
   data!: any;
   typeEchange: any;
   posData!: any;
+  venteData!: any;
+  venteMois!: any;
 
   // loading et error
   loading!: boolean;
@@ -23,6 +25,9 @@ export class AdminComponent implements OnInit{
 
   loadingTransaction!: boolean;
   errorTransaction!: string | null ;
+
+  loadingVente!: boolean;
+  errorVente!: string | null ;
 
   // form
     transactionForm = new FormGroup({
@@ -39,6 +44,7 @@ export class AdminComponent implements OnInit{
     this.apiService.updateUserLocal();
     this.getUserData();
     this.getPos();
+    this.getVente();
   }
 
   getUserData(){
@@ -68,6 +74,50 @@ export class AdminComponent implements OnInit{
       }
     });
   }
+
+  // pour les ventes
+  getVente(){
+    this.loadingVente = true;
+    this.apiService.getAllVente().subscribe({
+      next: (data:any) => {
+        this.loadingVente = false;
+        this.errorVente = null;
+        const dataPos = data.results;
+        this.venteData = dataPos;
+        this.gainMois();
+        console.log('all vente:', this.venteData);
+      },error: () => {
+        this.loadingVente = false;
+        this.errorVente = 'Refresh';
+        // this.apiService.logout();
+      }
+    });
+  }
+
+  gainMois(){
+    const venteMois = this.venteData.filter(
+      (item:any) => {
+        const date = new Date(item.date); // Convertir la chaîne de date en objet Date
+          const currentDate = new Date(); // Obtenir la date actuelle
+
+          // Comparer l'année et le mois
+          return (
+              date.getFullYear() === currentDate.getFullYear() &&
+              date.getMonth() === currentDate.getMonth()
+          );
+      }
+    );
+    console.log('vente data mois', venteMois);
+    let gainVente = 0;
+    for (let ventes of venteMois){
+      for (let vente of ventes.product_list){
+        gainVente = gainVente + (vente.pricePerUnitClient * vente.quantity);
+      }
+    }
+    this.venteMois = gainVente;
+    console.log('vente du mois', this.venteMois);
+  }
+
   // pour les transactions
   transaction(id:number){
     const pos = this.posData.find((item:any) => item.id == id);

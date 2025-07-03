@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row text-center">
+    <!-- <div class="row text-center">
         <div class="col">
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Toutes
@@ -11,9 +11,9 @@
                 Agent 1
             </button>
         </div>
-    </div>
+    </div> -->
     <div class="row">
-        <h5 class="text-center m-3">Liste des ventes effectes</h5>
+        <h5 class="m-3">Liste des ventes effectes</h5>
         <!-- start card -->
         @for (vente of allVente; track vente.id) {
         <div class="card shadow m-2" style="width: 18rem;">
@@ -35,35 +35,30 @@
                             <div class="accordion-body">
                                 <h6 class="card-subtitle mb-2 text-body-secondary border-top mt-3">{{article.product_name}}</h6>
                                 <div class="row">
-                                    <div class="col-6 text-secondary text-end">
-                                        prix officiel:
+                                    <div class="col-auto m-2">
+                                        <span class="p-1 rounded-pill shadow-sm bg-success-subtle text-success">
+                                            Officiel: {{article.pricePerUnitOfficiel | number: '1.0-0' }} Bif
+                                        </span>
                                     </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitOfficiel}} Bif
+                                    <div class="col-auto m-2">
+                                        <span class="p-1 rounded-pill shadow-sm bg-warning-subtle text-warning">
+                                            Client: {{article.pricePerUnitClient | number: '1.0-0' }} Bif
+                                        </span>
                                     </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        prix vendu:
+                                    <div class="col-auto m-2">
+                                        <span class="p-1 rounded-pill shadow-sm bg-body-secondary">
+                                            Qte: {{article.quantity}} box
+                                        </span>
                                     </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitClient}} Bif
+                                    <div class="col-auto m-2">
+                                        <span class="p-1 rounded-pill shadow-sm bg-success-subtle text-success">
+                                            Total officiel: {{article.pricePerUnitOfficiel * article.quantity | number: '1.0-0' }} Bif
+                                        </span>
                                     </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        Quantity:
-                                    </div>
-                                    <div class="col-6 text-start">
-                                        {{article.quantity}}
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        prix total officiel:
-                                    </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitOfficiel * article.quantity}} Bif
-                                    </div>
-                                    <div class="col-6 text-secondary text-end">
-                                        prix total client:
-                                    </div>
-                                    <div class="col-6 text-danger text-start">
-                                        {{article.pricePerUnitClient * article.quantity}} Bif
+                                    <div class="col-auto m-2">
+                                        <span class="p-1 rounded-pill shadow-sm bg-warning-subtle text-warning">
+                                            Total Client: {{article.pricePerUnitClient * article.quantity | number: '1.0-0' }} Bif
+                                        </span>
                                     </div>
                                     <!-- <div class="col-6 text-secondary text-end">
                                         date d'expiration:
@@ -93,7 +88,7 @@
                                         {{pay.typeEchange_name}}:
                                     </div>
                                     <div class="col-6 text-danger text-start">
-                                        {{pay.montant}} Bif
+                                        {{pay.montant | number: '1.0-0' }} Bif
                                     </div>
                                     <div class="col-12 text-start">
                                         ({{pay.bordereau}})
@@ -107,19 +102,16 @@
                 <!-- <h6 class="card-subtitle mb-2 border-top  mt-3">Quantity totale: 120</h6> -->
                 <h6 class="card-subtitle mb-2 mt-2">
                     Prix total vendu:
-                    <span class="text-danger">{{getTotalPrice(vente.product_list)}} BIF</span>
+                    <span class="text-danger">{{getTotalPrice(vente.product_list) | number: '1.0-0' }} BIF</span>
                 </h6>
                 <h6 class="card-subtitle mb-2 mt-2">
                     Montant total paye:
-                    <span class="text-danger">{{getTotalPaye(vente.typeEchange_list)}} BIF</span>
+                    <span class="text-danger">{{getTotalPaye(vente.typeEchange_list) | number: '1.0-0' }} BIF</span>
                 </h6>
                 <h6 class="card-subtitle mb-2 mt-2">
                     Reste:
-                    <span class="text-danger">{{vente.reste}} BIF</span>
+                    <span class="text-danger">{{vente.reste | number: '1.0-0' }} BIF</span>
                 </h6>
-                <button type="button" class="button secondary rounded-pill m-1 p-1">
-                    Rendre
-                </button>
                 <article class="text-secondary">{{vente.date | date: 'medium'}}</article>
             </div>
         </div>}

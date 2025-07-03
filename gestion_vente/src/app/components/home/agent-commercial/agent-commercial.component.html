@@ -106,7 +106,7 @@
                     </form>
                 </div>
             </div>
-        </div>}}@else if (recouvrementUser && recouvrementUser.length > 0) { @for (recouvrement of recouvrementUser; track $index) { @if (!isRecouvrementReceived(recouvrement.id)) {
+        </div>}}@if (recouvrementUser) { @for (recouvrement of recouvrementUser; track $index) { @if (!isRecouvrementReceived(recouvrement.id)) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{recouvrement.depot_name}}</h5>
             <h6 class="text-secondary ms-3">Recouvrement</h6>
@@ -136,7 +136,7 @@
             </div>
             }@else {
             <span class="text-danger">{{errorRendre}}</span>
-            <button class="btn button secondary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
+            <button class="btn btn-primary rounded-pill m-2 p-1" (click)="rendreRecouvrement(recouvrement.id)">
                 Rendre
             </button>}}
         </div>}
