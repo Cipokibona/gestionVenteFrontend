@@ -18,6 +18,10 @@ export class AdminComponent implements OnInit{
   posData!: any;
   venteData!: any;
   venteMois!: any;
+  depenseData!: any;
+  depenseMois!: any;
+  achatData!: any;
+  achatMois!: any;
 
   // loading et error
   loading!: boolean;
@@ -28,6 +32,12 @@ export class AdminComponent implements OnInit{
 
   loadingVente!: boolean;
   errorVente!: string | null ;
+
+  loadingDepense!: boolean;
+  errorDepense!: string | null ;
+
+  loadingAchat!: boolean;
+  errorAchat!: string | null ;
 
   // form
     transactionForm = new FormGroup({
@@ -45,6 +55,8 @@ export class AdminComponent implements OnInit{
     this.getUserData();
     this.getPos();
     this.getVente();
+    this.getDepenses();
+    this.getAchat();
   }
 
   getUserData(){
@@ -75,7 +87,7 @@ export class AdminComponent implements OnInit{
     });
   }
 
-  // pour les ventes
+  // pour les ventes, achat et depenses
   getVente(){
     this.loadingVente = true;
     this.apiService.getAllVente().subscribe({
@@ -84,7 +96,7 @@ export class AdminComponent implements OnInit{
         this.errorVente = null;
         const dataPos = data.results;
         this.venteData = dataPos;
-        this.gainMois();
+        this.venteMoth();
         console.log('all vente:', this.venteData);
       },error: () => {
         this.loadingVente = false;
@@ -94,7 +106,43 @@ export class AdminComponent implements OnInit{
     });
   }
 
-  gainMois(){
+  getDepenses(){
+    this.loadingDepense = true;
+    this.apiService.getAllDepenses().subscribe({
+      next: (data:any) => {
+        this.loadingDepense = false;
+        this.errorDepense = null;
+        const dataPos = data.results;
+        this.depenseData = dataPos;
+        this.depenseMoth();
+        console.log('all depenses:', this.depenseData);
+      },error: () => {
+        this.loadingDepense = false;
+        this.errorDepense = 'Refresh';
+        // this.apiService.logout();
+      }
+    });
+  }
+
+  getAchat(){
+    this.loadingAchat = true;
+    this.apiService.getAllAchat().subscribe({
+      next: (data:any) => {
+        this.loadingAchat = false;
+        this.errorAchat = null;
+        const dataPos = data.results;
+        this.achatData = dataPos;
+        this.achatMoth();
+        console.log('all achat:', this.achatData);
+      },error: () => {
+        this.loadingAchat = false;
+        this.errorAchat = 'Refresh';
+        // this.apiService.logout();
+      }
+    });
+  }
+
+  venteMoth(){
     const venteMois = this.venteData.filter(
       (item:any) => {
         const date = new Date(item.date); // Convertir la chaîne de date en objet Date
@@ -108,14 +156,60 @@ export class AdminComponent implements OnInit{
       }
     );
     console.log('vente data mois', venteMois);
-    let gainVente = 0;
+    let sumVente = 0;
     for (let ventes of venteMois){
       for (let vente of ventes.product_list){
-        gainVente = gainVente + (vente.pricePerUnitClient * vente.quantity);
+        sumVente = sumVente + (vente.pricePerUnitClient * vente.quantity);
       }
     }
-    this.venteMois = gainVente;
+    this.venteMois = sumVente;
     console.log('vente du mois', this.venteMois);
+  }
+
+  achatMoth(){
+    const achatMois = this.achatData.filter(
+      (item:any) => {
+        const date = new Date(item.date); // Convertir la chaîne de date en objet Date
+          const currentDate = new Date(); // Obtenir la date actuelle
+
+          // Comparer l'année et le mois
+          return (
+              date.getFullYear() === currentDate.getFullYear() &&
+              date.getMonth() === currentDate.getMonth()
+          );
+      }
+    );
+    console.log('depenses data mois', achatMois);
+    let sumAchat = 0;
+    for (let achats of achatMois){
+      for (let achat of achats.list_product){
+        sumAchat = sumAchat + (achat.prixAchat * achat.quantity);
+      }
+    }
+    this.achatMois = sumAchat;
+    console.log('achat du mois', this.achatMois);
+  }
+
+  depenseMoth(){
+    const depenseMois = this.depenseData.filter(
+      (item:any) => {
+        const date = new Date(item.date); // Convertir la chaîne de date en objet Date
+          const currentDate = new Date(); // Obtenir la date actuelle
+
+          // Comparer l'année et le mois
+          return (
+              date.getFullYear() === currentDate.getFullYear() &&
+              date.getMonth() === currentDate.getMonth()
+          );
+      }
+    );
+    console.log('depenses data mois', depenseMois);
+    let sumDepense = 0;
+    for (let depenses of depenseMois){
+      sumDepense = sumDepense + depenses.montant;
+    }
+    this.depenseMois = sumDepense;
+    console.log('depense du mois', this.depenseMois);
   }
 
   // pour les transactions

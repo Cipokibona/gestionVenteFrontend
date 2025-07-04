@@ -494,6 +494,11 @@ export class ApiServiceService {
     return this.http.delete<any>(`${this.provisionPosUrl}${id}/`, {headers});
   }
 
+  // achat
+  getAllAchat(){
+    return this.http.get(`${this.achatPosUrl}`);
+  }
+
   // rendre agent a pos
   getAllRender(){
     return this.http.get(`${this.rendreProduitPosUrl}`);
