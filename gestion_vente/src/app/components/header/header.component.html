@@ -15,18 +15,18 @@
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
                         <a routerLink="home" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Home
+                            <i class="fa-solid fa-house"></i> Home
                         </a>
                     </li> @if (userData && (userData.is_admin || userData.is_respo_pos)) {
                     <li class="nav-item">
                         <a routerLink="reception" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Receptions
+                            <i class="fa-solid fa-hand-holding-dollar"></i> Receptions
                         </a>
                     </li>
                     @if (userData && userData.is_admin) {
                     <li class="nav-item">
                         <a routerLink="userList" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Users
+                            <i class="fa-solid fa-users"></i> Users
                         </a>
                     </li>
                     <li class="nav-item">
