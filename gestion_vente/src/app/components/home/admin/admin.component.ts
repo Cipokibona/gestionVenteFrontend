@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiServiceService } from '../../../services/api-service.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, max } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -22,6 +22,8 @@ export class AdminComponent implements OnInit{
   depenseMois!: any;
   achatData!: any;
   achatMois!: any;
+  bestVenteData!: any;
+  bestVenteSum!: any;
 
   // loading et error
   loading!: boolean;
@@ -97,6 +99,7 @@ export class AdminComponent implements OnInit{
         const dataPos = data.results;
         this.venteData = dataPos;
         this.venteMoth();
+        this.bestSell();
         console.log('all vente:', this.venteData);
       },error: () => {
         this.loadingVente = false;
@@ -164,6 +167,26 @@ export class AdminComponent implements OnInit{
     }
     this.venteMois = sumVente;
     console.log('vente du mois', this.venteMois);
+  }
+
+  bestSell(){
+    let thisVenteData = 0;
+    let bestVenteData = 0;
+    let bestVenteId: number | null;
+    for(let vente of this.venteData){
+      for(let i of vente.product_list){
+        thisVenteData = thisVenteData + (i.pricePerUnitClient * i.quantity);
+      };
+      if(thisVenteData > bestVenteData){
+        bestVenteData = thisVenteData;
+        bestVenteId = vente.id;
+      };
+    };
+    this.bestVenteData = this.venteData.find(
+      (item:any) => item.id == bestVenteId
+    );
+    this.bestVenteSum = bestVenteData;
+    console.log('best vente', this.bestVenteData, this.bestVenteSum);
   }
 
   achatMoth(){

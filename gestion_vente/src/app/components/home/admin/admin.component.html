@@ -172,4 +172,31 @@
             </div>
         </div>
     </div>
+    <!-- best sell -->
+    <div class="row mb-3">
+        <h2>Best sell</h2>
+        <div class="col mt-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{bestVenteData.client_name}}
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                        by {{bestVenteData.agent_name}}
+                    </h6>
+                    @if (loadingVente) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-success-emphasis">{{bestVenteSum | number: '1.0-0' }} BIF</h4>
+                    <p>
+                        {{bestVenteData.date | date:'longDate' }}
+                    </p>}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
