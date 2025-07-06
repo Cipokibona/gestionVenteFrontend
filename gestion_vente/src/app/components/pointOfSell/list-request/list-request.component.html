@@ -4,7 +4,9 @@
         @if (loading) {
         <h3 class="text-center">Loading...</h3>
         }@else {@if (error) {
-        <h5>{{error}}</h5> } @for (request of requestData; track $index) {
+        <h5>{{error}}</h5> } @if (!requestData || requestData.length == 0) {
+        <h5>0</h5>
+        } @for (request of requestData; track $index) {
         <div class="card m-2 shadow-lg text-start" style="width: 18rem;">
             <h5 class="card-header">{{request.agent_name}}</h5>
             <div class="card-body">

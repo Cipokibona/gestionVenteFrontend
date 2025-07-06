@@ -20,7 +20,7 @@
                     </li> @if (userData && (userData.is_admin || userData.is_respo_pos)) {
                     <li class="nav-item">
                         <a routerLink="reception" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            <i class="fa-solid fa-hand-holding-dollar"></i> Receptions
+                            <i class="fa-solid fa-hand-holding-hand"></i> Receptions
                         </a>
                     </li>
                     @if (userData && userData.is_admin) {
@@ -31,58 +31,58 @@
                     </li>
                     <li class="nav-item">
                         <a routerLink="listProduct" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Liste produits
+                            <i class="fa-solid fa-cubes-stacked"></i> Produits
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="listTypeEchange" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Type echange
+                            <i class="fa-solid fa-hand-holding-dollar"></i> Type Échange
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="listPoste" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Postes
+                            <i class="fa-solid fa-users-rectangle"></i> Rôle
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="tools" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Tools
+                            <i class="fa-solid fa-car-side"></i> Matériel
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="vente" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Ventes
+                            <i class="fa-brands fa-sellsy"></i> Ventes
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="depenses" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Depenses
+                            <i class="fa-brands fa-sellsy"></i> Depenses
                         </a>
                     </li>
                     }}
                     <li class="nav-item">
                         <a routerLink="liste_panier" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Paniers
+                            <i class="fa-solid fa-cart-shopping"></i> Paniers
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="liste_request" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Demandes agent
+                            <i class="fa-solid fa-hand-point-up"></i> Request
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="listPOS" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Point de vente
+                            <i class="fa-solid fa-shop"></i> Point de vente
                         </a>
                     </li>
                     <li class="nav-item">
                         <a routerLink="client" class="nav-link active" aria-current="page" data-bs-dismiss="offcanvas">
-                            Clients
+                            <i class="fa-solid fa-people-group"></i> Clients
                         </a>
                     </li>
                     <li class="nav-item border-top mt-4">
                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                            Logout @if(userData){({{userData.username}})}
+                            <i class="fa-solid fa-door-open"></i> @if(userData){ {{userData.username}}}
                         </button>
                     </li>
                 </ul>
@@ -100,7 +100,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure? confirm your action
+                Are you sure?
                 <button type="button" class="btn btn-warning" (click)="logout()">
                     Yes
                 </button>
