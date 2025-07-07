@@ -19,6 +19,8 @@ import { ToolsForUserComponent } from './components/user/tools-for-user/tools-fo
 import { ListDepensesComponent } from './components/depenses/list-depenses/list-depenses.component';
 import { CaisseBordereauComponent } from './components/caisse-bordereau/caisse-bordereau.component';
 import { ListRequestComponent } from './components/pointOfSell/list-request/list-request.component';
+import { RenderMode } from '@angular/ssr';
+
 
 export const routes: Routes = [
     { 
@@ -43,6 +45,7 @@ export const routes: Routes = [
     },
     {
         path: 'client/vente/:id',
+        // renderMode: RenderMode.Server,
         title: 'vente client page',
         component: SellComponent,
     },

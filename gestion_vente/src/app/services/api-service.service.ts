@@ -24,6 +24,7 @@ export class ApiServiceService {
   private token: string | null = null;
 
   private url = 'http://127.0.0.1:8000/api/';
+  // private url = 'https://jph.bi/api/';
 
   private usersUrl = `${this.url}users/`;
   private tokenUrl = `${this.url}token/`;

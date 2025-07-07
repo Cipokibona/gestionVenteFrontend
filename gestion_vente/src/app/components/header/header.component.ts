@@ -7,7 +7,10 @@ import { RouterLink } from '@angular/router';
   selector: 'app-header',
   imports: [NgOptimizedImage, RouterLink],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
+  host: {
+    'ngSkipHydration': 'true'
+  }
 })
 export class HeaderComponent {
   logo: string = 'assets/icons/favicon.ico';

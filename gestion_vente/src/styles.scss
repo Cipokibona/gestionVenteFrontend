@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 :root {
     --color-principal: #24354f;
     --color-secondary: #3dafd1;
@@ -14,14 +14,10 @@ $color-text-secondary: var(--color-text-secondary);
 $color-principal:var(--color-principal);
 $color-secondary:var(--color-secondary);
 $color-background:var(--color-background);
-$color-bg-principal:rgba($color-principal,
-15%);
-$color-bg-secondary:rgba($color-secondary,
-15%);
-$color-hover-principal:darken(#33244f,
-10%);
-$color-hover-secondary:darken(#473dd1,
-10%);
+$color-bg-principal:rgba($color-principal, 15%);
+$color-bg-secondary:rgba($color-secondary, 15%);
+// $color-hover-principal:darken(#33244f, 10%);
+// $color-hover-secondary:darken(#473dd1, 10%);
 $color-disabled-principal:#33244f;
 $color-disabled-secondary:#473dd1;
 body {
@@ -80,9 +76,9 @@ body {
     &.principal {
         background-color: var(--color-principal);
         color: white!important;
-        &:hover {
-            background-color: $color-hover-principal;
-        }
+        // &:hover {
+        //     background-color: $color-hover-principal;
+        // }
         &.disabled {
             background-color: $color-disabled-principal;
         }
@@ -97,4 +93,4 @@ body {
     }
 }
 
-@import 'bootstrap/scss/bootstrap';
+// @import 'bootstrap/scss/bootstrap';
