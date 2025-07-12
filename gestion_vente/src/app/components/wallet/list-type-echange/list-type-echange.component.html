@@ -7,7 +7,7 @@
             <button type="button" class="button secondary rounded-pill m-1 p-1">
                 Poste 1
             </button> -->
-            <button type="button" class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationTypeEchange">
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationTypeEchange">
                 + Add
             </button>
         </div>
@@ -17,7 +17,7 @@
     <div class="row text-start gap-2">
         @for (type of typeEchangeData; track $index) {
         <div class="col">
-            <div class="card" style="width: 18rem;">
+            <div class="card shadow-lg" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title border-bottom">{{type.nom}}</h5>
                     <p class="card-text">
@@ -29,7 +29,7 @@
                     <h6 class="card-subtitle mb-2 text-body-secondary">
                         Devise (taux de {{type.taux_echange[0].taux}})
                     </h6>}
-                    <button class="button secondary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                    <button class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
                         Edit
                     </button>
                 </div>
@@ -73,7 +73,7 @@
                             </div>}
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn button secondary" [disabled]="!editTypeForm.valid">
+                            <button type="submit" class="btn btn-primary" [disabled]="!editTypeForm.valid">
                                 Save
                             </button>
                         </div>
@@ -130,7 +130,7 @@
                     </div>}
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn button secondary" [disabled]="!newTypeForm.valid">
+                    <button type="submit" class="btn btn-primary" [disabled]="!newTypeForm.valid">
                         Save
                     </button>
                 </div>
