@@ -1,0 +1,25 @@
+<div class="container justify-content-center">
+    <div class="row">
+        <div class="col">
+            <h3>Listes des bordereaux</h3>
+            @if (!caisseData) {
+            <p>
+                Caisse n'existe pas
+            </p>
+            }@else { @if (caisseData.list_bordereau.length > 0) {
+            <ul>
+                @for (bordereau of caisseData.list_bordereau; track $index) {
+                <li>
+                    {{$index + 1}}. {{bordereau.name}} (
+                    <span class="text-danger">
+                         {{bordereau.montant | number: '1.0-0' }} BIF
+                    </span>)
+                </li>}
+            </ul>}@else {
+            <p>
+                Pas de bordereaux
+            </p>
+            }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="container justify-content-center">
+    <h5 class="text-center">Approvisionner un agent</h5>
+    <div class="row">
+        <form class="needs-validation" [formGroup]="basketForm" (ngSubmit)="createPanier()">
+            @if (!posRespoData) {
+            <label for="depot">Point de vente</label>
+            <select class="form-select mb-2" aria-label="Default select example" name="depot" (change)="selectPos($event)" formControlName="depot">
+                    @for (pos of allPos; track pos.id) {
+                    <option value={{pos.id}}>{{pos.fullName}}</option>
+                }
+            </select>} @if (selectedPosData) {
+            <div class="container border p-2 rounded">
+                <h6>Agent</h6>
+                <select class="form-select mb-2" aria-label="Default select example" name="agent" (change)="selectAgent($event)" formControlName="agent">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (agent of allAgent; track agent.id) {
+                    <option value={{agent.id}}>{{agent.last_name}} ({{agent.username}})</option>
+                }
+                </select> @if(agentId){
+                <h6>Product</h6>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedPosData.list_product; track product.id) {
+                    <option value={{product.product}}>
+                        {{product.product_name}} 
+                        <span class="p-1 rounded-pill shadow-sm"
+                        [ngClass]="{
+                            'bg-success-subtle text-success':pourcentage(product.quantity, product.quantity_max) >= 50,
+                            'bg-warning-subtle text-warning': pourcentage(product.quantity, product.quantity_max) < 50 && pourcentage(product.quantity, product.quantity_max) >= 15,
+                            'bg-danger-subtle text-danger': pourcentage(product.quantity, product.quantity_max) < 15,
+                        }">
+                            ({{product.quantity}} box)
+                        </span>
+                    </option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
+                    <div class="col-auto mb-2">
+                        <label for="quantity" class="visually text-secondary m-2">
+                            <span class="p-1 rounded-pill shadow-sm bg-warning-subtle text-warning">
+                                {{selectedProductData.quantity}} box
+                            </span>
+                        </label>
+                        <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 formControlName="quantity" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <p class="text-secondary">
+                            <span class="p-1 rounded-pill shadow-sm bg-warning-subtle text-warning">
+                            {{selectedProductData.prixVente | number: '1.0-0' }} Bif
+                        </span>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-success rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + Save
+                        </button>
+                    </div>
+                </div>
+                }}
+            </div>}
+            <div class="row">
+                <div class="col">
+                    @if(basketForm.value.list_product && basketForm.value.list_product.length > 0){
+                    <h5>All products</h5>
+                    <ul> @for (product of basketForm.value.list_product; track product.id) {
+                        <li>{{product.product_name}} {{product.quantity}} Box
+                        </li>
+                        }
+                    </ul>}
+                </div>
+            </div>
+            <div class="ms-auto me-auto mb-2 mt-3">
+                <button type="submit" class="btn btn-primary p-1 m-1">
+                    <span class="ms-5 me-5">Livrer</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

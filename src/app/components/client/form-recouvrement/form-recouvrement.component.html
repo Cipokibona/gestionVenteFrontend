@@ -1,0 +1,64 @@
+<div class="container justify-content-center">
+    <h5 class="text-center">Recouvrement</h5>
+    <div class="row">
+        <form class="needs-validation" [formGroup]="recouvrementForm" (ngSubmit)="createRecouvrement()">
+            <div class="ms-auto me-auto mb-2">
+                <label for="nameClient" class="visually-hidden">Full name</label>
+                <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataVente.client_name}}" disabled>
+            </div>
+            <div class="row">
+                <div class="container">
+                    <h6>Mode de payement du client</h6>
+                    <div class="row">
+                        <div class="col-auto mb-2">
+                            <select class="form-select" aria-label="Default select example" (change)="selectedTypeEchange($event)" formArrayName="typeEchange">
+                                <option selected>Mode payement</option>
+                                @for (type of typeEchangeData; track type.id) {
+                                <option value={{type.id}}>{{type.nom}}</option>}
+                            </select>
+                        </div>@if (selectedTypeData) {
+                        <div [formGroup]="newTypeEchange">
+                            <div class="col-auto mb-2">
+                                <label for="montantCash" class="visually-hidden">montant</label>
+                                <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" formControlName="montant" required>
+                            </div>@if (selectedTypeData.is_bordereau) {
+                            <div class="col-auto mb-2">
+                                <label for="numero" class="visually-hidden ">Bordereau</label>
+                                <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" formControlName="bordereau" required>
+                            </div>}
+                            <div class="col">
+                                <button type="button" class="btn button secondary rounded-pill m-1 p-1 " (click)="addTypeEchange()">
+                                    + save
+                                </button>
+                                <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1 " (click)="removeModePay(selectedTypeData)">
+                                    Delete
+                                </button> -->
+                            </div>
+                        </div>}
+                    </div>
+                </div>
+                <div class="col">
+                    <h5>Mode Payement</h5>
+                    <ul>
+                        @for (pay of recouvrementForm.value.typeEchange; track pay.id) {
+                        <li>{{pay.typeName}}:
+                            <span class="text-danger">{{pay.montant| number: '1.0-0' }} BIF</span>
+                        </li>
+                        }
+                        <li>Total paye:<br>
+                            <span class="text-danger">{{totalPaye| number: '1.0-0' }} BIF</span>
+                        </li>
+                        <li>Reste a Paye: <br>
+                            <span class="text-danger">{{resteImpaye| number: '1.0-0' }} BIF</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class=" ms-auto me-auto mb-2 mt-3 ">
+                <button type="submit" class="btn btn-primary p-1 m-1 ">
+                    <span class="ms-5 me-5 ">Collecter</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

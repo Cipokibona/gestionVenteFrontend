@@ -1,0 +1,182 @@
+<div class="container text-center mb-3">
+    <div class="row">
+        <div class="col">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Toutes
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Poste 1
+            </button> -->
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationTool">
+                + Add
+            </button>
+        </div>
+    </div>
+    @if (loadingPage) {}@else { @if (toolsData && toolsData.length > 0) {
+    <h4 class="text-center ">Liste des outils des agents commerciaux</h4>
+    <div class="row text-start">
+        @for (tool of toolsData; track $index) {
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title border-bottom">Tool: {{tool.name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                        <span class="">{{tool.user_name}}</span>
+                    </h6>
+                    <p>
+                        {{tool.description}}
+                    </p>
+                    <button class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#collapse' + $index">
+                        Edit
+                    </button>
+                    <button class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#depenseTool' + $index">
+                        Depense
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- modal de edit poste -->
+        <div class="modal fade" [attr.id]="'collapse' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit tool</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="editToolForm" (ngSubmit)="editTool(tool.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="nameOldTool" class="visually-hidden">name</label>
+                                <input type="text" class="form-control" formControlName="nameOldTool" name="nameOldTool" id="nameOldTool" value="{{tool.name}}" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="responsableEdit" class="visually">Responsable</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="user" name="responsableEdit">
+                                    @for (user of allUser; track $index) {
+                                    <option value={{user.id}}>{{$index + 1}}. {{user.username}}</option>
+                                }
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="description" class="visually-hidden">Description</label>
+                                <input type="text" class="form-control" formControlName="description" name="description" id="description" value="{{tool.description}}" required>
+                            </div>
+                        </div>
+                        @if (loadingSaving) {
+                        <span>Loading...</span> }@else {
+                        <div class="modal-footer">
+                            <span class="text-danger">{{errorSaving}}</span> <br>
+                            <button type="submit" class="btn btn-primary" [disabled]="!editToolForm.valid">
+                                Save
+                            </button>
+                        </div>}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- modal de depense tool -->
+        <div class="modal fade" [attr.id]="'depenseTool' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Depense</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="depenseToolForm" (ngSubmit)="depenseTool(tool.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="pos" class="visually">Source Pos</label>
+                                <select class="form-select" aria-label="Default select example" name="pos" (change)="selectedPos($event)">
+                                    <option selected>Select source point de vente</option>
+                                    @for (pos of allPos; track $index) {
+                                    <option value={{pos.id}}>
+                                        {{$index + 1}}. {{pos.fullName}}
+                                    </option>
+                                }
+                                </select>
+                            </div>@if (selectedPosData) {
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="caisse" class="visually">Caisse</label>
+                                <select class="form-select" aria-label="Default select example" name="caisse" formControlName="caisse">
+                                    @for (caisse of selectedPosData.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>
+                                        {{$index + 1}}. {{caisse.typeEchange_name}} (
+                                        <span>{{caisse.montant | number: '1.0-0' }} BIF</span>)
+                                    </option>
+                                }
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="montant" class="visually">Montant</label>
+                                <input type="number" class="form-control" formControlName="montant" name="montant" id="montantDepense" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="description" class="visually">Description</label>
+                                <input type="text" class="form-control" formControlName="description" name="description" id="description" required>
+                            </div>
+                            }
+                        </div>
+                        @if (loadingSaving) {
+                        <span>Loading...</span> }@else {
+                        <div class="modal-footer">
+                            <span class="text-danger">{{errorSaving}}</span>
+                            <button type="submit" class="btn btn-primary" [disabled]="!depenseToolForm.valid">
+                                Effectuer
+                            </button>
+                        </div>}
+                    </form>
+                </div>
+            </div>
+        </div>
+        }
+    </div> }@else { @if (error) {
+    <h4 class="text-center ">{{error}}</h4>}@else {
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+            <h3 class="text-center">Page vide</h3>
+            <p class="text-center">
+                Ajoutez un outils de travail sur +add !!!
+            </p>
+        </div>
+    </div>} }}
+    <!-- fin de condition de posteData -->
+</div>
+<div class="modal fade " id="creationTool" tabindex="-1 " aria-labelledby="exampleModalLabel " aria-hidden="true ">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5 " id="newPosteTitle ">New tool</h1>
+                <button type="button" class="btn-close " data-bs-dismiss="modal " aria-label="Close "></button>
+            </div>
+            <form class="needs-validation " [formGroup]="newToolForm" (ngSubmit)="createTool() ">
+                <div class="modal-body ">
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="nameTool" class="visually-hidden">Tool</label>
+                        <input type="text" class="form-control" formControlName="nameTool" name="nameTool" id="nameTool" placeholder="Name outils ... " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="responsabl" class="visually">Responsable</label>
+                        <select class="form-select " aria-label="Default select example " formControlName="user" name="responsable">
+                             @for (user of allUser; track $index) {
+                                <option value={{user.id}}>{{$index + 1}}. {{user.username}}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="description " class="visually-hidden ">Descriptioin</label>
+                        <input type="text" class="form-control" formControlName="description" name="description" placeholder="Description" required>
+                    </div>
+                </div>
+                @if (loadingSaving) {
+                <span>Loading...</span> }@else {
+                <div class="modal-footer ">
+                    <span class="text-danger">{{errorSaving}}</span>
+                    <button type="submit" class="btn btn-primary" [disabled]="!newToolForm.valid">
+                        Save
+                    </button>
+                </div>}
+            </form>
+        </div>
+    </div>
+</div>

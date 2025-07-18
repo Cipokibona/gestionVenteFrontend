@@ -1,0 +1,195 @@
+<div class="container text-center mb-3">
+    <div class="row">
+        <div class="col">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Toutes
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Poste 1
+            </button> -->
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createUser">
+                + Add
+            </button>
+        </div>
+    </div>
+    <h5>Liste des users</h5>
+    <div class="row text-start gap-1">
+        @if (loadingPage) {loading...}@else {@if (allUser && allUser.length > 0) {
+        <div class="accordion" id="accordionUsers">
+            @for (user of allUser; track $index) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
+                        {{$index + 1}}. {{user.first_name}} {{user.last_name}} ({{user.username}})
+                    </button>
+                </h2>
+                <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
+                    <p class="m-2">
+                        Contact:
+                        <span class="text-secondary">{{user.tel}}, {{user.email}}</span><br>
+                        <!-- Role du user -->
+                        <span>
+                            Role: @if (user.is_agent_commercial) {
+                                <span class="text-secondary">
+                                    Agent commercial
+                                </span> }@if (user.is_respo_pos) {
+                        <span class="text-secondary">
+                            Responsable d'un point de vente
+                        </span> }@if (user.is_admin) {
+                        <span class="text-secondary">Admin</span> }
+                        </span> <br>
+                        <!-- end role -->
+                        <span>
+                            Salaire :
+                            <span class="text-secondary">
+                                {{getSalarUser(user.id) | number: '1.0-0' }} BIF/mois ({{getPostUser(user.id)}})
+                            </span>
+                        </span><br>
+                        <span>
+                            Dernier paye :
+                            <span class="text-success">
+                                {{getDepenseSalaireUser(user.id) | number: '1.0-0' }} BIF ({{getDateSalaireUser(user.id) | date: 'longDate'}})
+                            </span>
+                        <button type="button" class="btn btn-warning rounded-pill m-1 p-1" data-bs-toggle="modal" [attr.data-bs-target]="'#createPaye' + $index">
+                            new pay
+                        </button>
+                        </span><br>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal new pay-->
+            <div class="modal fade" [attr.id]="'createPaye' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Pay</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" [formGroup]="payForm" (ngSubmit)="createPay(user.id)" novalidate>
+                                <div class="ms-auto me-auto mb-2">
+                                    <label for="pos" class="visually-hidden">Source caisse</label>
+                                    <select class="form-select" aria-label="Default select example" (change)="selectedPos($event, user.id)">
+                                        <option selected>Select pos</option>
+                                        @for (pos of allPos; track $index) {
+                                        <option value={{pos.id}}>{{$index + 1}}. {{pos.fullName}}</option>}
+                                    </select>
+                                </div>@if (selectedPosData) {
+                                <div class="ms-auto me-auto mb-2">
+                                    <label for="caisse" class="visually">Caisse</label>
+                                    <select class="form-select" aria-label="Default select example" formControlName="caisse">
+                                        <option selected>Select caisse</option>
+                                        @for (caisse of selectedPosData.list_caisse; track $index) {
+                                        <option value={{caisse.id}}>
+                                            {{$index + 1}}. {{caisse.typeEchange_name}} (max: {{caisse.montant | number: '1.0-0' }} BIF)
+                                        </option>}
+                                    </select>
+                                </div>
+                                <div class="ms-auto me-auto mb-2 ">
+                                    <label for="montant" class="visually-hidden">Montant</label>
+                                    <input type="number" class="form-control" formControlName="montant" name="montant" id="montant" required>
+                                    <p>
+                                        Salaire:
+                                        <span class="text-secondary">
+                                            {{getSalarUser(user.id) | number: '1.0-0' }} BIF/mois
+                                        </span>
+                                    </p>
+                                </div>
+                                }
+                                <div class=" ms-auto me-auto mb-2 mt-3 ">
+                                    <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!payForm.valid">
+                                        <span class="ms-5 me-5 ">Pay</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div> }@else if (0>allUser.length && !loadingPage) {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Creez un user
+                </p>
+            </div>
+        </div>
+
+        }}
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create user</h1>
+                <button type="button " class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" [formGroup]="userForm" (ngSubmit)="createUser()" novalidate>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="firstUser" class="visually-hidden">Name</label>
+                        <input type="text" class="form-control " formControlName="first_name" name="nameClient" id="nameUser" placeholder="name " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="lastname" class="visually-hidden">Prenom</label>
+                        <input type="text" class="form-control" formControlName="last_name" name="lastname" id="lastname" placeholder="Prenom " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="email" class="visually-hidden">Email</label>
+                        <input type="email" class="form-control" formControlName="email" name="email" id="email" placeholder="email" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="tel" class="visually-hidden">Tel</label>
+                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
+                    </div>
+                    <label for="salaire">Salaire mensuel</label>
+                    <select class="form-select mb-2 " formControlName="poste" name="salaire" aria-label="Default">
+                        @for (poste of allPoste; track $index) {
+                        <option value={{poste.id}}>{{poste.salar | number: '1.0-0' }} BIF ({{poste.name}})</option>}
+                    </select>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="agent" value="agent" checked>
+                        <label class="form-check-label" for="agent">
+                            Agent commercial
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="respo" value="respo">
+                        <label class="form-check-label" for="respo">
+                            Responsable d'un POV
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="role" name="role" id="admin" value="admin">
+                        <label class="form-check-label" for="admin">
+                            Admin
+                        </label>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="username " class="visually-hidden ">Username</label>
+                        <input type="text" class="form-control " formControlName="username" name="username " id="username " placeholder="Username " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="password " class="visually-hidden ">Password</label>
+                        <input type="password" class="form-control " formControlName="password" name="password " id="password " placeholder="password " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="confirmPassword " class="visually-hidden ">confirm Password</label>
+                        <input type="password" class="form-control " formControlName="confirmPassword" name="confirmPassword " id="confirmPassword " placeholder="confirm Password " required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3 ">
+                        <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!userForm.valid">
+                            <span class="ms-5 me-5 ">Create</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="container text-center mb-3">
+    <div class="row">
+        <div class="col">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Toutes
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Poste 1
+            </button> -->
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#creationDepense">
+                + Add
+            </button>
+        </div>
+    </div>
+    @if (loadingPage) {
+    <h4 class="text-center">Loading...</h4>
+    }@else { @if (depenseData && depenseData.length > 0) {
+    <h4 class="text-center ">Liste des depenses</h4>
+    <div class="row text-start">
+        @for (dep of depenseData; track $index) {
+        <div class="col m-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title border-bottom">Autheur: {{dep.user_name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                        <span class="">Caisse: {{dep.caisse_pos}}</span>
+                    </h6>
+                    <p>
+                        {{dep.description}} <br>
+                        <strong class="text-danger">
+                            {{dep.montant | number: '1.0-0' }} BIF
+                        </strong>
+                    </p>
+                    <article>
+                        {{dep.date | date: 'medium'}}
+                    </article>
+                </div>
+            </div>
+        </div>
+        }
+    </div> }@else { @if (error) {
+    <h4 class="text-center">{{error}}</h4>
+    }@else {
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+            <h3 class="text-center">Page vide</h3>
+            <p class="text-center">
+                Pas encore de depenses!!!
+            </p>
+        </div>
+    </div>
+    }}}
+    <!-- fin de condition de posteData -->
+</div>
+<div class="modal fade" id="creationDepense" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="newPosteTitle">New depense</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="needs-validation" [formGroup]="newDepenseForm" (ngSubmit)="createDepense()">
+                <div class="modal-body">
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="pos" class="visually">Point de vente</label>
+                        <select class="form-select" aria-label="Default select example" name="pos" (change)="selectPos($event)">
+                            <option selected>Point de vente</option>
+                             @for (pos of allPos; track $index) {
+                                <option value={{pos.id}}>{{$index + 1}}. {{pos.fullName}}</option>
+                            }
+                        </select>
+                    </div>@if (selectedPosData) {
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="caisse" class="visually">Caisse</label>
+                        <select class="form-select" aria-label="Default select example" name="caisse" formControlName="caisse">
+                             @for (caisse of selectedPosData.list_caisse; track $index) {
+                                <option value={{caisse.id}}>
+                                    {{$index + 1}}. {{caisse.typeEchange_name}} (
+                                    <span>{{caisse.montant | number: '1.0-0' }} BIF</span>)
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="montant" class="visually-hidden">Montant</label>
+                        <input type="number" class="form-control" formControlName="montant" name="montant" placeholder="montant" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="description" class="visually-hidden">Descriptioin</label>
+                        <input type="text" class="form-control" formControlName="description" name="description" placeholder="Description" required>
+                    </div>}
+                </div>
+                @if (loadingSaving) {
+                <span class="m-2 text-warning">Loading...</span> }@else {
+                <div class="modal-footer">
+                    <span class="text-danger">
+                        {{errorSaving}}
+                    </span> <br>
+                    <button type="submit" class="btn btn-warning" [disabled]="!newDepenseForm.valid">
+                        Save
+                    </button>
+                </div>}
+            </form>
+        </div>
+    </div>
+</div>

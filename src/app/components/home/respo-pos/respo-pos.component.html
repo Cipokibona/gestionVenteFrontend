@@ -1,0 +1,102 @@
+<div class="container">
+    <h2 class="text-center">Caisse</h2>
+    @if (loading) {
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    }@else {@if(error){
+    <h1>{{error}}</h1>
+    } @if (posData) {
+    <div class="card text-center">
+        <div class="card-header">
+            {{posData?.list_caisse.length}} type d'echange dispo
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{posData?.fullName}}</h5>
+            @for (caisse of posData.list_caisse; track $index) {
+            <div class="row">
+                <div class="col-6 text-end">
+                    {{caisse.typeEchange_name}}:
+                    <a routerLink="bordereau/{{caisse.id}}">
+                        bordereaux
+                    </a>
+                </div>
+                <div class="col-6 text-start">
+                    <strong class="text-danger">
+                        {{caisse.montant | number: '1.0-0' }} BIF
+                    </strong>
+                </div>
+            </div> }
+            <button class="btn btn-warning mt-4" data-bs-toggle="modal" [attr.data-bs-target]="'#transaction'">
+                Transaction
+            </button>
+        </div>
+        <div class="card-footer text-body-secondary">
+            {{posData.date | date: 'longDate' }} last modification
+        </div>
+    </div>} @else {
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+            <h3 class="text-center">Pas de point de vente pour vous!!!</h3>
+            <p class="text-center">
+                Contacter l'admin
+            </p>
+        </div>
+    </div>
+    }}
+</div>
+
+<!-- modal de transaction -->
+<div class="modal fade" [attr.id]="'transaction'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content text-start">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Transaction</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction()">
+                <div class="modal-body">
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="typeSource" class="visually">Source</label>
+                        <select class="form-select" aria-label="Default select example" formControlName="typeEchangeSource">
+                                    <option selected>Select source</option>
+                                    @for (caisse of posData.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>{{caisse.typeEchange_name}} (max: {{caisse.montant | number: '1.0-0' }} BIF)</option>}
+                                </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="typeSource" class="visually">Cible</label>
+                        <select class="form-select" aria-label="Default select example" formControlName="typeEchangeCible">
+                                    <option selected>Select cible</option>
+                                    @for (caisse of posData.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>{{caisse.typeEchange_name}} ({{caisse.montant | number: '1.0-0' }} BIF)</option>}
+                                </select>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="montantTransaction" class="visually">Montant</label>
+                        <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="bordereauTransaction" class="visually">Bordereau</label>
+                        <input type="text" class="form-control" formControlName="bordereauTransaction" name="bordereauTransaction" id="bordereauTransaction" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (loadingTransaction) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <span class="text-danger">{{errorTransaction}}</span>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn button secondary">Make</button>}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

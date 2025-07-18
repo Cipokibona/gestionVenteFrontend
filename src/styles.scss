@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+
+// @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+:root {
+    --color-principal: #24354f;
+    --color-secondary: #3dafd1;
+    --color-background: #ffffff;
+    --color-text: #1e1d23;
+    --color-text-secondary: #678cdd;
+}
+
+$color-text: var(--color-text);
+$color-text-secondary: var(--color-text-secondary);
+$color-principal:var(--color-principal);
+$color-secondary:var(--color-secondary);
+$color-background:var(--color-background);
+$color-bg-principal:rgba($color-principal, 15%);
+$color-bg-secondary:rgba($color-secondary, 15%);
+// $color-hover-principal:darken(#33244f, 10%);
+// $color-hover-secondary:darken(#473dd1, 10%);
+$color-disabled-principal:#33244f;
+$color-disabled-secondary:#473dd1;
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-background)!important;
+    color: var(--color-text)!important;
+}
+
+.principal {
+    color: var(--color-principal)!important;
+}
+
+.secondary {
+    color: var(--color-secondary)!important;
+}
+
+.text-principal {
+    color: $color-text!important;
+}
+
+.text-secondary {
+    color: $color-text-secondary!important;
+}
+
+.background {
+    &.principal {
+        background-color: var(--color-principal)!important;
+        color: white!important;
+    }
+    &.secondary {
+        background-color: var(--color-secondary)!important;
+        color: black!important;
+    }
+    &.normal {
+        background-color: $color-background!important;
+        color: var(--color-text)!important;
+    }
+    &.info-principal {
+        background-color: $color-bg-principal!important;
+        color: var(--color-principal)!important;
+    }
+    &.info-secondary {
+        background-color: $color-bg-secondary!important;
+        color: var(--color-secondary)!important;
+    }
+}
+
+.button {
+    display: inline-block;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    &.principal {
+        background-color: var(--color-principal);
+        color: white!important;
+        // &:hover {
+        //     background-color: $color-hover-principal;
+        // }
+        &.disabled {
+            background-color: $color-disabled-principal;
+        }
+    }
+    &.secondary {
+        background-color: var(--color-text-secondary);
+        color: var(--color-principal)!important;
+        &:hover {
+            background-color: var(--color-principal)!important;
+            color: #FFFBFC !important;
+        }
+    }
+}
+
+// @import 'bootstrap/scss/bootstrap';

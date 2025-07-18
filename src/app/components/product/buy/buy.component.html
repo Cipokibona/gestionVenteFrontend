@@ -1,0 +1,202 @@
+<div class="container justify-content-center">
+    <h5 class="text-center">Approvisionnement</h5>
+    <div class="row">
+        <form class="needs-validation" [formGroup]="aprovisionForm" (ngSubmit)="createAchat()">
+            <div class="ms-auto me-auto mb-2">
+                <label for="nameClient" class="visually-hidden">Full name</label>
+                <input type="text" class="form-control" name="nameClient" id="nameClient" placeholder="{{dataPos.fullName}}" disabled>
+            </div>
+            @if (showPayement) {
+            <h6>Source d'approvisionnement</h6>
+            <!-- button radio -->
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" id="distributeur" value=1 (change)="onSourceChange($event)">
+                <label class="form-check-label" for="distributeur">
+                    Distributeur
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="source" id="posPrincipal" value=2 (change)="onSourceChange($event)">
+                <label class="form-check-label" for="posPrincipal">
+                    Autre POS
+                </label>
+            </div>
+            @if (selectedSource && selectedSource== 2) {
+            <div class="container border p-2 rounded mt-2">
+                <h5>Point de vente</h5>
+                <select class="form-select mb-2" aria-label="Default select example" name="pos" (change)="selectPos($event)" formControlName="pos">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (pos of allPos; track pos.id) {
+                    <option value={{pos.id}}>{{pos.fullName}}</option>
+                }
+                </select> @if(selectedPosData){
+                <h4 for="product">New product</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedPosData.list_product; track product.id) {
+                    <option value={{product.product}}>{{product.product_name}}</option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
+                    <div class="col-auto mb-2">
+                        <label for="quantity" class="visually">Quantity (max:{{selectedProductData.quantity}})</label>
+                        <input type="number" class="form-control" max="{{selectedProductData.quantity}}" name="quantity" id="quantity" placeholder="Quantity" value=1 formControlName="quantity" required>
+                        <p class="text-secondary">
+                            Prix achat:
+                            <span class="text-danger">
+                            {{selectedProductData.prixAchat}} Bif
+                        </span><br> Prix vente:
+                            <span class="text-danger">
+                                {{selectedProductData.prixVente}} BIF
+                            </span><br> Exp:
+                            <span>
+                                {{selectedProductData.date_expiration | date: 'longDate'}}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-success rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + panier
+                        </button>
+                        <!-- <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                            end
+                        </button> -->
+                        <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
+                            Delete
+                        </button> -->
+                    </div>
+                </div>
+                }}
+            </div>
+            }
+            <!-- fin de condition de pos -->
+            <!-- consition de distributeur -->
+            @else if (selectedSource && selectedSource== 1) {
+            <div class="container border p-2 rounded mt-2">
+                <h5>Distributeur</h5>
+                <select class="form-select mb-2" aria-label="Default select example" name="distributeur" (change)="selectDistributeur($event)" formControlName="distr">
+                    <!-- <option selected>Selectionner le panier</option> -->
+                    @for (distributeur of allDistributeur; track distributeur.id) {
+                    <option value={{distributeur.id}}>{{distributeur.name}}</option>
+                }
+                </select> @if(selectedDistrData){
+                <h4 for="product">New product</h4>
+                <select class="form-select mb-2" aria-label="Default select example" (change)="selectProduct($event)" formArrayName="list_product">
+                    <option selected>Choisit un produit</option>
+                    @for (product of selectedDistrData.product_list; track product.id) {
+                    <option value={{product.id}}>{{product.name}}</option>}
+                </select> @if (selectedProductData) {
+                <div [formGroup]="newProduct">
+                    <p class="text-secondary">
+                        <span>
+                                {{selectedProductData.description}}
+                            </span>
+                    </p>
+                    <div class="col-auto mb-2">
+                        <label for="quantityDistributeur" class="visually-hidden">Quantity</label>
+                        <input type="number" class="form-control" name="quantityDistributeur" id="quantityDistributeur" placeholder="Quantity" formControlName="quantity" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <label for="prixAchatDistributeur" class="visually-hidden">Prix d'achat</label>
+                        <input type="number" class="form-control" name="prixAchatDistributeur" id="prixAchatDistributeur" placeholder="Prix d'achat" formControlName="prixAchatDistributeur" required>
+                    </div>
+                    <div class="col-auto mb-2">
+                        <label for="prixVenteDistributeur" class="visually-hidden">Prix de vente</label>
+                        <input type="number" class="form-control" name="prixVenteDistributeur" id="prixVenteDistributeur" placeholder="Prix de vente" formControlName="prixVenteDistributeur" required>
+                    </div>
+                    <div clas="col-auto mb-2">
+                        <label for="dateExpiration">Exp:</label>
+                        <input type="date" class="form-control" name="dateExpiration" id="dateExpiration" formControlName="dateExpiration">
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-success rounded-pill m-1 p-1" (click)="addProductByForm()">
+                            + panier
+                        </button>
+                        <!-- <button type="button" class="btn btn-warning rounded-pill m-1 p-1" (click)="payementShow()">
+                            end
+                        </button> -->
+                        <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1" (click)="removeProduct(selectedProductData)">
+                            Delete
+                        </button> -->
+                    </div>
+                </div>
+                }}
+            </div>
+            }}
+            <!-- fin condition de distributeur -->
+            @if (showPayement) {
+            <div class="row">
+                <div class="container">
+                    <h6>Payement</h6>
+                    <div class="row">
+                        <div class="col-auto mb-2">
+                            <select class="form-select" aria-label="Default select example" (change)="selectedCaisse($event)" formArrayName="typeEchange">
+                                <option selected>Source caisse</option>
+                                @for (caisse of caisseData; track caisse.id) {
+                                <option value={{caisse.id}}>{{caisse.pos_name}} {{caisse.montant | number: '1.0-0' }} BIF ({{caisse.typeEchange_name}})</option>}
+                            </select>
+                        </div>@if (selectedCaisseData) {
+                        <div [formGroup]="newTypeEchange">
+                            <div class="col-auto mb-2">
+                                <label for="montantCash" class="visually-hidden">montant</label>
+                                <input type="number" class="form-control" name="montantCash" id="montantCash" placeholder="montant" formControlName="montant" required>
+                            </div>@if (selectedCaisseData.is_bordereau) {
+                            <div class="col-auto mb-2">
+                                <label for="numero" class="visually-hidden ">Bordereau</label>
+                                <input type="text" class="form-control" name="numero" id="numero" placeholder="bordereau" formControlName="bordereau" required>
+                            </div>}
+                            <div class="col">
+                                <button type="button" class="btn btn-success rounded-pill m-1 p-1 " (click)="addTypeEchange()">
+                                    + save
+                                </button>
+                                <!-- <button type="button" class="btn btn-danger rounded-pill m-1 p-1 " (click)="removeModePay(selectedTypeData)">
+                                    Delete
+                                </button> -->
+                            </div>
+                        </div>}
+                    </div>
+                </div>
+                <div class="col">
+                    @if(aprovisionForm.value.list_product && aprovisionForm.value.list_product.length > 0){
+                    <h5>Produit recus</h5>
+                    <ul> @for (product of aprovisionForm.value.list_product; track product.id) {
+                        <li>{{product.product_name}} {{product.quantity}}*{{product.prixAchat | number: '1.0-0' }} BIF: <br>
+                            <span class="text-danger">{{product.prixAchat * product.quantity | number: '1.0-0' }} BIF</span>
+                        </li>
+                        }
+                        <li>Total a paye:<br>
+                            <span class="text-danger"> {{totalReel | number: '1.0-0' }}BIF</span>
+                        </li>
+                    </ul>} @if (aprovisionForm.value.typeEchange && aprovisionForm.value.typeEchange.length > 0 ){
+                    <h5>Mode Payement</h5>
+                    <ul>
+                        @for (pay of aprovisionForm.value.typeEchange; track pay.id) {
+                        <li>Caisse {{pay.caisse}}:
+                            <span class="text-danger">{{pay.montant | number: '1.0-0' }} BIF</span>
+                        </li>
+                        }
+                        <li>Total paye:<br>
+                            <span class="text-danger">{{totalPaye | number: '1.0-0' }} BIF</span>
+                        </li>
+                        <li>Reste a Paye: <br>
+                            <span class="text-danger">{{resteImpaye | number: '1.0-0' }} BIF</span>
+                        </li>
+                        <label for="dateDette">Payera le</label>
+                        <input type="date" class="form-control" name="dateRecouvrement" id="dateRecouvrement" formControlName="dateRecouvrement">
+                    </ul> }
+                </div>
+            </div>}@if (loadingAchat) {
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            }@else {
+            <div class=" ms-auto me-auto mb-2 mt-3 ">
+                <span class="text-danger">{{errorAchat}}</span> <br>
+                <button type="submit" class="btn btn-primary p-1 m-1 ">
+                    <span class="ms-5 me-5 ">Achat</span>
+                </button>
+            </div>}
+        </form>
+    </div>
+</div>

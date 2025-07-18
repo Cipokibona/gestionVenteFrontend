@@ -1,0 +1,37 @@
+<div class="container">
+    @if (loadingPage) {
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    }@else{ @if (errorPage) {
+    <h1>{{errorPage}}</h1>
+    } @if (venteData) {
+    <div class="row">
+        <h2>Facture - Vente #{{venteData.id}}</h2>
+        <p>Client: {{venteData.agent_name}}</p>
+        <p>Date: {{venteData.date | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+        <table border=" 1 ">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (product of venteData.product_list; track $index) {
+                <tr>
+                    <td>{{product.product_name}}</td>
+                    <td>{{product.quantity}}</td>
+                    <td>{{product.pricePerUnitClient | number: '1.0-0' }} BIF</td>
+                    <td>{{product.pricePerUnitClient * product.quantity | number: '1.0-0' }} BIF</td>
+                </tr> }
+            </tbody>
+        </table>
+
+        <h3>Total: {{totalVente | number: '1.0-0' }} BIF</h3>
+    </div>}}
+</div>

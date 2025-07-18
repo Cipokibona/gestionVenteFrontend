@@ -1,0 +1,202 @@
+<div class="container">
+    <div class="row">
+        @if (loading) {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        }@else { @if (error) {
+        <h1>{{error}}</h1>
+        } @if (posData && posData.length > 0) {
+        <h2>Caisses</h2>
+        @for (pos of posData; track $index) {
+        <div class="col">
+            <div class="card m-1 shadow-lg" style="width: 18rem;">
+                <!-- <div class="card-header">
+                    {{pos.list_caisse.length}} type d'echange dispo
+                </div> -->
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{pos.fullName}}</h6>
+                    @for (caisse of pos.list_caisse; track $index) {
+                    <div class="row border-top">
+                        <div class="col-auto mt-2">
+                            <span class="p-1 rounded-pill shadow-sm bg-success-subtle text-success">
+                                {{caisse.typeEchange_name}}
+                            </span>
+                            <h4>{{caisse.montant | number: '1.0-0' }} BIF</h4>
+                            <a routerLink="bordereau/{{caisse.id}}">
+                                bordereaux
+                            </a>
+                        </div>
+                    </div> } @if (pos.list_caisse.length>1) {
+                    <button class="btn btn-warning mt-4" data-bs-toggle="modal" [attr.data-bs-target]="'#transaction' + $index">
+                        Transaction
+                    </button>}@else{
+                    <h5>{{pos.list_caisse.length}} caisse</h5>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- modal de transaction -->
+        <div class="modal fade" [attr.id]="'transaction' + $index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content text-start">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Transaction</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="needs-validation" [formGroup]="transactionForm" (ngSubmit)="transaction(pos.id)">
+                        <div class="modal-body">
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="typeSource" class="visually">Source</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="typeEchangeSource">
+                                    <option selected>Select source</option>
+                                    @for (caisse of pos.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>{{caisse.typeEchange_name}} (max: {{caisse.montant | number: '1.0-0' }} BIF)</option>}
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="typeSource" class="visually">Cible</label>
+                                <select class="form-select" aria-label="Default select example" formControlName="typeEchangeCible">
+                                    <option selected>Select cible</option>
+                                    @for (caisse of pos.list_caisse; track $index) {
+                                    <option value={{caisse.id}}>{{caisse.typeEchange_name}} ({{caisse.montant | number: '1.0-0' }} BIF)</option>}
+                                </select>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="montantTransaction" class="visually">Montant</label>
+                                <input type="number" class="form-control" formControlName="montantTransaction" name="montantTransaction" id="montantTransaction" required>
+                            </div>
+                            <div class="ms-auto me-auto mb-2">
+                                <label for="bordereauTransaction" class="visually">Bordereau</label>
+                                <input type="text" class="form-control" formControlName="bordereauTransaction" name="bordereauTransaction" id="bordereauTransaction" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if (loadingTransaction) {
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-grow" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            }@else {
+                            <span class="text-danger">{{errorTransaction}}</span>
+                            <button type="submit" class="btn btn-primary" [disabled]="!transactionForm.valid">
+                                Save
+                            </button>}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>}}@else{
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Creez un point de vente d'abord
+                </p>
+            </div>
+        </div>
+        }}
+    </div>
+    <div class="row mb-3">
+        <h2 class="mt-3">Other info</h2>
+        <!-- gain -->
+        <div class="col mt-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Gain</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Ce mois</h6>
+                    @if (loadingDepense || loadingAchat || loadingVente) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-success">{{venteMois - (depenseMois + achatMois) | number: '1.0-0' }} BIF</h4>}
+                </div>
+            </div>
+        </div>
+        <div class="col mt-1">
+            <!-- vente -->
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Vente</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Ce mois</h6>
+                    @if (loadingVente) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-info">{{venteMois | number: '1.0-0' }} BIF</h4>}
+                </div>
+            </div>
+        </div>
+        <!-- achat -->
+        <div class="col mt-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Achat</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Ce mois</h6>
+                    @if (loadingAchat) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-warning">{{achatMois | number: '1.0-0' }} BIF</h4>}
+                </div>
+            </div>
+        </div>
+        <!-- depenses -->
+        <div class="col mt-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Depense</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Ce mois</h6>
+                    @if (loadingDepense) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-danger">{{depenseMois | number: '1.0-0' }} BIF</h4>}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- best sell -->
+    <div class="row mb-3">
+        <h2>Best sell</h2>
+        <div class="col mt-1">
+            <div class="card shadow-lg" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{bestVenteData.client_name}}
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">
+                        by {{bestVenteData.agent_name}}
+                    </h6>
+                    @if (loadingVente) {
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    }@else {
+                    <h4 class="text-success-emphasis">{{bestVenteSum | number: '1.0-0' }} BIF</h4>
+                    <p>
+                        {{bestVenteData.date | date:'longDate' }}
+                    </p>}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

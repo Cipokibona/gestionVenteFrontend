@@ -1,0 +1,102 @@
+<div class="container text-center mb-3">
+    <div class="row">
+        <div class="col">
+            <!-- <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Toutes
+            </button>
+            <button type="button" class="button secondary rounded-pill m-1 p-1">
+                Poste 1
+            </button> -->
+            <button type="button" class="btn btn-primary rounded-pill m-1 p-1" data-bs-toggle="modal" data-bs-target="#createClient">
+                + Add
+            </button>
+        </div>
+    </div>
+    <div class="row text-start gap-1">
+        @if (loadingPage) {loading...}@else {@if (customers && customers.length > 0) {
+        <h5>Liste des clients</h5>
+        <div class="accordion" id="accordionUsers">
+            @for (client of customers; track $index) {
+            <div class="accordion-item shadow">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + $index" aria-expanded="false" aria-controls="collapse">
+                        {{$index + 1}}. {{client.fullName}}
+                        <span class="p-1 rounded-pill bg-warning-subtle text-warning-emphasis">
+                            {{haveCredit(client.id) | number: '1.0-0'}} BIF credit
+                        </span>
+                    </button>
+                </h2>
+                <div [attr.id]="'collapse' + $index" class="accordion-collapse collapse">
+                    <p class="m-2">
+                        Contact:
+                        <span class="text-secondary">{{client.tel}}, {{client.adress}}</span>
+                    </p>
+                    @if(venteCreditClient.length > 0){
+                    <h6 class="m-2">Dettes</h6>}
+                    <p class="m-2">
+                        @for (vente of venteCreditClient; track $index) { @if (vente.client == client.id) {
+                        <span class="text-secondary">
+                            {{$index + 1}}.Date de payement {{vente.date_recouvrement | date: 'medium'}}
+                        </span>
+                        <span class="text-danger">
+                            {{vente.reste | number: '1.0-0' }} BIF
+                        </span>
+                        <a routerLink="recouvrement/{{vente.id}}" class="btn btn-warning rounded-pill m-1 p-1">
+                            Recouvrir
+                        </a>
+                        <br>}}
+                    </p>
+                    <div>
+                        <a routerLink="vente/{{client.id}}" class="btn btn-primary rounded-2 m-2 p-1">
+                            Vendre
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+        </div> }@else {
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- <img src="assets/icons/openbox.png" alt="openbox" width="30 px" height="auto"> -->
+                <h3 class="text-center">Page vide</h3>
+                <p class="text-center">
+                    Ajoutez des clients sur +add !!!
+                </p>
+            </div>
+        </div>
+        }}
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create client</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" [formGroup]="clientForm" (ngSubmit)="createClient()" novalidate>
+                    <div class="ms-auto me-auto mb-2">
+                        <label for="fullName" class="visually-hidden">Name</label>
+                        <input type="text" class="form-control" formControlName="fullName" name="fullName" id="fullName" placeholder="Full name" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="adress" class="visually-hidden">Adress</label>
+                        <input type="text" class="form-control" formControlName="adress" name="adress" id="adress" placeholder="Adress" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 ">
+                        <label for="tel" class="visually-hidden ">Tel</label>
+                        <input type="number" class="form-control" formControlName="tel" name="tel" id="tel" placeholder="Tel" required>
+                    </div>
+                    <div class="ms-auto me-auto mb-2 mt-3 ">
+                        <button type="submit" class="btn btn-primary p-1 m-1 " [disabled]="!clientForm.valid">
+                            <span class="ms-5 me-5 ">Create</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- old html -->
